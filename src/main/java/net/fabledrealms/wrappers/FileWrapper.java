@@ -1,4 +1,4 @@
-package net.fabledrealms.managers;
+package net.fabledrealms.wrappers;
 
 import net.fabledrealms.Core;
 import org.bukkit.Bukkit;
@@ -9,14 +9,14 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class FileManager {
+public class FileWrapper {
     private final Core main;
     private final File directory;
     private final File file;
     private final String fileName;
     private final FileConfiguration config;
 
-    public FileManager(Core main, String directoryPath, String fileName){
+    public FileWrapper(Core main, String directoryPath, String fileName){
         this.main = main;
         this.fileName = fileName;
         this.directory = new File(directoryPath);

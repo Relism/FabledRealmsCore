@@ -5,3 +5,7 @@ api-version: 1.20
 authors: [joshscoper]
 description: The core plugin for FabledRealms
 website: www.fabledrealms.net
+commands:
+  graveyard:
+    description: The graveyard module root command.
+    usage: /graveyard

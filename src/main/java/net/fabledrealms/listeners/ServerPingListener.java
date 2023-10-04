@@ -24,7 +24,7 @@ public class ServerPingListener implements Listener {
 
     //Formats the server list motd
     private String getMOTDLine(int line){
-        String value = main.getConfigFileManager().getFile().getString("module.server-list.motd.line_" + line);
+        String value = main.getConfigFile().getFile().getString("module.server-list.motd.line_" + line);
         value = main.getStringUtil().colorString(value);
         return value;
     }
@@ -40,8 +40,8 @@ public class ServerPingListener implements Listener {
     @EventHandler
     public void onServerListPing(ServerListPingEvent event) {
         String modulePath = "module.server-list";
-        if (main.getConfigFileManager().getFile().getBoolean(modulePath + ".player-count.enabled")){formatPlayerCount(event);}
-        if (main.getConfigFileManager().getFile().getBoolean(modulePath+".motd.enabled")){formatMOTD(event);}
+        if (main.getConfigFile().getFile().getBoolean(modulePath + ".player-count.enabled")){formatPlayerCount(event);}
+        if (main.getConfigFile().getFile().getBoolean(modulePath+".motd.enabled")){formatMOTD(event);}
     }
 
 }

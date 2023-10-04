@@ -1,1 +1,9 @@
-prefix: "&5[&d&lSystem&5]"
+system:
+  module-prefix: "&d&lSystem &f>>>"
+  no-permission: "%prefix% &cYou don't have permission for that!"
+
+graveyards:
+  module-prefix: "&7&lGraveyards &f>>>"
+  graveyard-created: "%prefix% &e%graveyard% created at &6X:%locationX% Y:%locationy% Z:%locationz%&e."
+  graveyard-delete: "%prefix% &c%graveyard% has been removed!"
+  graveyard-nearest: "%prefix% &aThe nearest graveyard is at %locationx% %locationy% %locationz%&a."
