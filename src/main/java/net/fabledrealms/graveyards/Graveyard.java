@@ -58,6 +58,12 @@ public class Graveyard {
         this.z = z;
     }
 
+    public void saveToFile(){
+        main.getGraveyardManager().getGraveyardFileWrapper().getFile().set(getGraveyardName() + ".world", getWorldName());
+        main.getGraveyardManager().getGraveyardFileWrapper().getFile().set(getGraveyardName() + ".x", getX());
+        main.getGraveyardManager().getGraveyardFileWrapper().getFile().set(getGraveyardName() + ".y", getY());
+        main.getGraveyardManager().getGraveyardFileWrapper().getFile().set(getGraveyardName() + ".z", getZ());
+    }
     private int y;
     private int z;
 

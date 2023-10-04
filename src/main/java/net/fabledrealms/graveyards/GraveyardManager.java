@@ -43,6 +43,25 @@ public class GraveyardManager {
         graveyardMap.put(graveyard,graveyardLocation);
     }
 
+    public Graveyard getGraveyardByID(String id){
+        Graveyard returned = null;
+        for (Graveyard graveyard : graveyardMap.keySet()){
+            if (graveyard.getGraveyardName().equalsIgnoreCase(id)){
+                returned = graveyard;
+            }
+        }
+        return returned;
+    }
+
+    public Graveyard getGraveyardByLocation(Location location){
+        for (Graveyard graveyard : graveyardMap.keySet()){
+            Location location1 = new Location(Bukkit.getWorld(graveyard.getWorldName()),graveyard.getX(),graveyard.getY(), graveyard.getZ());
+            if (location1.equals(location)){
+                return graveyard;
+            }
+        }
+        return null;
+    }
     public Location getClosestGraveyard(Player player){
         World world = player.getWorld();
         List<Location> graveyards = new ArrayList<>();
@@ -65,6 +84,8 @@ public class GraveyardManager {
 
         return closest;
     }
+
+    public FileWrapper getGraveyardFileWrapper(){return graveyardFileWrapper;}
 
 
 
