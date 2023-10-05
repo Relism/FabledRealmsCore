@@ -59,10 +59,14 @@ public class Graveyard {
     }
 
     public void saveToFile(){
+        if (!main.getGraveyardManager().getGraveyardFileWrapper().getFile().getKeys(false).contains(getGraveyardName())){
+            main.getGraveyardManager().getGraveyardFileWrapper().getFile().createSection(graveyardName);
+        }
         main.getGraveyardManager().getGraveyardFileWrapper().getFile().set(getGraveyardName() + ".world", getWorldName());
         main.getGraveyardManager().getGraveyardFileWrapper().getFile().set(getGraveyardName() + ".x", getX());
         main.getGraveyardManager().getGraveyardFileWrapper().getFile().set(getGraveyardName() + ".y", getY());
         main.getGraveyardManager().getGraveyardFileWrapper().getFile().set(getGraveyardName() + ".z", getZ());
+        main.getGraveyardManager().getGraveyardFileWrapper().saveFile();
     }
     private int y;
     private int z;

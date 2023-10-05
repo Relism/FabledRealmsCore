@@ -7,5 +7,8 @@ description: The core plugin for FabledRealms
 website: www.fabledrealms.net
 commands:
   graveyard:
+    aliases:
+      - gy
+      - graves
     description: The graveyard module root command.
     usage: /graveyard

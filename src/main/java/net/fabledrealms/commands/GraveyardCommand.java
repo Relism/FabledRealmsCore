@@ -19,16 +19,16 @@ public class GraveyardCommand implements CommandExecutor {
     }
 
     private void sendHelp(Player player){
-        player.sendMessage(main.getStringUtil().colorString("&7*--------------{&8&lGraveyards&7}--------------*"));
-        player.sendMessage("&r");
+        player.sendMessage(main.getStringUtil().colorString("&7*--------------{&8&lGraveyard&7}--------------*"));
+        player.sendMessage(main.getStringUtil().colorString("&r"));
         player.sendMessage(main.getStringUtil().colorString("&f- /graveyards help &7&o(Displays the Graveyard module help text)"));
         player.sendMessage(main.getStringUtil().colorString("&f- /graveyards near &7&o(Displays the closest graveyard)"));
         player.sendMessage(main.getStringUtil().colorString("&f- /graveyards create <graveyardName> &7&o(creates a Graveyard at your location)"));
         player.sendMessage(main.getStringUtil().colorString("&f- /graveyards set <graveyardName> &7&o(Sets a graveyards location)"));
         player.sendMessage(main.getStringUtil().colorString("&f- /graveyards tp <graveyardName> &7&o(Teleports you to a Graveyard)"));
         player.sendMessage(main.getStringUtil().colorString("&f- /graveyards remove <graveyardName> &7&o(Removes a Graveyard)"));
-        player.sendMessage("&r");
-        player.sendMessage("&7*----------------------------------------*");
+        player.sendMessage(main.getStringUtil().colorString("&r"));
+        player.sendMessage(main.getStringUtil().colorString("&7*----------------------------------------*"));
     }
 
     private void createGraveyard(Player player, String id){

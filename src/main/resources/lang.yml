@@ -4,7 +4,7 @@ system:
 
 graveyards:
   module-prefix: "&7&lGraveyards &f>>>"
-  graveyard-created: "%prefix% &e%graveyard% created at &6X:%locationX% Y:%locationy% Z:%locationz%&e."
+  graveyard-created: "%prefix% &e%graveyard% created at &6X:%locationx% Y:%locationy% Z:%locationz%&e."
   graveyard-delete: "%prefix% &c%graveyard% has been removed!"
   graveyard-nearest: "%prefix% &aThe nearest graveyard is %graveyard%."
   graveyard-set: "%prefix% &e%graveyard% has been updated."
