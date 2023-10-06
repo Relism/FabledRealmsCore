@@ -26,14 +26,14 @@ public class GraveyardManager {
     }
 
     private void generateGraveyards(){
-        List<String> keyList = new ArrayList<>(graveyardFileWrapper.getFile().getKeys(false));
-        for (int i = 0; i < graveyardFileWrapper.getFile().getKeys(false).size(); i++){
-            String graveyardName = graveyardFileWrapper.getFile().getString(keyList.get(i));
-            String worldName = graveyardFileWrapper.getFile().getString(keyList.get(i) + ".world");
-            int x = graveyardFileWrapper.getFile().getInt(keyList.get(i) + ".x");
-            int y = graveyardFileWrapper.getFile().getInt(keyList.get(i) + ".y");
-            int z = graveyardFileWrapper.getFile().getInt(keyList.get(i) + ".z");
-            createGraveyard(graveyardName, worldName, x, y, z);
+        for (String key : graveyardFileWrapper.getFile().getKeys(false)){
+            String graveyardID = key;
+            String worldName = graveyardFileWrapper.getFile().getString(key+".world");
+            int x = graveyardFileWrapper.getFile().getInt(key+".x");
+            int y = graveyardFileWrapper.getFile().getInt(key+"y");
+            int z = graveyardFileWrapper.getFile().getInt(key+"z");
+            createGraveyard(graveyardID,worldName,x,y,z);
+            Bukkit.getLogger().info("Graveyard:" + key + " has been generated.");
         }
     }
 
@@ -55,7 +55,7 @@ public class GraveyardManager {
 
     public Graveyard getGraveyardByLocation(Location location){
         for (Graveyard graveyard : graveyardMap.keySet()){
-            Location location1 = new Location(Bukkit.getWorld(graveyard.getWorldName()),graveyard.getX(),graveyard.getY(), graveyard.getZ());
+            Location location1 = graveyardMap.get(graveyard);
             if (location1.equals(location)){
                 return graveyard;
             }
@@ -85,7 +85,27 @@ public class GraveyardManager {
         return closest;
     }
 
+    public void saveToFile(){
+        for (Location location : graveyardMap.values()){
+            Graveyard graveyard = getGraveyardByLocation(location);
+            String graveyardName = graveyard.getGraveyardName();
+            String worldName = graveyard.getWorldName();
+            int x = graveyard.getX();
+            int y = graveyard.getY();
+            int z = graveyard.getZ();
+            if (!graveyardFileWrapper.getFile().getKeys(false).contains(graveyardName)){
+                graveyardFileWrapper.getFile().createSection(graveyardName);
+            }
+            main.getGraveyardManager().getGraveyardFileWrapper().getFile().set(graveyardName + ".world", worldName);
+            main.getGraveyardManager().getGraveyardFileWrapper().getFile().set(graveyardName + ".x", x);
+            main.getGraveyardManager().getGraveyardFileWrapper().getFile().set(graveyardName + ".y", y);
+            main.getGraveyardManager().getGraveyardFileWrapper().getFile().set(graveyardName + ".z", z);
+            main.getGraveyardManager().getGraveyardFileWrapper().saveFile();
+        }
+    }
+
     public FileWrapper getGraveyardFileWrapper(){return graveyardFileWrapper;}
+    public HashMap<Graveyard, Location> getGraveyardMap(){return graveyardMap;}
 
 
 

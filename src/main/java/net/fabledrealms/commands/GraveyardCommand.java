@@ -31,13 +31,21 @@ public class GraveyardCommand implements CommandExecutor {
         player.sendMessage(main.getStringUtil().colorString("&7*----------------------------------------*"));
     }
 
+    private void listGraveyards(Player player){
+        for (Location location : main.getGraveyardManager().getGraveyardMap().values()){
+            Graveyard graveyard = main.getGraveyardManager().getGraveyardByLocation(location);
+            player.sendMessage(graveyard.getGraveyardName());
+        }
+    }
+
     private void createGraveyard(Player player, String id){
         Location newGraveyard = player.getLocation();
         String worldName = newGraveyard.getWorld().getName();
         int x = newGraveyard.getBlockX();
-        int y = newGraveyard.getBlockX();
+        int y = newGraveyard.getBlockY();
         int z = newGraveyard.getBlockZ();
         main.getGraveyardManager().createGraveyard(id,worldName,x,y,z);
+        main.getGraveyardManager().saveToFile();
         String createMessage = main.getLangFile().getFile().getString("graveyards.graveyard-created");
         createMessage = createMessage.replaceAll("%prefix%", main.getLangFile().getFile().getString("graveyards.module-prefix"));
         createMessage = createMessage.replaceAll("%graveyard%", id);
@@ -65,7 +73,7 @@ public class GraveyardCommand implements CommandExecutor {
         main.getGraveyardManager().getGraveyardByID(id).setX(x);
         main.getGraveyardManager().getGraveyardByID(id).setY(y);
         main.getGraveyardManager().getGraveyardByID(id).setZ(z);
-        main.getGraveyardManager().getGraveyardByID(id).saveToFile();
+        main.getGraveyardManager().saveToFile();
         String setMessage = main.getLangFile().getFile().getString("graveyards.graveyard-set");
         setMessage = setMessage.replaceAll("%prefix%", main.getLangFile().getFile().getString("graveyards.module-prefix"));
         setMessage = setMessage.replaceAll("%graveyard%", id);
@@ -73,7 +81,7 @@ public class GraveyardCommand implements CommandExecutor {
         setMessage = setMessage.replaceAll("%locationy%", String.valueOf(y));
         setMessage = setMessage.replaceAll("%locationz", String.valueOf(z));
         setMessage = main.getStringUtil().colorString(setMessage);
-        player.sendMessage();
+        player.sendMessage(setMessage);
     }
 
     private void tpGraveyard(Player player, String id){
@@ -107,7 +115,7 @@ public class GraveyardCommand implements CommandExecutor {
     }
 
     private void removeGraveyard(Player player, String id){
-        String deleteMessage = main.getLangFile().getFile().getString("graveyards.delete");
+        String deleteMessage = main.getLangFile().getFile().getString("graveyards.graveyard-delete");
         deleteMessage = deleteMessage.replaceAll("%prefix%", main.getLangFile().getFile().getString("graveyards.module-prefix"));
         deleteMessage = deleteMessage.replaceAll("%graveyard%",id);
         deleteMessage = main.getStringUtil().colorString(deleteMessage);
@@ -121,17 +129,17 @@ public class GraveyardCommand implements CommandExecutor {
         if (!command.getLabel().equalsIgnoreCase("graveyard")){return true;}
         command.getAliases().add("gy");
         if (args.length < 1 || args[0].equalsIgnoreCase("help")){sendHelp(sender);}
+        if (args[0].equalsIgnoreCase("list")){listGraveyards(sender);}
+        if (args[0].equalsIgnoreCase("near")){}
         if (args.length == 2){
-
-            if (args[0].equalsIgnoreCase("near")){
-
-            }
 
             if (args[0].equalsIgnoreCase("create")){
                 if (args[1].equals(null)){
                     sendHelp(sender);
                     return true;}
-                createGraveyard(sender, args[1]);
+                String name = args[1];
+                sender.sendMessage(name);
+                createGraveyard(sender, name);
             }
 
             if (args[0].equalsIgnoreCase("set")){

@@ -2,6 +2,11 @@ system:
   module-prefix: "&d&lSystem &f>>>"
   no-permission: "%prefix% &cYou don't have permission for that!"
 
+player:
+  death-message: "&cOh dear, you've died!"
+  level-up: "&6&lLevel Up!"
+  enter-water: "&7&oYou don't know how to swim...Why try to learn now?"
+
 graveyards:
   module-prefix: "&7&lGraveyards &f>>>"
   graveyard-created: "%prefix% &e%graveyard% created at &6X:%locationx% Y:%locationy% Z:%locationz%&e."

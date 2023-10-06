@@ -14,3 +14,8 @@ module:
       enabled: true
       line_1: "&7play.&6&lFabledRealms&7.net"
       line_2: "&eStart your story on May 4th 2024"
+  character-creation:
+    default-level: 1
+    default-exp: 0
+    default-balance: 10
+    max-characters: 5

@@ -8,6 +8,11 @@ public class Graveyard {
 
     public Graveyard(Core main, String graveyardName, String worldName, int x, int y, int z){
         this.main = main;
+        this.graveyardName = graveyardName;
+        this.worldName = worldName;
+        this.x = x;
+        this.y = y;
+        this.z = z;
     }
 
     private String worldName;
@@ -58,16 +63,6 @@ public class Graveyard {
         this.z = z;
     }
 
-    public void saveToFile(){
-        if (!main.getGraveyardManager().getGraveyardFileWrapper().getFile().getKeys(false).contains(getGraveyardName())){
-            main.getGraveyardManager().getGraveyardFileWrapper().getFile().createSection(graveyardName);
-        }
-        main.getGraveyardManager().getGraveyardFileWrapper().getFile().set(getGraveyardName() + ".world", getWorldName());
-        main.getGraveyardManager().getGraveyardFileWrapper().getFile().set(getGraveyardName() + ".x", getX());
-        main.getGraveyardManager().getGraveyardFileWrapper().getFile().set(getGraveyardName() + ".y", getY());
-        main.getGraveyardManager().getGraveyardFileWrapper().getFile().set(getGraveyardName() + ".z", getZ());
-        main.getGraveyardManager().getGraveyardFileWrapper().saveFile();
-    }
     private int y;
     private int z;
 

@@ -17,8 +17,12 @@ public class PlayerJoinListener implements Listener {
     }
 
     private void createPlayerDataTable(Player player){
-        main.getPlayerDatabase().execute("CREATE TABLE IF NOT EXISTS "+ player.getUniqueId().toString() + "(CharacterID int" +
-                ", Class string, Level-Main int, Experience float, Balance int)");
+        String tableName = player.getUniqueId().toString();
+        tableName = tableName.replaceAll("-", "_");
+        String sqlString = "CREATE TABLE IF NOT EXISTS "+ tableName + "(CharacterID int" +
+                ", ClassName text, PlayerLevel int, PlayerExperience int, Balance int);";
+        Bukkit.getLogger().info(sqlString); //Prints the SQL string to the console
+        main.getPlayerDatabase().execute(sqlString);
     }
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event){
