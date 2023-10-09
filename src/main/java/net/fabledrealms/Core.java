@@ -3,6 +3,7 @@ package net.fabledrealms;
 import net.fabledrealms.character.CharacterManager;
 import net.fabledrealms.commands.GraveyardCommand;
 import net.fabledrealms.graveyards.GraveyardManager;
+import net.fabledrealms.gui.GUIManager;
 import net.fabledrealms.listeners.PlayerDeathListener;
 import net.fabledrealms.listeners.PlayerJoinListener;
 import net.fabledrealms.listeners.ServerPingListener;
@@ -20,6 +21,7 @@ public final class Core extends JavaPlugin {
     private DatabaseWrapper playerDatabaseWrapper;
     private GraveyardManager graveyardManager;
     private CharacterManager characterManager;
+    private GUIManager guiManager;
     private StringUtil stringUtil;
 
     @Override
@@ -36,6 +38,7 @@ public final class Core extends JavaPlugin {
         this.langFileWrapper = new FileWrapper(this, this.getDataFolder().getPath(), "lang.yml");
         this.graveyardManager = new GraveyardManager(this);
         this.characterManager = new CharacterManager(this);
+        this.guiManager = new GUIManager(this);
     }
     private void registerUtility(){
         this.stringUtil = new StringUtil(this);
@@ -62,6 +65,7 @@ public final class Core extends JavaPlugin {
     }
     public GraveyardManager getGraveyardManager(){return graveyardManager;}
     public CharacterManager getCharacterManager(){return characterManager;}
+    public GUIManager getGuiManager(){return guiManager;}
 
 
     //Plugin Shutdown
