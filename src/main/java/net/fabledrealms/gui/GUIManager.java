@@ -17,11 +17,12 @@ public class GUIManager {
         this.guiHashMap = new HashMap<>();
     }
 
-    public void addPlayer(Player player, Inventory inventory){
+    public void openInventory(Player player, Inventory inventory){
         guiHashMap.put(player, inventory);
+        player.openInventory(inventory);
     }
 
-    public void removePlayer(Player player){
+    public void closeInventory(Player player){
         guiHashMap.remove(player);
     }
 

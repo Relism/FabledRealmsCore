@@ -2,6 +2,9 @@ system:
   module-prefix: "&d&lSystem &f>>>"
   no-permission: "%prefix% &cYou don't have permission for that!"
 
+gui:
+  character-creation-title: "&aCharacter Creation"
+
 player:
   death-message: "&cOh dear, you've died!"
   level-up: "&6&lLevel Up!"

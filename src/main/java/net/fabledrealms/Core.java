@@ -18,6 +18,7 @@ public final class Core extends JavaPlugin {
 
     private FileWrapper configFileWrapper;
     private FileWrapper langFileWrapper;
+    private FileWrapper guiItemWrapper;
     private DatabaseWrapper playerDatabaseWrapper;
     private GraveyardManager graveyardManager;
     private CharacterManager characterManager;
@@ -36,6 +37,7 @@ public final class Core extends JavaPlugin {
     private void registerManagers(){
         this.configFileWrapper = new FileWrapper(this, this.getDataFolder().getPath(), "config.yml");
         this.langFileWrapper = new FileWrapper(this, this.getDataFolder().getPath(), "lang.yml");
+        this.guiItemWrapper = new FileWrapper(this,this.getDataFolder().getPath(),"gui-items.yml");
         this.graveyardManager = new GraveyardManager(this);
         this.characterManager = new CharacterManager(this);
         this.guiManager = new GUIManager(this);
@@ -59,6 +61,7 @@ public final class Core extends JavaPlugin {
         return configFileWrapper;
     }
     public FileWrapper getLangFile(){return langFileWrapper;}
+    public FileWrapper getGuiItemWrapper(){return guiItemWrapper;}
     public DatabaseWrapper getPlayerDatabase(){return playerDatabaseWrapper;}
     public StringUtil getStringUtil() {
         return stringUtil;

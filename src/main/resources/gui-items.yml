@@ -1,0 +1,15 @@
+blank:
+  type: paper
+  item-meta:
+    display-name: " "
+    lore:
+      - " "
+    custom-model-data: 1
+
+locked:
+  type: barrier
+  item-meta:
+      display-name: "&c&Locked"
+      lore:
+        - " "
+      custom-model-data: 1
