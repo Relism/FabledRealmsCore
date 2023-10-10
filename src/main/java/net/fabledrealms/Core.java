@@ -5,6 +5,7 @@ import net.fabledrealms.commands.GraveyardCommand;
 import net.fabledrealms.graveyards.GraveyardManager;
 import net.fabledrealms.gui.GUIManager;
 import net.fabledrealms.listeners.*;
+import net.fabledrealms.util.LogUtil;
 import net.fabledrealms.util.StringUtil;
 import net.fabledrealms.wrappers.DatabaseWrapper;
 import net.fabledrealms.wrappers.FileWrapper;
@@ -30,6 +31,7 @@ public final class Core extends JavaPlugin {
         registerUtility();
         registerEvents();
         registerCommands();
+        LogUtil.sendLog("Startup complete!");
     }
 
     private void registerManagers(){
