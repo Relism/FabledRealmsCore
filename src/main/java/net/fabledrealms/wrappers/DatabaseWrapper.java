@@ -71,4 +71,7 @@ public class DatabaseWrapper {
         }
     }
 
+    public Connection getConnection() {
+        return connection;
+    }
 }

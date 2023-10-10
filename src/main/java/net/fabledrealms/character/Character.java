@@ -1,7 +1,5 @@
 package net.fabledrealms.character;
 
-import net.fabledrealms.Core;
-
 public class Character {
 
 

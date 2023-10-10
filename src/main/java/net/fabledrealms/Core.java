@@ -76,6 +76,7 @@ public final class Core extends JavaPlugin {
     //Plugin Shutdown
     @Override
     public void onDisable() {
+        characterManager.saveAllCharacters();
         playerDatabaseWrapper.disconnect();
     }
 }

@@ -3,6 +3,8 @@ package net.fabledrealms.economy;
 import net.fabledrealms.Core;
 import org.bukkit.entity.Player;
 
+import java.util.UUID;
+
 public class EconomyManager {
 
     private final Core main;
@@ -11,14 +13,24 @@ public class EconomyManager {
         this.main = main;
     }
 
-    public int getPlayerBalance(Player player, int CharacterID){
-        String uuid = player.getUniqueId().toString();
-        return (int) main.getPlayerDatabase().executeQuery("SELECT Balance FROM " + uuid + "WHERE CharacterID=" + CharacterID);
+    public int getPlayerBalance(UUID uuid){
+        return this.main.getCharacterManager().getCharacterFromMemory(uuid).getBalance();
     }
 
-    public void setPlayerBalance(Player player, int CharacterID, int newBalance){
-        String uuid = player.getUniqueId().toString();
-        main.getPlayerDatabase().execute("UPDATE " + uuid + " SET Balance " + newBalance + " WHERE CharacterID = " + CharacterID);
+    public void setPlayerBalance(UUID uuid, int balance) {
+        this.main.getCharacterManager().getCharacterFromMemory(uuid).setBalance(balance);
     }
 
+    public void addPlayerBalance(UUID uuid, int balance) {
+        this.setPlayerBalance(uuid, getPlayerBalance(uuid) + balance);
+    }
+
+    public void removePlayerBalance(UUID uuid, int balance) {
+        if (getPlayerBalance(uuid) <= balance) {
+            setPlayerBalance(uuid, 0);
+            return;
+        }
+
+        setPlayerBalance(uuid, getPlayerBalance(uuid) - balance);
+    }
 }
