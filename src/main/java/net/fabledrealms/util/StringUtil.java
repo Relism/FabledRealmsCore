@@ -1,6 +1,7 @@
 package net.fabledrealms.util;
 
 import net.fabledrealms.Core;
+import net.fabledrealms.character.Character;
 import org.bukkit.ChatColor;
 
 import java.util.regex.Matcher;
@@ -25,6 +26,15 @@ public class StringUtil {
                 matcher = pattern.matcher(input);
             }
         return ChatColor.translateAlternateColorCodes('&', input);
+    }
+    public String characterPlaceholder(Character character, String placeholder, String input){
+        String message = input;
+        if (placeholder.equalsIgnoreCase("id")){message = message.replaceAll("%characterID%", String.valueOf(character.getCharacterID()));}
+        if (placeholder.equalsIgnoreCase("balance")){message = message.replaceAll("%characterBalance%", String.valueOf(character.getBalance()));}
+        if (placeholder.equalsIgnoreCase("level")){message = message.replaceAll("%characterLevel%", String.valueOf(character.getCharacterLevel()));}
+        if (placeholder.equalsIgnoreCase("exp")){message = message.replaceAll("%characterExp%", String.valueOf(character.getCharacterExp()));}
+        if (placeholder.equalsIgnoreCase("class")){message = message.replaceAll("%characterClass%", character.getClassName());}
+        return message;
     }
 
 }

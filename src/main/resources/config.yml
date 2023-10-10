@@ -19,3 +19,4 @@ module:
     default-exp: 0
     default-balance: 10
     max-characters: 5
+    npc: "Character Creator"

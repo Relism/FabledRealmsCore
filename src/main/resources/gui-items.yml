@@ -6,10 +6,30 @@ blank:
       - " "
     custom-model-data: 1
 
+#Character Creation Items
+
 locked:
   type: barrier
   item-meta:
       display-name: "&c&Locked"
       lore:
         - " "
+      custom-model-data: 1
+
+  unlocked:
+    type: paper
+    item-meta:
+      display-name: "&aOpen Slot"
+      lore:
+        - "&7Click to create a character."
+      custom-model-data: 1
+
+  character:
+    type: book
+    item-meta:
+      display-name: "&e%characterid%"
+      lore:
+        - '&7Level: &e%characterLevel%'
+        - '&7Balance: &e%characterBalance%'
+        - '&7Location: &e%characterLastWorld%'
       custom-model-data: 1

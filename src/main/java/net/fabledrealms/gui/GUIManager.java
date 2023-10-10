@@ -29,4 +29,8 @@ public class GUIManager {
     public boolean isInventoryLocked(Player player){
         return guiHashMap.containsKey(player);
     }
+
+    public Inventory getMappedInventory(Player player){
+        return guiHashMap.get(player);
+    }
 }

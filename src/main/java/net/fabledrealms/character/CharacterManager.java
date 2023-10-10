@@ -54,6 +54,17 @@ public class CharacterManager {
         player.setExp(0);
     }
 
+    public Character getCharacter(Player player, int id){
+        String playerUUID = player.getUniqueId().toString();
+        playerUUID = playerUUID.replaceAll("-", "_");
+        String className = (String) playerDatabase.executeQuery("SELECT ClassName FROM " + playerUUID + " WHERE CharacterID = " + id+";");
+        int level = (int) playerDatabase.executeQuery("SELECT PlayerLevel FROM " + playerUUID + " WHERE CharacterID = " + id+";");
+        int exp = (int) playerDatabase.executeQuery("SELECT PlayerExp FROM " + playerUUID + " WHERE CharacterID = " + id+";");
+        int balance = (int) playerDatabase.executeQuery("SELECT Balance FROM " + playerUUID + " WHERE CharacterID = " + id+";");
+        Character load = new Character(id,className,level,exp,balance);
+        return load;
+    }
+
     private void saveCharacter(Player player, int characterID){
         if (!hasActiveCharacter(player)){return;}
         Character active = getActive(player);

@@ -4,9 +4,7 @@ import net.fabledrealms.character.CharacterManager;
 import net.fabledrealms.commands.GraveyardCommand;
 import net.fabledrealms.graveyards.GraveyardManager;
 import net.fabledrealms.gui.GUIManager;
-import net.fabledrealms.listeners.PlayerDeathListener;
-import net.fabledrealms.listeners.PlayerJoinListener;
-import net.fabledrealms.listeners.ServerPingListener;
+import net.fabledrealms.listeners.*;
 import net.fabledrealms.util.StringUtil;
 import net.fabledrealms.wrappers.DatabaseWrapper;
 import net.fabledrealms.wrappers.FileWrapper;
@@ -49,6 +47,8 @@ public final class Core extends JavaPlugin {
         new ServerPingListener(this);
         new PlayerJoinListener(this);
         new PlayerDeathListener(this);
+        new PlayerInteractListener(this);
+        new InventoryClickListener(this);
     }
     private void registerCommands(){
         new GraveyardCommand(this);
