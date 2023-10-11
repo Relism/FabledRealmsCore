@@ -4,11 +4,14 @@ system:
 
 gui:
   character-creation-title: "&aCharacter Creation"
+  character-selection-title: "&aPick Your Character"
+  character-action-confirm: "&aConfirm Action"
 
 player:
   death-message: "&cOh dear, you've died!"
   level-up: "&6&lLevel Up!"
   enter-water: "&7&oYou don't know how to swim...Why try to learn now?"
+  load-character: "&aCharacter loaded."
 
 graveyards:
   module-prefix: "&7&lGraveyards &f>>>"

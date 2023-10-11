@@ -1,7 +1,7 @@
 package net.fabledrealms.listeners;
 
 import net.fabledrealms.Core;
-import net.fabledrealms.gui.CharacterCreationGUI;
+import net.fabledrealms.gui.CharacterSelectionGUI;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -23,7 +23,7 @@ public class PlayerInteractListener implements Listener {
         if (event.getRightClicked() instanceof Player){rightClicked = (Player) event.getRightClicked();}
         if (rightClicked.equals(null)){return;}
         if (rightClicked.getName().equals(main.getConfigFile().getFile().getString("module.character-creation.npc"))){
-            main.getGuiManager().openInventory(event.getPlayer(), new CharacterCreationGUI(main, event.getPlayer()).getInventory());
+            main.getGuiManager().openInventory(event.getPlayer(), new CharacterSelectionGUI(main, event.getPlayer()).getInventory());
         }
     }
 

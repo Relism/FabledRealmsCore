@@ -12,12 +12,12 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 
 
-public class CharacterCreationGUI {
+public class CharacterSelectionGUI {
 
     private final Core main;
     private final Player player;
 
-    public CharacterCreationGUI(Core main, Player player){
+    public CharacterSelectionGUI(Core main, Player player){
         this.main = main;
         this.player = player;
     }
@@ -26,8 +26,8 @@ public class CharacterCreationGUI {
         Inventory inventory = Bukkit.createInventory(null, InventoryType.HOPPER,main.getStringUtil().colorString(main.getLangFile().getFile().getString("gui.character-creation-title")));
         if (!player.hasPermission("character.slot.4")){inventory.setItem(3,new GUIItem(main).generateItemStack("locked"));}
         if (!player.hasPermission("character.slot.staff")){inventory.setItem(4,new GUIItem(main).generateItemStack("locked"));}
-        for (int i = 0; i <= 3; i++){
-            Character slotCharacter = main.getCharacterManager().getCharacter(player,i);
+        for (int i = 0; i < 3; i++){
+            Character slotCharacter = main.getCharacterManager().getCharacter(player,i+1);
             ItemStack item;
             if (slotCharacter.equals(null)){item = new GUIItem(main).generateItemStack("unlocked");}
             else{

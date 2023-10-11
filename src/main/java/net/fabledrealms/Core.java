@@ -49,6 +49,7 @@ public final class Core extends JavaPlugin {
         new ServerPingListener(this);
         new PlayerJoinListener(this);
         new PlayerDeathListener(this);
+        new PlayerMoveListener(this);
         new PlayerInteractListener(this);
         new InventoryClickListener(this);
     }
