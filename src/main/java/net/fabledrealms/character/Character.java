@@ -1,27 +1,109 @@
 package net.fabledrealms.character;
 
+import java.util.UUID;
+
 public class Character {
 
-    public Character(int characterID, String className, int characterLevel, int characterExp, int balance){
-        this.characterID = characterID;
+    private final String uuid;
+    private final String className;
+    private final int levelMain;
+    private final int levelWoodcutting;
+    private final int levelFishing;
+    private final int levelMining;
+    private final int levelSmithing;
+    private final int levelCrafting;
+    private final int levelGathering;
+    private final int expMain;
+    private final int expWoodcutting;
+    private final int expFishing;
+    private final int expMining;
+    private final int expSmithing;
+    private final int expCrafting;
+    private final int expGathering;
+    private int balance;
+
+    public Character(String uuid, String className, int levelMain, int levelWoodcutting, int levelFishing, int levelMining, int levelSmithing, int levelCrafting, int levelGathering, int expMain, int expWoodcutting, int expFishing, int expMining, int expSmithing, int expCrafting, int expGathering, int balance) {
+        this.uuid = uuid;
         this.className = className;
-        this.characterLevel = characterLevel;
-        this.characterExp = characterExp;
+        this.levelMain = levelMain;
+        this.levelWoodcutting = levelWoodcutting;
+        this.levelFishing = levelFishing;
+        this.levelMining = levelMining;
+        this.levelSmithing = levelSmithing;
+        this.levelCrafting = levelCrafting;
+        this.levelGathering = levelGathering;
+        this.expMain = expMain;
+        this.expWoodcutting = expWoodcutting;
+        this.expFishing = expFishing;
+        this.expMining = expMining;
+        this.expSmithing = expSmithing;
+        this.expCrafting = expCrafting;
+        this.expGathering = expGathering;
         this.balance = balance;
     }
 
-    private int characterID;
-    private int balance;
-    private int characterLevel;
-    private int characterExp;
-    private String className;
-
-    public int getCharacterID() {
-        return characterID;
+    public UUID getUuid() {
+        return uuid;
     }
 
-    public void setCharacterID(int characterID) {
-        this.characterID = characterID;
+    public String getClassName() {
+        return className;
+    }
+
+    public int getLevelMain() {
+        return levelMain;
+    }
+
+    public int getLevelWoodcutting() {
+        return levelWoodcutting;
+    }
+
+    public int getLevelFishing() {
+        return levelFishing;
+    }
+
+    public int getLevelMining() {
+        return levelMining;
+    }
+
+    public int getLevelSmithing() {
+        return levelSmithing;
+    }
+
+    public int getLevelCrafting() {
+        return levelCrafting;
+    }
+
+    public int getLevelGathering() {
+        return levelGathering;
+    }
+
+    public int getExpMain() {
+        return expMain;
+    }
+
+    public int getExpWoodcutting() {
+        return expWoodcutting;
+    }
+
+    public int getExpFishing() {
+        return expFishing;
+    }
+
+    public int getExpMining() {
+        return expMining;
+    }
+
+    public int getExpSmithing() {
+        return expSmithing;
+    }
+
+    public int getExpCrafting() {
+        return expCrafting;
+    }
+
+    public int getExpGathering() {
+        return expGathering;
     }
 
     public int getBalance() {
@@ -31,29 +113,4 @@ public class Character {
     public void setBalance(int balance) {
         this.balance = balance;
     }
-
-    public int getCharacterLevel() {
-        return characterLevel;
-    }
-
-    public void setCharacterLevel(int characterLevel) {
-        this.characterLevel = characterLevel;
-    }
-
-    public float getCharacterExp() {
-        return characterExp;
-    }
-
-    public void setCharacterExp(int characterExp) {
-        this.characterExp = characterExp;
-    }
-
-    public String getClassName() {
-        return className;
-    }
-
-    public void setClassName(String className) {
-        this.className = className;
-    }
-
 }

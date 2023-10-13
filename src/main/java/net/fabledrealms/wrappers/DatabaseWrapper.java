@@ -33,6 +33,16 @@ public class DatabaseWrapper {
         this.connection = tryConnection;
     }
 
+    public void initialization() throws SQLException {
+        Statement statement = this.connection.createStatement();
+        statement.execute
+                ("CREATE TABLE IF NOT EXISTS players (uuid VARCHAR(36) primary key, " +
+                        "className VARCHAR(36), levelMain int, levelWoodcutting int, levelFishing int, levelMining int, levelSmithing int," +
+                        "levelCrafting int, levelGathering int, expMain int, expWoodcutting int, expFishing int, expMining int, " +
+                        "expSmithing int, expCrafting int, expGathering int, balance int)");
+        statement.close();
+    }
+
     private Statement getStatement(){
         Statement returnedStatement;
         try {

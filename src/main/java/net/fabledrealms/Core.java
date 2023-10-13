@@ -13,6 +13,8 @@ import net.fabledrealms.wrappers.DatabaseWrapper;
 import net.fabledrealms.wrappers.FileWrapper;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.sql.SQLException;
+
 public final class Core extends JavaPlugin {
 
     //Plugin Startup
@@ -63,6 +65,11 @@ public final class Core extends JavaPlugin {
     }
     private void registerDatabases(){
         this.playerDatabaseWrapper = new DatabaseWrapper(this, "player-data");
+        try {
+            this.playerDatabaseWrapper.initialization();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public FileWrapper getConfigFile() {
@@ -85,7 +92,11 @@ public final class Core extends JavaPlugin {
     //Plugin Shutdown
     @Override
     public void onDisable() {
-        characterManager.saveAllCharacters();
+        try {
+            characterManager.saveAllCharacters();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         playerDatabaseWrapper.disconnect();
     }
 }

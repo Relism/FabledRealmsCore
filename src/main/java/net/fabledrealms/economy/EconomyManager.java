@@ -1,7 +1,6 @@
 package net.fabledrealms.economy;
 
 import net.fabledrealms.Core;
-import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
@@ -14,11 +13,11 @@ public class EconomyManager {
     }
 
     public int getPlayerBalance(UUID uuid){
-        return this.main.getCharacterManager().getCharacterFromMemory(uuid).getBalance();
+        return this.main.getCharacterManager().getCharacter(uuid).getBalance();
     }
 
     public void setPlayerBalance(UUID uuid, int balance) {
-        this.main.getCharacterManager().getCharacterFromMemory(uuid).setBalance(balance);
+        this.main.getCharacterManager().getCharacter(uuid).setBalance(balance);
     }
 
     public void addPlayerBalance(UUID uuid, int balance) {
