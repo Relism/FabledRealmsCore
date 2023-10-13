@@ -2,6 +2,8 @@ package net.fabledrealms;
 
 import net.fabledrealms.character.CharacterManager;
 import net.fabledrealms.commands.GraveyardCommand;
+import net.fabledrealms.economy.EconomyManager;
+import net.fabledrealms.economy.command.EconomyCommand;
 import net.fabledrealms.graveyards.GraveyardManager;
 import net.fabledrealms.gui.GUIManager;
 import net.fabledrealms.listeners.*;
@@ -23,6 +25,7 @@ public final class Core extends JavaPlugin {
     private CharacterManager characterManager;
     private GUIManager guiManager;
     private StringUtil stringUtil;
+    private EconomyManager economyManager;
 
     @Override
     public void onEnable() {
@@ -41,6 +44,7 @@ public final class Core extends JavaPlugin {
         this.graveyardManager = new GraveyardManager(this);
         this.characterManager = new CharacterManager(this);
         this.guiManager = new GUIManager(this);
+        this.economyManager = new EconomyManager(this);
     }
     private void registerUtility(){
         this.stringUtil = new StringUtil(this);
@@ -55,6 +59,7 @@ public final class Core extends JavaPlugin {
     }
     private void registerCommands(){
         new GraveyardCommand(this);
+        new EconomyCommand(this);
     }
     private void registerDatabases(){
         this.playerDatabaseWrapper = new DatabaseWrapper(this, "player-data");
@@ -73,6 +78,9 @@ public final class Core extends JavaPlugin {
     public CharacterManager getCharacterManager(){return characterManager;}
     public GUIManager getGuiManager(){return guiManager;}
 
+    public EconomyManager getEconomyManager() {
+        return economyManager;
+    }
 
     //Plugin Shutdown
     @Override

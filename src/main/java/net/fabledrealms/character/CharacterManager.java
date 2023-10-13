@@ -28,9 +28,20 @@ public class CharacterManager {
     }
 
     public void loadAllCharacters(){
-        /*
-        TODO loop thru table and add to map
-         */
+        String query = "SELECT * FROM table_name ORDER BY CharacterID";
+        try (PreparedStatement statement = main.getPlayerDatabase().getConnection().prepareStatement(query,
+                ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+             ResultSet rs = statement.executeQuery();) {
+            while (rs.next()) {
+                /*
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                System.out.printf("id=%d, name=%s%n", id, name);
+                */
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public void saveAllCharacters(){

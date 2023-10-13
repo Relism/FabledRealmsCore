@@ -2,7 +2,6 @@ package net.fabledrealms.character;
 
 public class Character {
 
-
     public Character(int characterID, String className, int characterLevel, int characterExp, int balance){
         this.characterID = characterID;
         this.className = className;

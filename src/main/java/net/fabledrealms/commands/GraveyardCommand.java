@@ -9,13 +9,15 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.Objects;
+
 public class GraveyardCommand implements CommandExecutor {
 
     private final Core main;
 
     public GraveyardCommand(Core main){
         this.main = main;
-        Bukkit.getPluginCommand("graveyard").setExecutor(this);
+        Objects.requireNonNull(Bukkit.getPluginCommand("graveyard")).setExecutor(this);
     }
 
     private void sendHelp(Player player){
