@@ -90,30 +90,6 @@ public class CharacterManager {
         characterCache.add(new Character(player.getUniqueId().toString(),characterID, className,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0));
     }
 
-    /* PROBABLY TO REMOVE
-    public void loadCharacter(Player player, int id){
-        String playerUUID = player.getUniqueId().toString();
-        playerUUID = playerUUID.replaceAll("-", "_");
-        String className = (String) playerDatabase.executeQuery("SELECT ClassName FROM " + playerUUID + " WHERE CharacterID = " + id+";");
-        int level = (int) playerDatabase.executeQuery("SELECT PlayerLevel FROM " + playerUUID + " WHERE CharacterID = " + id+";");
-        int exp = (int) playerDatabase.executeQuery("SELECT PlayerExp FROM " + playerUUID + " WHERE CharacterID = " + id+";");
-        int balance = (int) playerDatabase.executeQuery("SELECT Balance FROM " + playerUUID + " WHERE CharacterID = " + id+";");
-        Character load = new Character(id,className,level,exp,balance);
-        if (hasActiveCharacter(player)) characterHashMap.remove(player.getUniqueId());
-        characterHashMap.put(player.getUniqueId(), load);
-        syncPlayer(player);
-    }
-
-    public void unloadCharacter(Player player){
-        if (!hasActiveCharacter(player)){return;}
-        saveCharacter(player,getActive(player).getCharacterID());
-        characterHashMap.remove(player.getUniqueId());
-        player.setLevel(0);
-        player.setExp(0);
-    }
-
-     */
-
     public Character getCharacter(Player player){
         for (Character character : characterCache) {
             if (character.getUuid().equals(player.getUniqueId().toString())) return character;
@@ -127,45 +103,6 @@ public class CharacterManager {
         }
         return null;
     }
-
-    /*
-    public Character getCharacterFromMemory(UUID uuid) {
-        for (Map.Entry<UUID, Character> characterEntry : characterHashMap.entrySet()) {
-            if (characterEntry.getKey().toString().equalsIgnoreCase(uuid.toString())) {
-                return characterEntry.getValue();
-            }
-        }
-        return null;
-    }
-
-    private void saveCharacter(Player player, int characterID){
-        if (!hasActiveCharacter(player)) return;
-        Character active = getActive(player);
-        String playerUUID = player.getUniqueId().toString();
-        playerUUID = playerUUID.replaceAll("-", "_");
-        playerDatabase.execute("UPDATE " + playerUUID + " SET CharacterID = " + active.getCharacterID()
-                + ", ClassName = " + active.getClassName() + ", PlayerLevel = " + active.getCharacterLevel() + ", PlayerExperience = " +
-                active.getCharacterExp() + ", Balance = " + active.getBalance() + " WHERE CharacterID=" + characterID + ";");
-    }
-    public void deleteCharacter(Player player, int characterID){
-        String playerUUID = player.getUniqueId().toString();
-        playerUUID = playerUUID.replaceAll("-", "_");
-        playerDatabase.execute("DELETE FROM " + playerUUID + " WHERE CharacterID = " + characterID);
-    }
-    public Boolean hasActiveCharacter(Player player){
-        return characterHashMap.containsKey(player.getUniqueId());
-    }
-
-    public Character getActive(Player player){
-        if (!hasActiveCharacter(player)) return null;
-        return characterHashMap.get(player.getUniqueId());
-    }
-    private void syncPlayer(Player player){
-        Character active = getActive(player);
-        player.setLevel(active.getCharacterLevel());
-        player.setExp(active.getCharacterExp());
-    }
-     */
 
     public Set<Character> getCharacterCache() {
         return characterCache;

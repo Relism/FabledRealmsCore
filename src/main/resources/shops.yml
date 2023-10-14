@@ -1,0 +1,6 @@
+shops:
+  example:
+    name: "example"
+    title: "&cExample Shop"
+    size: 54
+    items:

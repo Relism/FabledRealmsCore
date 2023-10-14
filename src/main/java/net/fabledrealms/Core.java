@@ -10,6 +10,8 @@ import net.fabledrealms.graveyards.GraveyardManager;
 import net.fabledrealms.gui.GUIManager;
 import net.fabledrealms.listeners.manager.ListenerManager;
 import net.fabledrealms.quests.QuestManager;
+import net.fabledrealms.shop.command.ShopAdminCommand;
+import net.fabledrealms.shop.manager.ShopManager;
 import net.fabledrealms.util.LogUtil;
 import net.fabledrealms.util.StringUtil;
 import net.fabledrealms.wrappers.DatabaseWrapper;
@@ -25,6 +27,7 @@ public final class Core extends JavaPlugin {
     private FileWrapper configFileWrapper;
     private FileWrapper langFileWrapper;
     private FileWrapper guiItemWrapper;
+    private FileWrapper shopFileWrapper;
     private DatabaseWrapper playerDatabaseWrapper;
     private GraveyardManager graveyardManager;
     private CharacterManager characterManager;
@@ -33,6 +36,7 @@ public final class Core extends JavaPlugin {
     private StringUtil stringUtil;
     private EconomyManager economyManager;
     private QuestManager questManager;
+    private ShopManager shopManager;
 
     @Override
     public void onEnable() {
@@ -49,12 +53,15 @@ public final class Core extends JavaPlugin {
         this.configFileWrapper = new FileWrapper(this, this.getDataFolder().getPath(), "config.yml");
         this.langFileWrapper = new FileWrapper(this, this.getDataFolder().getPath(), "lang.yml");
         this.guiItemWrapper = new FileWrapper(this,this.getDataFolder().getPath(),"gui-items.yml");
+        this.shopFileWrapper = new FileWrapper(this, this.getDataFolder().getPath(), "shops.yml");
         this.graveyardManager = new GraveyardManager(this);
         this.guiManager = new GUIManager(this);
         this.compassManager = new CompassManager(this);
         questManager = new QuestManager(this);
         new CommandManager(this);
         new ListenerManager(this);
+        this.shopManager = new ShopManager(this);
+        this.shopManager.loadShops();
     }
     private void registerUtility(){
         this.stringUtil = new StringUtil(this);
@@ -62,6 +69,7 @@ public final class Core extends JavaPlugin {
     private void registerCommands(){
         new GraveyardCommand(this);
         new EconomyCommand(this);
+        new ShopAdminCommand(this);
     }
     private void registerDatabases(){
         this.playerDatabaseWrapper = new DatabaseWrapper(this, "player-data");
@@ -76,6 +84,11 @@ public final class Core extends JavaPlugin {
         return configFileWrapper;
     }
     public FileWrapper getLangFile(){return langFileWrapper;}
+
+    public FileWrapper getShopFileWrapper() {
+        return shopFileWrapper;
+    }
+
     public FileWrapper getGuiItemWrapper(){return guiItemWrapper;}
     public DatabaseWrapper getPlayerDatabase(){return playerDatabaseWrapper;}
     public StringUtil getStringUtil() {
@@ -90,6 +103,10 @@ public final class Core extends JavaPlugin {
     }
     public CompassManager getCompassManager() { return compassManager;}
     public QuestManager getQuestManager() { return questManager; }
+
+    public ShopManager getShopManager() {
+        return shopManager;
+    }
 
     //Plugin Shutdown
     @Override

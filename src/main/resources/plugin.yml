@@ -21,3 +21,7 @@ commands:
     aliases:
       - quest
     description: The quest module root command.
+  shopadmin:
+    aliases:
+      - adminshop
+    description: The shop management module root command.
