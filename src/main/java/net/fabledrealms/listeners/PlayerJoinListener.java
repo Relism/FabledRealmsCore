@@ -18,16 +18,6 @@ public class PlayerJoinListener implements Listener {
         Bukkit.getPluginManager().registerEvents(this, main);
     }
 
-    /*
-    private void createPlayerDataTable(Player player){
-        String tableName = player.getUniqueId().toString();
-        tableName = tableName.replaceAll("-", "_");
-        String sqlString = "CREATE TABLE IF NOT EXISTS "+ tableName + "(CharacterID int" +
-                ", ClassName text, PlayerLevel int, PlayerExperience int, Balance int);";
-        Bukkit.getLogger().info(sqlString); //Prints the SQL string to the console
-        main.getPlayerDatabase().execute(sqlString);
-    }
-*/
     private void sendCompass(Player player){
         main.getCompassManager().addCompass(player, new CompassBar(player));
     }
@@ -35,7 +25,9 @@ public class PlayerJoinListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event){
         Player player = event.getPlayer();
         sendCompass(player);
+
+        if (this.main.getCharacterManager().getCharacter(player) == null) {
+            this.main.getCharacterManager().createCharacter(player, 0, null);
+        }
     }
-
-
 }

@@ -1,7 +1,5 @@
 package net.fabledrealms.character;
 
-import java.util.UUID;
-
 public class Character {
 
     private final String uuid;

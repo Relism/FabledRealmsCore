@@ -17,7 +17,7 @@ public class EconomyCommand implements CommandExecutor {
     public EconomyCommand(Core plugin) {
         this.plugin = plugin;
 
-        plugin.getCommand("economy").setExecutor(this);
+        Objects.requireNonNull(plugin.getCommand("economy")).setExecutor(this);
     }
 
     @Override
