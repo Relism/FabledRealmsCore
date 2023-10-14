@@ -27,7 +27,7 @@ public class CharacterSelectionGUI {
         if (!player.hasPermission("character.slot.4")){inventory.setItem(3,new GUIItem(main).generateItemStack("locked"));}
         if (!player.hasPermission("character.slot.staff")){inventory.setItem(4,new GUIItem(main).generateItemStack("locked"));}
         for (int i = 0; i < 3; i++){
-            Character slotCharacter = main.getCharacterManager().getCharacter(player,i+1);
+            Character slotCharacter = main.getCharacterManager().getCharacter(player.getUniqueId(),i+1);
             ItemStack item;
             if (slotCharacter.equals(null)){item = new GUIItem(main).generateItemStack("unlocked");}
             else{

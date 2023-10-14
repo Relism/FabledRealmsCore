@@ -6,6 +6,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.util.Objects;
 
@@ -16,7 +17,7 @@ public class EconomyCommand implements CommandExecutor {
     public EconomyCommand(Core plugin) {
         this.plugin = plugin;
 
-        Objects.requireNonNull(this.plugin.getCommand("economy")).setExecutor(this);
+        plugin.getCommand("economy").setExecutor(this);
     }
 
     @Override
@@ -41,7 +42,7 @@ public class EconomyCommand implements CommandExecutor {
                 } else {
                     int amount = Integer.parseInt(args[2]);
 
-                    this.plugin.getEconomyManager().setPlayerBalance(player.getUniqueId(), amount);
+                    this.plugin.getEconomyManager().setPlayerBalance(player.getUniqueId(),plugin.getCharacterManager().getCharacter((Player) player).getCharacterID(), amount);
                     sender.sendMessage(this.plugin.getStringUtil().colorString("&aSuccessfully set balance of " + amount + " to player."));
                 }
             }
@@ -62,7 +63,7 @@ public class EconomyCommand implements CommandExecutor {
                 } else {
                     int amount = Integer.parseInt(args[2]);
 
-                    this.plugin.getEconomyManager().addPlayerBalance(player.getUniqueId(), amount);
+                    this.plugin.getEconomyManager().addPlayerBalance(player.getUniqueId(),plugin.getCharacterManager().getCharacter((Player) player).getCharacterID(), amount);
                     sender.sendMessage(this.plugin.getStringUtil().colorString("&aSuccessfully added balance of " + amount + " to player."));
                 }
             }
@@ -83,7 +84,7 @@ public class EconomyCommand implements CommandExecutor {
                 } else {
                     int amount = Integer.parseInt(args[2]);
 
-                    this.plugin.getEconomyManager().removePlayerBalance(player.getUniqueId(), amount);
+                    this.plugin.getEconomyManager().removePlayerBalance(player.getUniqueId(),plugin.getCharacterManager().getCharacter((Player) player).getCharacterID(), amount);
                     sender.sendMessage(this.plugin.getStringUtil().colorString("&aSuccessfully removed balance of " + amount + " from player."));
                 }
             }
@@ -100,7 +101,7 @@ public class EconomyCommand implements CommandExecutor {
             } else {
                 OfflinePlayer player = Bukkit.getOfflinePlayer(args[1]);
 
-                sender.sendMessage(this.plugin.getStringUtil().colorString("&fBalance of &a" + player.getName() + " &7is &a$" + this.plugin.getEconomyManager().getPlayerBalance(player.getUniqueId())));
+                sender.sendMessage(this.plugin.getStringUtil().colorString("&fBalance of &a" + player.getName() + " &7is &a$" + this.plugin.getEconomyManager().getPlayerBalance(player.getUniqueId(), plugin.getCharacterManager().getCharacter((Player) player).getCharacterID())));
             }
         }
 

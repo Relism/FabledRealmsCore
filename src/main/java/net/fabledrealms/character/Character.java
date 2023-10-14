@@ -6,6 +6,7 @@ public class Character {
 
     private final String uuid;
     private final String className;
+    private final int characterID;
     private final int levelMain;
     private final int levelWoodcutting;
     private final int levelFishing;
@@ -22,9 +23,10 @@ public class Character {
     private final int expGathering;
     private int balance;
 
-    public Character(String uuid, String className, int levelMain, int levelWoodcutting, int levelFishing, int levelMining, int levelSmithing, int levelCrafting, int levelGathering, int expMain, int expWoodcutting, int expFishing, int expMining, int expSmithing, int expCrafting, int expGathering, int balance) {
+    public Character(String uuid,int characterID, String className, int levelMain, int levelWoodcutting, int levelFishing, int levelMining, int levelSmithing, int levelCrafting, int levelGathering, int expMain, int expWoodcutting, int expFishing, int expMining, int expSmithing, int expCrafting, int expGathering, int balance) {
         this.uuid = uuid;
         this.className = className;
+        this.characterID = characterID;
         this.levelMain = levelMain;
         this.levelWoodcutting = levelWoodcutting;
         this.levelFishing = levelFishing;
@@ -42,12 +44,16 @@ public class Character {
         this.balance = balance;
     }
 
-    public UUID getUuid() {
+    public String getUuid() {
         return uuid;
     }
 
     public String getClassName() {
         return className;
+    }
+
+    public int getCharacterID() {
+        return characterID;
     }
 
     public int getLevelMain() {

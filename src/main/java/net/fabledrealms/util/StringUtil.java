@@ -31,8 +31,8 @@ public class StringUtil {
         String message = input;
         if (placeholder.equalsIgnoreCase("id")){message = message.replaceAll("%characterID%", String.valueOf(character.getCharacterID()));}
         if (placeholder.equalsIgnoreCase("balance")){message = message.replaceAll("%characterBalance%", String.valueOf(character.getBalance()));}
-        if (placeholder.equalsIgnoreCase("level")){message = message.replaceAll("%characterLevel%", String.valueOf(character.getCharacterLevel()));}
-        if (placeholder.equalsIgnoreCase("exp")){message = message.replaceAll("%characterExp%", String.valueOf(character.getCharacterExp()));}
+        if (placeholder.equalsIgnoreCase("level")){message = message.replaceAll("%characterLevel%", String.valueOf(character.getLevelMain()));}
+        if (placeholder.equalsIgnoreCase("exp")){message = message.replaceAll("%characterExp%", String.valueOf(character.getExpMain()));}
         if (placeholder.equalsIgnoreCase("class")){message = message.replaceAll("%characterClass%", character.getClassName());}
         return message;
     }

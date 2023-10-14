@@ -43,8 +43,8 @@ public class CharacterManager {
         });
     }
 
-    public void createCharacter(Player player, String className){
-        characterCache.add(new Character(player.getUniqueId().toString(), className,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0));
+    public void createCharacter(Player player, int characterID, String className){
+        characterCache.add(new Character(player.getUniqueId().toString(),characterID, className,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0));
     }
 
     /* PROBABLY TO REMOVE
@@ -78,7 +78,7 @@ public class CharacterManager {
         return null;
     }
 
-    public Character getCharacter(UUID uuid) {
+    public Character getCharacter(UUID uuid, int slot) {
         for (Character character : characterCache) {
             if (character.getUuid().equals(uuid)) return character;
         }

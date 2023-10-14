@@ -1,6 +1,7 @@
 package net.fabledrealms.wrappers;
 
 import net.fabledrealms.Core;
+import net.fabledrealms.util.LogUtil;
 import org.bukkit.Bukkit;
 
 import java.sql.Connection;
@@ -21,6 +22,7 @@ public class DatabaseWrapper {
         String username = main.getConfigFile().getFile().getString("settings.databases." + database_id + ".username");
         String password = main.getConfigFile().getFile().getString("settings.databases." + database_id + ".password");
         String url = "jdbc:mysql://" + host + ":" + port + "/" + database;
+        LogUtil.sendLog(url);
         Connection tryConnection;
         try {
             tryConnection = DriverManager.getConnection(url, username, password);
@@ -36,7 +38,7 @@ public class DatabaseWrapper {
     public void initialization() throws SQLException {
         Statement statement = this.connection.createStatement();
         statement.execute
-                ("CREATE TABLE IF NOT EXISTS players (uuid VARCHAR(36) primary key, " +
+                ("CREATE TABLE IF NOT EXISTS players (uuid VARCHAR(36) primary key, characterID int," +
                         "className VARCHAR(36), levelMain int, levelWoodcutting int, levelFishing int, levelMining int, levelSmithing int," +
                         "levelCrafting int, levelGathering int, expMain int, expWoodcutting int, expFishing int, expMining int, " +
                         "expSmithing int, expCrafting int, expGathering int, balance int)");

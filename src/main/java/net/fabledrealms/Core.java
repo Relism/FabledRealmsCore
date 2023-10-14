@@ -35,6 +35,8 @@ public final class Core extends JavaPlugin {
     public void onEnable() {
         registerManagers();
         registerDatabases();
+        this.characterManager = new CharacterManager(this);
+        this.economyManager = new EconomyManager(this);
         registerUtility();
         registerEvents();
         registerCommands();
@@ -46,10 +48,8 @@ public final class Core extends JavaPlugin {
         this.langFileWrapper = new FileWrapper(this, this.getDataFolder().getPath(), "lang.yml");
         this.guiItemWrapper = new FileWrapper(this,this.getDataFolder().getPath(),"gui-items.yml");
         this.graveyardManager = new GraveyardManager(this);
-        this.characterManager = new CharacterManager(this);
         this.guiManager = new GUIManager(this);
         this.compassManager = new CompassManager(this);
-        this.economyManager = new EconomyManager(this);
     }
     private void registerUtility(){
         this.stringUtil = new StringUtil(this);

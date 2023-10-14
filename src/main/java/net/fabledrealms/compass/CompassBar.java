@@ -1,7 +1,13 @@
 package net.fabledrealms.compass;
 
+import net.fabledrealms.Core;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -11,17 +17,17 @@ import java.util.Map;
 
 public class CompassBar {
 
-    // Characters for the directions, largest to smallest
+    // Characters for the directions, largest to the smallest
     // Upper case = cardinal, lower case = ordinal
     private static final String[] compassSize = new String[] {
             "N", "n", "E", "e", "S", "s", "W", "w",
-            "O", "o", "F", "f", "T", "t", "X", "x",
+            "O", "o", "F", "f", "T", "t", "X", "x", //Add varying sized unicode icons to add a bubble effect
             "P", "p", "G", "g", "U", "u", "Y", "y",
             "Q", "q", "H", "h", "V", "v", "Z", "z"
     };
     // Lines for separating directions, from largest to smallest
     private static final String[] lines = new String[] {
-            "A", "B", "C", "D"
+            "|", "|", "|", "|" //Add varying sized unicode icons to add a bubble effect
     };
     // 3 2 2 5 2 2 3
     // Map for the char sizes of the compass
@@ -34,11 +40,12 @@ public class CompassBar {
     private final TextComponent compass;
     private final List<ICompassTrackable> trackers = new ArrayList<>();
     private final Map<Integer, ICompassTrackable> tempTrackers = new HashMap<>();
+    private BossBar compassBar = null;
 
     public CompassBar(Player player) {
         owner = player;
         compass = new TextComponent();
-        compass.setFont("compass");
+        //compass.setFont("compass");
     }
 
     public void addTracker(ICompassTrackable tracker) {
@@ -48,8 +55,16 @@ public class CompassBar {
     }
 
     public void displayCompass() {
-        compass.setText(getCompassDisplay(normalizeYaw(owner.getLocation().getYaw()) + 180));
-        owner.spigot().sendMessage(ChatMessageType.ACTION_BAR, compass);
+        compass.setText(getCompassDisplay(owner.getLocation().getYaw() + 180));
+        NamespacedKey compassKey = new NamespacedKey(Core.getPlugin(Core.class),"compassbar");
+        if (compassBar == null) {
+            this.compassBar = Bukkit.createBossBar(compassKey, compass.getText(), BarColor.WHITE, BarStyle.SOLID);
+            compassBar.addPlayer(owner);
+            compassBar.setVisible(true);
+            return;
+        }
+        compassBar.setTitle(compass.getText());
+        compassBar.setVisible(true);
     }
 
     private String getCompassDisplay(float yaw) {

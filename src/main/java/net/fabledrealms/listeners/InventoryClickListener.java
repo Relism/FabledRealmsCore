@@ -26,7 +26,6 @@ public class InventoryClickListener implements Listener {
             //Start character creator
             return;
         }
-        main.getCharacterManager().loadCharacter(player,event.getRawSlot()  + 1);
         player.sendMessage(main.getStringUtil().colorString(main.getLangFile().getFile().getString("player.load-character")));
         }
 

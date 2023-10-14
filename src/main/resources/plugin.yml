@@ -6,6 +6,11 @@ authors: [joshscoper]
 description: The core plugin for FabledRealms
 website: www.fabledrealms.net
 commands:
+  economy:
+    aliases:
+      - eco
+    description: The economy module root command
+    usage: /economy
   graveyard:
     aliases:
       - gy
