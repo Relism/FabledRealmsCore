@@ -18,6 +18,7 @@ public class PlayerJoinListener implements Listener {
         Bukkit.getPluginManager().registerEvents(this, main);
     }
 
+    /*
     private void createPlayerDataTable(Player player){
         String tableName = player.getUniqueId().toString();
         tableName = tableName.replaceAll("-", "_");
@@ -37,5 +38,5 @@ public class PlayerJoinListener implements Listener {
         sendCompass(player);
     }
 
-
+    */
 }

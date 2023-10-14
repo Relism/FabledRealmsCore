@@ -1,69 +1,53 @@
 package net.fabledrealms.character;
 
 import net.fabledrealms.Core;
-import net.fabledrealms.wrappers.DatabaseWrapper;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class CharacterManager {
 
     private final Core main;
-    private final DatabaseWrapper playerDatabase;
-    private final HashMap<UUID, Character> characterHashMap;
+    private final Set<Character> characterCache = new HashSet<>();
 
     public CharacterManager(Core main){
         this.main = main;
-
-        this.playerDatabase = main.getPlayerDatabase();
-        this.characterHashMap = new HashMap<>();
 
         this.loadAllCharacters();
     }
 
     public void loadAllCharacters(){
-        String query = "SELECT * FROM table_name ORDER BY CharacterID";
+        String query = "SELECT * FROM players ORDER BY uuid";
         try (PreparedStatement statement = main.getPlayerDatabase().getConnection().prepareStatement(query,
                 ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
              ResultSet rs = statement.executeQuery();) {
             while (rs.next()) {
-                /*
-                int id = rs.getInt("id");
-                String name = rs.getString("name");
-                System.out.printf("id=%d, name=%s%n", id, name);
-                */
+                /* TODO
+                characterCache.add(
+                        rs.getString("uuid"),
+                        rs.getString("className")); */
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public void saveAllCharacters(){
-        /*
-        //todo loop thru map and add to db
-         */
+    public void saveAllCharacters() throws SQLException {
+        // TODO
+        PreparedStatement preparedStatement = this.main.getPlayerDatabase().getConnection().prepareStatement("UPDATE players");
+        characterCache.forEach(character -> {
+
+        });
     }
 
-    public void createCharacter(Player player,int id, String className){
-        int balance = main.getConfigFile().getFile().getInt("module.character-creation.default-balance");
-        int level = main.getConfigFile().getFile().getInt("module.character-creation.default-level");
-        int exp = main.getConfigFile().getFile().getInt("module.character-creation.default-exp");
-        Character create = new Character(id,className,level,exp,balance);
-        characterHashMap.put(player.getUniqueId(),create);
-        Bukkit.getLogger().info(player.getName() + " has created character " + create.getCharacterID());
-        String playerUUID = player.getUniqueId().toString();
-        playerUUID = playerUUID.replaceAll("-", "_");
-        playerDatabase.execute("INSERT INTO " + playerUUID + "(CharacterID, ClassName, PlayerLevel, PlayerExperience, Balance) VALUES ("
-        +id+","+className+","+level+","+exp+","+balance+");");
-        syncPlayer(player);
+    public void createCharacter(Player player, String className){
+        characterCache.add(new Character(player.getUniqueId().toString(), className,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0));
     }
 
+    /* PROBABLY TO REMOVE
     public void loadCharacter(Player player, int id){
         String playerUUID = player.getUniqueId().toString();
         playerUUID = playerUUID.replaceAll("-", "_");
@@ -85,16 +69,23 @@ public class CharacterManager {
         player.setExp(0);
     }
 
-    public Character getCharacter(Player player, int id){
-        String playerUUID = player.getUniqueId().toString();
-        playerUUID = playerUUID.replaceAll("-", "_");
-        String className = (String) playerDatabase.executeQuery("SELECT ClassName FROM " + playerUUID + " WHERE CharacterID = " + id+";");
-        int level = (int) playerDatabase.executeQuery("SELECT PlayerLevel FROM " + playerUUID + " WHERE CharacterID = " + id+";");
-        int exp = (int) playerDatabase.executeQuery("SELECT PlayerExp FROM " + playerUUID + " WHERE CharacterID = " + id+";");
-        int balance = (int) playerDatabase.executeQuery("SELECT Balance FROM " + playerUUID + " WHERE CharacterID = " + id+";");
-        return new Character(id,className,level,exp,balance);
+     */
+
+    public Character getCharacter(Player player){
+        for (Character character : characterCache) {
+            if (character.getUuid().equals(player.getUniqueId())) return character;
+        }
+        return null;
     }
 
+    public Character getCharacter(UUID uuid) {
+        for (Character character : characterCache) {
+            if (character.getUuid().equals(uuid)) return character;
+        }
+        return null;
+    }
+
+    /*
     public Character getCharacterFromMemory(UUID uuid) {
         for (Map.Entry<UUID, Character> characterEntry : characterHashMap.entrySet()) {
             if (characterEntry.getKey().toString().equalsIgnoreCase(uuid.toString())) {
@@ -131,5 +122,9 @@ public class CharacterManager {
         player.setLevel(active.getCharacterLevel());
         player.setExp(active.getCharacterExp());
     }
+     */
 
+    public Set<Character> getCharacterCache() {
+        return characterCache;
+    }
 }
