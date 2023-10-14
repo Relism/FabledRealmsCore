@@ -17,3 +17,7 @@ commands:
       - graves
     description: The graveyard module root command.
     usage: /graveyard
+  quests:
+    aliases:
+      - quest
+    description: The quest module root command.

@@ -1,13 +1,15 @@
 package net.fabledrealms;
 
 import net.fabledrealms.character.CharacterManager;
+import net.fabledrealms.command.manager.CommandManager;
 import net.fabledrealms.compass.CompassManager;
 import net.fabledrealms.graveyards.GraveyardCommand;
 import net.fabledrealms.economy.EconomyManager;
 import net.fabledrealms.economy.command.EconomyCommand;
 import net.fabledrealms.graveyards.GraveyardManager;
 import net.fabledrealms.gui.GUIManager;
-import net.fabledrealms.listeners.*;
+import net.fabledrealms.listeners.manager.ListenerManager;
+import net.fabledrealms.quests.QuestManager;
 import net.fabledrealms.util.LogUtil;
 import net.fabledrealms.util.StringUtil;
 import net.fabledrealms.wrappers.DatabaseWrapper;
@@ -30,6 +32,7 @@ public final class Core extends JavaPlugin {
     private GUIManager guiManager;
     private StringUtil stringUtil;
     private EconomyManager economyManager;
+    private QuestManager questManager;
 
     @Override
     public void onEnable() {
@@ -38,7 +41,6 @@ public final class Core extends JavaPlugin {
         this.characterManager = new CharacterManager(this);
         this.economyManager = new EconomyManager(this);
         registerUtility();
-        registerEvents();
         registerCommands();
         LogUtil.sendLog("Startup complete!");
     }
@@ -50,17 +52,12 @@ public final class Core extends JavaPlugin {
         this.graveyardManager = new GraveyardManager(this);
         this.guiManager = new GUIManager(this);
         this.compassManager = new CompassManager(this);
+        questManager = new QuestManager(this);
+        new CommandManager(this);
+        new ListenerManager(this);
     }
     private void registerUtility(){
         this.stringUtil = new StringUtil(this);
-    }
-    private void registerEvents(){
-        new ServerPingListener(this);
-        new PlayerJoinListener(this);
-        new PlayerDeathListener(this);
-        new PlayerMoveListener(this);
-        new PlayerInteractListener(this);
-        new InventoryClickListener(this);
     }
     private void registerCommands(){
         new GraveyardCommand(this);
@@ -92,6 +89,7 @@ public final class Core extends JavaPlugin {
         return economyManager;
     }
     public CompassManager getCompassManager() { return compassManager;}
+    public QuestManager getQuestManager() { return questManager; }
 
     //Plugin Shutdown
     @Override

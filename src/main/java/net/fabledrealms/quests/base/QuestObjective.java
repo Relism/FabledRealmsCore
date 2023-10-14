@@ -1,11 +1,13 @@
 package net.fabledrealms.quests.base;
 
+import java.util.List;
+
 public class QuestObjective {
 
     private final String objective;
-    private String[] commands;
+    private List<String> commands;
 
-    public QuestObjective(String objective, String[] commands) {
+    public QuestObjective(String objective, List<String> commands) {
         this.objective = objective;
         this.commands = commands;
     }
@@ -14,11 +16,11 @@ public class QuestObjective {
         return objective;
     }
 
-    public String[] getCommands() {
+    public List<String> getCommands() {
         return commands;
     }
 
-    public void setCommands(String[] commands) {
+    public void setCommands(List<String> commands) {
         this.commands = commands;
     }
 }
