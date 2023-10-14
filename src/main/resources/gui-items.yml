@@ -1,35 +1,76 @@
+#Generic Menu Items
 blank:
   type: paper
   item-meta:
     display-name: " "
     lore:
       - " "
-    custom-model-data: 1
+    custom-model-data: 1001
 
-#Character Creation Items
+arrow-next:
+  type: paper
+  item-meta:
+    display-name: "&eNext"
+    lore:
+      - " "
+    custom-model-data: 1002
 
+arrow-back:
+  type: paper
+  item-meta:
+    display-name: "&eBack"
+    lore:
+      - " "
+    custom-model-data: 1003
+
+#Character Selection Items
 locked:
   type: barrier
   item-meta:
       display-name: "&c&Locked"
       lore:
         - " "
-      custom-model-data: 1
+      custom-model-data: 1001
 
-  unlocked:
-    type: paper
-    item-meta:
-      display-name: "&aOpen Slot"
-      lore:
-        - "&7Click to create a character."
-      custom-model-data: 1
+unlocked:
+  type: paper
+  item-meta:
+    display-name: "&aOpen Slot"
+    lore:
+      - "&7Click to create a character."
+    custom-model-data: 1004
 
-  character:
-    type: book
-    item-meta:
-      display-name: "&e%characterid%"
-      lore:
-        - '&7Level: &e%characterLevel%'
-        - '&7Balance: &e%characterBalance%'
-        - '&7Location: &e%characterLastWorld%'
-      custom-model-data: 1
+character:
+  type: book
+  item-meta:
+    display-name: "&e%characterid%"
+    lore:
+       - '&7Level: &e%characterLevel%'
+       - '&7Balance: &e%characterBalance%'
+       - '&7Location: &e%characterLastWorld%'
+    custom-model-data: 1001
+
+#Character Creation Items
+class-item-fighter:
+  type: paper
+  item-meta:
+    display-name: "&cWarrior"
+    lore:
+      - "&7Attributes will eventually go here"
+    custom-model-data: 1005
+
+class-item-ranger:
+  type: paper
+  item-meta:
+    display-name: "&aRanger"
+    lore:
+      - "&7Attributes will eventually go here"
+    custom-model-data: 1006
+
+class-item-mage:
+  type: paper
+  item-meta:
+    display-name: "&bMage"
+    lore:
+      - "&7Attributes will eventually go here"
+    custom-model-data: 1007
