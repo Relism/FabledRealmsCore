@@ -1,4 +1,4 @@
-package net.fabledrealms.commands;
+package net.fabledrealms.graveyards;
 
 import net.fabledrealms.Core;
 import net.fabledrealms.graveyards.Graveyard;

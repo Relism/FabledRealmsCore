@@ -1,7 +1,8 @@
 package net.fabledrealms;
 
 import net.fabledrealms.character.CharacterManager;
-import net.fabledrealms.commands.GraveyardCommand;
+import net.fabledrealms.compass.CompassManager;
+import net.fabledrealms.graveyards.GraveyardCommand;
 import net.fabledrealms.economy.EconomyManager;
 import net.fabledrealms.economy.command.EconomyCommand;
 import net.fabledrealms.graveyards.GraveyardManager;
@@ -23,6 +24,7 @@ public final class Core extends JavaPlugin {
     private DatabaseWrapper playerDatabaseWrapper;
     private GraveyardManager graveyardManager;
     private CharacterManager characterManager;
+    private CompassManager compassManager;
     private GUIManager guiManager;
     private StringUtil stringUtil;
     private EconomyManager economyManager;
@@ -44,6 +46,7 @@ public final class Core extends JavaPlugin {
         this.graveyardManager = new GraveyardManager(this);
         this.characterManager = new CharacterManager(this);
         this.guiManager = new GUIManager(this);
+        this.compassManager = new CompassManager(this);
         this.economyManager = new EconomyManager(this);
     }
     private void registerUtility(){
@@ -81,6 +84,7 @@ public final class Core extends JavaPlugin {
     public EconomyManager getEconomyManager() {
         return economyManager;
     }
+    public CompassManager getCompassManager() { return compassManager;}
 
     //Plugin Shutdown
     @Override
