@@ -14,6 +14,8 @@ import net.fabledrealms.shop.command.ShopAdminCommand;
 import net.fabledrealms.shop.manager.ShopManager;
 import net.fabledrealms.util.LogUtil;
 import net.fabledrealms.util.StringUtil;
+import net.fabledrealms.util.misc;
+import net.fabledrealms.util.msg;
 import net.fabledrealms.wrappers.DatabaseWrapper;
 import net.fabledrealms.wrappers.FileWrapper;
 import org.bukkit.NamespacedKey;
@@ -41,6 +43,7 @@ public final class Core extends JavaPlugin {
     /* KEYS */
 
     private final NamespacedKey productKey = new NamespacedKey(this, "product");
+    private final misc misc = new misc();
 
     @Override
     public void onEnable() {
@@ -50,6 +53,10 @@ public final class Core extends JavaPlugin {
         this.characterManager = new CharacterManager(this);
         this.economyManager = new EconomyManager(this);
         registerCommands();
+        msg.log(misc.separator("&#34deeb", "DEPENDENCIES"));
+        msg.log("Loading softdepends...");
+        misc.checkSoftDep("PlaceholderAPI");
+        msg.log("");
         LogUtil.sendLog("Startup complete!");
     }
 

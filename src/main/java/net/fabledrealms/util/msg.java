@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Player;
 import java.util.regex.Pattern;
+import me.clip.placeholderapi.PlaceholderAPI;
 
 public class msg {
 
@@ -11,7 +12,7 @@ public class msg {
     public static final char COLOR_CHAR = ChatColor.COLOR_CHAR;
 
     public static void send(Player p, String message) {
-        p.sendMessage(translateColorCodes(message));
+        p.sendMessage(translateColorCodes(PlaceholderAPI.setPlaceholders(p, message)));
     }
 
     public static void broadcast(String message) {
