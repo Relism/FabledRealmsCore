@@ -44,11 +44,11 @@ public final class Core extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        registerUtility();
         registerManagers();
         registerDatabases();
         this.characterManager = new CharacterManager(this);
         this.economyManager = new EconomyManager(this);
-        registerUtility();
         registerCommands();
         LogUtil.sendLog("Startup complete!");
     }
