@@ -41,11 +41,13 @@ public class ShopManager {
                 this.main.getShopFileWrapper().getFile().set("shops." + shop.getShopName() + ".items." + i + ".price", map.getValue());
                 i++;
             }
+            this.main.getShopFileWrapper().saveFile();
         }
     }
 
     private Map<ItemStack, Integer> getItems(String i){
         Map<ItemStack, Integer> itemStackMap = new HashMap<>();
+        if (this.main.getShopFileWrapper().getFile().getConfigurationSection("shops." + i + ".items") == null) return null;
         for (final String items : Objects.requireNonNull(this.main.getShopFileWrapper().getFile().getConfigurationSection("shops" + i + ".items")).getKeys(false)) {
             itemStackMap.put(this.main.getShopFileWrapper().getFile().getItemStack("shops." + i + ".items." + items + ".item"),
                     this.main.getShopFileWrapper().getFile().getInt("shops." + i + ".items." + items + ".price"));
