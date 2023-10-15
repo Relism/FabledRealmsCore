@@ -36,12 +36,14 @@ public class ShopManager {
             this.main.getShopFileWrapper().getFile().set("shops." + shop.getShopName() + ".title", shop.getShopTitle());
             this.main.getShopFileWrapper().getFile().set("shops." + shop.getShopName() + ".size", shop.getShopSize());
 
-            for (Map.Entry<ItemStack, Integer> map : shop.getShopItems().entrySet()) {
-                this.main.getShopFileWrapper().getFile().set("shops." + shop.getShopName() + ".items." + i + ".item", map.getKey());
-                this.main.getShopFileWrapper().getFile().set("shops." + shop.getShopName() + ".items." + i + ".price", map.getValue());
-                i++;
+            if (shop.getShopItems() != null && !shop.getShopItems().isEmpty()) {
+                for (Map.Entry<ItemStack, Integer> map : shop.getShopItems().entrySet()) {
+                    this.main.getShopFileWrapper().getFile().set("shops." + shop.getShopName() + ".items." + i + ".item", map.getKey());
+                    this.main.getShopFileWrapper().getFile().set("shops." + shop.getShopName() + ".items." + i + ".price", map.getValue());
+                    i++;
+                }
+                this.main.getShopFileWrapper().saveFile();
             }
-            this.main.getShopFileWrapper().saveFile();
         }
     }
 
