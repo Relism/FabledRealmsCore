@@ -1,7 +1,7 @@
 package net.fabledrealms.graveyards;
 
 import net.fabledrealms.Core;
-import net.fabledrealms.graveyards.Graveyard;
+import net.fabledrealms.util.msg;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -21,22 +21,22 @@ public class GraveyardCommand implements CommandExecutor {
     }
 
     private void sendHelp(Player player){
-        player.sendMessage(main.getStringUtil().colorString("&7*--------------{&8&lGraveyard&7}--------------*"));
-        player.sendMessage(main.getStringUtil().colorString("&r"));
-        player.sendMessage(main.getStringUtil().colorString("&f- /graveyards help &7&o(Displays the Graveyard module help text)"));
-        player.sendMessage(main.getStringUtil().colorString("&f- /graveyards near &7&o(Displays the closest graveyard)"));
-        player.sendMessage(main.getStringUtil().colorString("&f- /graveyards create <graveyardName> &7&o(creates a Graveyard at your location)"));
-        player.sendMessage(main.getStringUtil().colorString("&f- /graveyards set <graveyardName> &7&o(Sets a graveyards location)"));
-        player.sendMessage(main.getStringUtil().colorString("&f- /graveyards tp <graveyardName> &7&o(Teleports you to a Graveyard)"));
-        player.sendMessage(main.getStringUtil().colorString("&f- /graveyards remove <graveyardName> &7&o(Removes a Graveyard)"));
-        player.sendMessage(main.getStringUtil().colorString("&r"));
-        player.sendMessage(main.getStringUtil().colorString("&7*----------------------------------------*"));
+        msg.send(player, "&7*--------------{&8&lGraveyard&7}--------------*");
+        msg.send(player, "&r");
+        msg.send(player, "&f- /graveyards help &7&o(Displays the Graveyard module help text)");
+        msg.send(player, "&f- /graveyards near &7&o(Displays the closest graveyard)");
+        msg.send(player, "&f- /graveyards create <graveyardName> &7&o(creates a Graveyard at your location)");
+        msg.send(player, "&f- /graveyards set <graveyardName> &7&o(Sets a graveyards location)");
+        msg.send(player, "&f- /graveyards tp <graveyardName> &7&o(Teleports you to a Graveyard)");
+        msg.send(player, "&f- /graveyards remove <graveyardName> &7&o(Removes a Graveyard)");
+        msg.send(player, "&r");
+        msg.send(player, "&7*----------------------------------------*");
     }
 
     private void listGraveyards(Player player){
         for (Location location : main.getGraveyardManager().getGraveyardMap().values()){
             Graveyard graveyard = main.getGraveyardManager().getGraveyardByLocation(location);
-            player.sendMessage(graveyard.getGraveyardName());
+            msg.send(player, graveyard.getGraveyardName());
         }
     }
 
@@ -54,8 +54,7 @@ public class GraveyardCommand implements CommandExecutor {
         createMessage = createMessage.replaceAll("%locationx%", String.valueOf(x));
         createMessage = createMessage.replaceAll("%locationy%", String.valueOf(y));
         createMessage = createMessage.replaceAll("%locationz%", String.valueOf(z));
-        createMessage = main.getStringUtil().colorString(createMessage);
-        player.sendMessage(createMessage);
+        msg.send(player, createMessage);
     }
 
     private void setGraveyard(Player player, String id){
@@ -67,8 +66,7 @@ public class GraveyardCommand implements CommandExecutor {
         if (main.getGraveyardManager().getGraveyardByID(id).equals(null)){
             String errorMessage = main.getLangFile().getFile().getString("graveyards.graveyard-not-found");
             errorMessage = errorMessage.replaceAll("%prefix%", main.getLangFile().getFile().getString("graveyards.module-prefix"));
-            errorMessage = main.getStringUtil().colorString(errorMessage);
-            player.sendMessage(errorMessage);
+            msg.send(player, errorMessage);
             return;
         }
         main.getGraveyardManager().getGraveyardByID(id).setWorldName(worldName);
@@ -82,16 +80,14 @@ public class GraveyardCommand implements CommandExecutor {
         setMessage = setMessage.replaceAll("%locationx%",String.valueOf(x));
         setMessage = setMessage.replaceAll("%locationy%", String.valueOf(y));
         setMessage = setMessage.replaceAll("%locationz", String.valueOf(z));
-        setMessage = main.getStringUtil().colorString(setMessage);
-        player.sendMessage(setMessage);
+        msg.send(player, setMessage);
     }
 
     private void tpGraveyard(Player player, String id){
         if (main.getGraveyardManager().getGraveyardByID(id).equals(null)){
             String errorMessage = main.getLangFile().getFile().getString("graveyards.graveyard-not-found");
             errorMessage = errorMessage.replaceAll("%prefix%", main.getLangFile().getFile().getString("graveyards.module-prefix"));
-            errorMessage = main.getStringUtil().colorString(errorMessage);
-            player.sendMessage(errorMessage);
+            msg.send(player, errorMessage);
             return;
         }
         String worldName = main.getGraveyardManager().getGraveyardByID(id).getWorldName();
@@ -101,10 +97,9 @@ public class GraveyardCommand implements CommandExecutor {
         String tpMessage = main.getLangFile().getFile().getString("graveyards.graveyard-tp");
         tpMessage = tpMessage.replaceAll("%prefix%",main.getLangFile().getFile().getString("graveyards.module-prefix"));
         tpMessage = tpMessage.replaceAll("%graveyard%", id);
-        tpMessage = main.getStringUtil().colorString(tpMessage);
         Location location = new Location(Bukkit.getWorld(worldName),x,y,z);
         player.teleport(location);
-        player.sendMessage(tpMessage);
+        msg.send(player, tpMessage);
     }
 
     private void nearestGraveyard(Player player){
@@ -112,16 +107,14 @@ public class GraveyardCommand implements CommandExecutor {
         String nearMessage = main.getLangFile().getFile().getString("graveyards.graveyard-nearest");
         nearMessage = nearMessage.replaceAll("%prefix%", main.getLangFile().getFile().getString("graveyards.module-prefix"));
         nearMessage = nearMessage.replaceAll("%graveyard%", nearest.getGraveyardName());
-        nearMessage = main.getStringUtil().colorString(nearMessage);
-        player.sendMessage(nearMessage);
+        msg.send(player, nearMessage);
     }
 
     private void removeGraveyard(Player player, String id){
         String deleteMessage = main.getLangFile().getFile().getString("graveyards.graveyard-delete");
         deleteMessage = deleteMessage.replaceAll("%prefix%", main.getLangFile().getFile().getString("graveyards.module-prefix"));
         deleteMessage = deleteMessage.replaceAll("%graveyard%",id);
-        deleteMessage = main.getStringUtil().colorString(deleteMessage);
-        player.sendMessage(deleteMessage);
+        msg.send(player, deleteMessage);
         main.getGraveyardManager().getGraveyardFileWrapper().getFile().set(id,null);
     }
     @Override
@@ -140,7 +133,7 @@ public class GraveyardCommand implements CommandExecutor {
                     sendHelp(sender);
                     return true;}
                 String name = args[1];
-                sender.sendMessage(name);
+                msg.send(sender, name);
                 createGraveyard(sender, name);
             }
 

@@ -1,6 +1,7 @@
 package net.fabledrealms.economy.command;
 
 import net.fabledrealms.Core;
+import net.fabledrealms.util.msg;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -23,12 +24,13 @@ public class EconomyCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String string, String[] args) {
 
+        Player psender = (Player) sender;
         if (args.length == 0) {
             usage(sender);
         } else if (args[0].equalsIgnoreCase("set")) {
 
             if (!(sender.hasPermission("economy.command.set"))) {
-                sender.sendMessage(this.plugin.getStringUtil().colorString("&cNo Permissions."));
+                msg.send(psender, "&cNo Permissions.");
                 return false;
             }
 
@@ -43,13 +45,13 @@ public class EconomyCommand implements CommandExecutor {
                     int amount = Integer.parseInt(args[2]);
 
                     this.plugin.getEconomyManager().setPlayerBalance(player.getUniqueId(),plugin.getCharacterManager().getCharacter((Player) player).getCharacterID(), amount);
-                    sender.sendMessage(this.plugin.getStringUtil().colorString("&aSuccessfully set balance of " + amount + " to player."));
+                    msg.send(psender, "&aSuccessfully set balance of " + amount + " to player.");
                 }
             }
         } else if (args[0].equalsIgnoreCase("add")) {
 
             if (!(sender.hasPermission("economy.command.add"))) {
-                sender.sendMessage(this.plugin.getStringUtil().colorString("&cNo Permissions."));
+                msg.send(psender, "&cNo Permissions.");
                 return false;
             }
 
@@ -64,13 +66,13 @@ public class EconomyCommand implements CommandExecutor {
                     int amount = Integer.parseInt(args[2]);
 
                     this.plugin.getEconomyManager().addPlayerBalance(player.getUniqueId(),plugin.getCharacterManager().getCharacter((Player) player).getCharacterID(), amount);
-                    sender.sendMessage(this.plugin.getStringUtil().colorString("&aSuccessfully added balance of " + amount + " to player."));
+                    msg.send(psender, "&aSuccessfully added balance of " + amount + " to player.");
                 }
             }
         } else if (args[0].equalsIgnoreCase("remove")) {
 
             if (!(sender.hasPermission("economy.command.remove"))) {
-                sender.sendMessage(this.plugin.getStringUtil().colorString("&cNo Permissions."));
+                msg.send(psender, "&cNo Permissions.");
                 return false;
             }
 
@@ -85,13 +87,13 @@ public class EconomyCommand implements CommandExecutor {
                     int amount = Integer.parseInt(args[2]);
 
                     this.plugin.getEconomyManager().removePlayerBalance(player.getUniqueId(),plugin.getCharacterManager().getCharacter((Player) player).getCharacterID(), amount);
-                    sender.sendMessage(this.plugin.getStringUtil().colorString("&aSuccessfully removed balance of " + amount + " from player."));
+                    msg.send(psender, "&aSuccessfully removed balance of " + amount + " from player.");
                 }
             }
         } else if (args[0].equalsIgnoreCase("check")) {
 
             if (!(sender.hasPermission("economy.command.check"))) {
-                sender.sendMessage(this.plugin.getStringUtil().colorString("&cNo Permissions."));
+                msg.send(psender, "&cNo Permissions.");
                 return false;
             }
 
@@ -101,7 +103,11 @@ public class EconomyCommand implements CommandExecutor {
             } else {
                 OfflinePlayer player = Bukkit.getOfflinePlayer(args[1]);
 
-                sender.sendMessage(this.plugin.getStringUtil().colorString("&fBalance of &a" + player.getName() + " &7is &a$" + this.plugin.getEconomyManager().getPlayerBalance(player.getUniqueId(), plugin.getCharacterManager().getCharacter((Player) player).getCharacterID())));
+                msg.send(psender, "&fBalance of &a" + player.getName() + " &7is &a$" + this.plugin.getEconomyManager()
+                        .getPlayerBalance(player.getUniqueId(), plugin.getCharacterManager()
+                                .getCharacter((Player) player)
+                                .getCharacterID())
+                );
             }
         }
 
@@ -109,11 +115,12 @@ public class EconomyCommand implements CommandExecutor {
     }
 
     private void usage(CommandSender sender) {
-        sender.sendMessage(this.plugin.getStringUtil().colorString("&f&m-----------------------------------"));
-        sender.sendMessage(this.plugin.getStringUtil().colorString("&a/economy set <player> <amount>"));
-        sender.sendMessage(this.plugin.getStringUtil().colorString("&a/economy add <player>"));
-        sender.sendMessage(this.plugin.getStringUtil().colorString("&a/economy remove <player>"));
-        sender.sendMessage(this.plugin.getStringUtil().colorString("&a/economy check <player>"));
-        sender.sendMessage(this.plugin.getStringUtil().colorString("&f&m-----------------------------------"));
+        Player psender = (Player) sender;
+        msg.send(psender, "&f&m-----------------------------------");
+        msg.send(psender, "&a/economy set <player> <amount>");
+        msg.send(psender, "&a/economy add <player>");
+        msg.send(psender, "&a/economy remove <player>");
+        msg.send(psender, "&a/economy check <player>");
+        msg.send(psender, "&f&m-----------------------------------");
     }
 }

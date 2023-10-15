@@ -3,11 +3,13 @@ package net.fabledrealms.command;
 import net.fabledrealms.Core;
 import net.fabledrealms.command.base.CoreCommand;
 import net.fabledrealms.util.Constants;
+import net.fabledrealms.util.msg;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class QuestsCommand extends Constants implements CoreCommand {
 
@@ -45,15 +47,14 @@ public class QuestsCommand extends Constants implements CoreCommand {
         if(!(sender instanceof Player)) return;
         Player p = (Player) sender;
         if(!p.hasPermission(getPermission())) {
-            p.sendMessage(core.getStringUtil().colorString(core.getLangFile().getFile().getString("system.no-permission")
-                    .replace("%%prefix%",
-                            super.prefix)));
+            msg.send(p, Objects.requireNonNull(core.getLangFile().getFile().getString("system.no-permission"))
+                    .replace("%%prefix%", super.prefix));
             return;
         }
 
         if(args.length == 0) {
             for(String usage : getUsage()) {
-                p.sendMessage(core.getStringUtil().colorString(usage));
+                msg.send(p, usage);
             }
         }
 

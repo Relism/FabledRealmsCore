@@ -1,6 +1,7 @@
 package net.fabledrealms.shop.command;
 
 import net.fabledrealms.Core;
+import net.fabledrealms.util.msg;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -21,12 +22,13 @@ public class ShopAdminCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
 
+        Player psender = (Player) sender;
         if (args.length == 0) {
             usage(sender);
         } else if (args[0].equalsIgnoreCase("create")) {
 
             if (!(sender.hasPermission("shop.command.create"))) {
-                sender.sendMessage(this.main.getStringUtil().colorString("&cNo Permissions."));
+                msg.send(psender, "&cNo Permissions.");
                 return false;
             }
 
@@ -44,24 +46,24 @@ public class ShopAdminCommand implements CommandExecutor {
                         int shopSize = Integer.parseInt(args[3]);
 
                         if (this.main.getShopManager().getShop(shopName) != null) {
-                            sender.sendMessage(this.main.getStringUtil().colorString("&cShop with name " + shopName + " already exists."));
+                            msg.send(psender, "&cShop with name " + shopName + " already exists.");
                             return false;
                         }
 
                         if (this.main.getShopManager().getShopByTitle(shopTitle) != null) {
-                            sender.sendMessage(this.main.getStringUtil().colorString("&cShop with title " + shopTitle + " already exists."));
+                            msg.send(psender, "&cShop with title " + shopTitle + " already exists.");
                             return false;
                         }
 
                         this.main.getShopManager().createShop(shopName, shopTitle, shopSize);
-                        sender.sendMessage(this.main.getStringUtil().colorString("&aSuccessfully created " + shopName + " shop."));
+                        msg.send(psender, "&aSuccessfully created " + shopName + " shop.");
                     }
                 }
             }
         } else if (args[0].equalsIgnoreCase("delete")) {
 
             if (!(sender.hasPermission("shop.command.delete"))) {
-                sender.sendMessage(this.main.getStringUtil().colorString("&cNo Permissions."));
+                msg.send(psender, "&cNo Permissions.");
                 return false;
             }
 
@@ -71,22 +73,22 @@ public class ShopAdminCommand implements CommandExecutor {
                 String shopName = args[1];
 
                 if (this.main.getShopManager().getShop(shopName) == null) {
-                    sender.sendMessage(this.main.getStringUtil().colorString("&cShop with name " + shopName + " doesnt exists."));
+                    msg.send(psender, "&cShop with name " + shopName + " doesnt exist.");
                     return false;
                 }
 
                 this.main.getShopManager().removeShop(shopName);
-                sender.sendMessage(this.main.getStringUtil().colorString("&aSuccessfully deleted " + shopName + " shop."));
+                msg.send(psender, "&aSuccessfully deleted " + shopName + " shop.");
             }
         } else if (args[0].equalsIgnoreCase("additem")) {
 
             if (!(sender.hasPermission("shop.command.additem"))) {
-                sender.sendMessage(this.main.getStringUtil().colorString("&cNo Permissions."));
+                msg.send(psender, "&cNo Permissions.");
                 return false;
             }
 
             if (!(sender instanceof Player player)) {
-                sender.sendMessage(this.main.getStringUtil().colorString("&cYou must be player to execute this command argument."));
+                msg.send(psender, "&cYou must be player to execute this command argument.");
                 return false;
             }
 
@@ -101,12 +103,12 @@ public class ShopAdminCommand implements CommandExecutor {
                     int price = Integer.parseInt(args[2]);
 
                     if (this.main.getShopManager().getShop(shopName) == null) {
-                        sender.sendMessage(this.main.getStringUtil().colorString("&cShop with name " + shopName + " doesnt exists."));
+                        msg.send(psender, "&cShop with name " + shopName + " doesnt exists.");
                         return false;
                     }
 
                     this.main.getShopManager().getShop(shopName).getShopItems().put(player.getInventory().getItemInMainHand(), price);
-                    sender.sendMessage(this.main.getStringUtil().colorString("&aSuccessfully added item to " + shopName + " shop."));
+                    msg.send(psender, "&aSuccessfully added item to " + shopName + " shop.");
                 }
             }
         }
@@ -115,10 +117,11 @@ public class ShopAdminCommand implements CommandExecutor {
     }
 
     private void usage(CommandSender sender) {
-        sender.sendMessage(this.main.getStringUtil().colorString("&f&m-----------------------------------"));
-        sender.sendMessage(this.main.getStringUtil().colorString("&a/shop create <name> <title> <size>"));
-        sender.sendMessage(this.main.getStringUtil().colorString("&a/shop delete <name>"));
-        sender.sendMessage(this.main.getStringUtil().colorString("&a/shop additem <price>"));
-        sender.sendMessage(this.main.getStringUtil().colorString("&f&m-----------------------------------"));
+        Player psender = (Player) sender;
+        msg.send(psender, "&f&m-----------------------------------");
+        msg.send(psender, "&a/shop create <name> <title> <size>");
+        msg.send(psender, "&a/shop delete <name>");
+        msg.send(psender, "&a/shop additem <price>");
+        msg.send(psender, "&f&m-----------------------------------");
     }
 }

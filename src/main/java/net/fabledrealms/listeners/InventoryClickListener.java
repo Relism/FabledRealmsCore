@@ -2,6 +2,7 @@ package net.fabledrealms.listeners;
 
 import net.fabledrealms.Core;
 import net.fabledrealms.gui.GUIItem;
+import net.fabledrealms.util.msg;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -26,7 +27,7 @@ public class InventoryClickListener implements Listener {
             //Start character creator
             return;
         }
-        player.sendMessage(main.getStringUtil().colorString(main.getLangFile().getFile().getString("player.load-character")));
+        msg.send(player, main.getLangFile().getFile().getString("player.load-character"));
         }
 
     @EventHandler

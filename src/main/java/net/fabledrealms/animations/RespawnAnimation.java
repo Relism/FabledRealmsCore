@@ -1,6 +1,7 @@
 package net.fabledrealms.animations;
 
 import net.fabledrealms.Core;
+import net.fabledrealms.util.msg;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -49,10 +50,9 @@ public class RespawnAnimation {
     }
     private void respawn(Player player) {
         String deathMessage = main.getLangFile().getFile().getString("player.death-message");
-        deathMessage = main.getStringUtil().colorString(deathMessage);
         player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PLAYER_DEATH,1,1);
         playBeamAnimation(player);
-        player.sendMessage(deathMessage);
+        msg.send(player, deathMessage);
     }
 
 }

@@ -2,6 +2,7 @@ package net.fabledrealms.listeners;
 
 import net.fabledrealms.Core;
 import net.fabledrealms.animations.RespawnAnimation;
+import net.fabledrealms.util.msg;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -23,7 +24,7 @@ public class PlayerMoveListener implements Listener {
     private void playerAntiSwim(Player player, Location toLoc){
         //Finds the closest safe block within radius, if none then teleports player to the nearest graveyard
         String message = main.getLangFile().getFile().getString("player.enter-water");
-        player.sendMessage(main.getStringUtil().colorString(message));
+        msg.send(player, message);
         player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO,1,1);
         int radius = 10;
         for (int x = -(radius); x <= radius; x ++) {
