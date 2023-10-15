@@ -55,7 +55,7 @@ public class CharacterManager {
     public void saveAllCharacters() throws SQLException {
         PreparedStatement statement =
                 this.main.getPlayerDatabase().getConnection()
-                        .prepareStatement("UPDATE players SET characterID = ?, className = ?, levelMain = ?, levelWoodcuting = ?, levelFishing = ?, levelMining = ?, levelSmithing = ?, levelCrafting = ?, levelGathering = ?, expMain = ?, expWoodcutting = ?, expFishing = ?, expMining = ?, expSmithing = ?, expCrafting = ?, expGathering = ?, balance = ? WHERE uuid = ?");
+                        .prepareStatement("UPDATE players SET characterID = ?, className = ?, levelMain = ?, levelWoodcutting = ?, levelFishing = ?, levelMining = ?, levelSmithing = ?, levelCrafting = ?, levelGathering = ?, expMain = ?, expWoodcutting = ?, expFishing = ?, expMining = ?, expSmithing = ?, expCrafting = ?, expGathering = ?, balance = ? WHERE uuid = ?");
         characterCache.forEach(character -> {
             try {
                 statement.setInt(1, character.getCharacterID());

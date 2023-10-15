@@ -24,6 +24,7 @@ import java.sql.SQLException;
 public final class Core extends JavaPlugin {
 
     //Plugin Startup
+    private static Core INSTANCE;
     private FileWrapper configFileWrapper;
     private FileWrapper langFileWrapper;
     private FileWrapper guiItemWrapper;
@@ -44,6 +45,7 @@ public final class Core extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        INSTANCE = this;
         registerUtility();
         registerManagers();
         registerDatabases();
@@ -51,6 +53,10 @@ public final class Core extends JavaPlugin {
         this.economyManager = new EconomyManager(this);
         registerCommands();
         LogUtil.sendLog("Startup complete!");
+    }
+
+    public static Core getINSTANCE() {
+        return INSTANCE;
     }
 
     private void registerManagers(){
