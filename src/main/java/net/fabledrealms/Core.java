@@ -61,7 +61,7 @@ public final class Core extends JavaPlugin {
         this.graveyardManager = new GraveyardManager(this);
         this.guiManager = new GUIManager(this);
         this.compassManager = new CompassManager(this);
-        questManager = new QuestManager(this);
+        this.questManager = new QuestManager(this);
         new CommandManager(this);
         new ListenerManager(this);
         this.shopManager = new ShopManager(this);
@@ -120,11 +120,17 @@ public final class Core extends JavaPlugin {
     @Override
     public void onDisable() {
         try {
-            characterManager.saveAllCharacters();
+            if (characterManager != null) {
+                characterManager.saveAllCharacters();
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        shopManager.saveShops();
-        playerDatabaseWrapper.disconnect();
+        if (shopManager != null) {
+            shopManager.saveShops();
+        }
+        if (playerDatabaseWrapper != null) {
+            playerDatabaseWrapper.disconnect();
+        }
     }
 }
