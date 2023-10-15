@@ -61,6 +61,7 @@ public final class Core extends JavaPlugin {
     }
 
     private void registerManagers(){
+        msg.log(misc.separator("&#eb8c34", "MANAGERS REGISTERING"));
         this.configFileWrapper = new FileWrapper(this, this.getDataFolder().getPath(), "config.yml");
         this.langFileWrapper = new FileWrapper(this, this.getDataFolder().getPath(), "lang.yml");
         this.guiItemWrapper = new FileWrapper(this,this.getDataFolder().getPath(),"gui-items.yml");
@@ -73,6 +74,7 @@ public final class Core extends JavaPlugin {
         new ListenerManager(this);
         this.shopManager = new ShopManager(this);
         this.shopManager.loadShops();
+        msg.log("");
     }
     private void registerUtility(){
         this.stringUtil = new StringUtil(this);

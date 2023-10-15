@@ -1,6 +1,7 @@
 package net.fabledrealms.wrappers;
 
 import net.fabledrealms.Core;
+import net.fabledrealms.util.msg;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -25,15 +26,25 @@ public class FileWrapper {
         setupFile();
     }
 
-    public void setupFile(){
-        if (!directory.exists()){
+    public void setupFile() {
+        if (!directory.exists()) {
             directory.mkdirs();
+            msg.log("&#eb8c34• &fDirectory &#a83232does not exist&f. Created directory: \"&#eb8c34" + directory.getAbsolutePath() + "&f\"");
+            return; // directory doesn't exist, just return
         }
+
         if (!file.exists()) {
-            loadFile();
+            try {
+                loadFile();
+                msg.log("&#eb8c34• &fFile \"&#eb8c34" + file.getName() + "&f\"&#a83232 not found");
+            } catch (Error e) {
+                msg.log("&#eb8c34• &fError encountered while loading file: &#a83232" + e.getMessage());
+            }
+        } else {
+            msg.log("&#eb8c34• &fFile \"&#eb8c34" + file.getName() + "&f\" has been &#5ca832successfully &finitialized!");
         }
-        Bukkit.getLogger().info(file.getName() + " has been successfully initialized!");
     }
+
 
     // Load File
 
