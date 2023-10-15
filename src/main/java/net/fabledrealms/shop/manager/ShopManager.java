@@ -2,7 +2,12 @@ package net.fabledrealms.shop.manager;
 
 import net.fabledrealms.Core;
 import net.fabledrealms.shop.Shop;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.*;
 
@@ -24,6 +29,21 @@ public class ShopManager {
         }
     }
 
+    public void saveShops(){
+        for (Shop shop : shops) {
+            int i = 0;
+            this.main.getShopFileWrapper().getFile().set("shops." + shop.getShopName() + ".name", shop.getShopName());
+            this.main.getShopFileWrapper().getFile().set("shops." + shop.getShopName() + ".title", shop.getShopTitle());
+            this.main.getShopFileWrapper().getFile().set("shops." + shop.getShopName() + ".size", shop.getShopSize());
+
+            for (Map.Entry<ItemStack, Integer> map : shop.getShopItems().entrySet()) {
+                this.main.getShopFileWrapper().getFile().set("shops." + shop.getShopName() + ".items." + i + ".item", map.getKey());
+                this.main.getShopFileWrapper().getFile().set("shops." + shop.getShopName() + ".items." + i + ".price", map.getValue());
+                i++;
+            }
+        }
+    }
+
     private Map<ItemStack, Integer> getItems(String i){
         Map<ItemStack, Integer> itemStackMap = new HashMap<>();
         for (final String items : Objects.requireNonNull(this.main.getShopFileWrapper().getFile().getConfigurationSection("shops" + i + ".items")).getKeys(false)) {
@@ -31,6 +51,22 @@ public class ShopManager {
                     this.main.getShopFileWrapper().getFile().getInt("shops." + i + ".items." + items + ".price"));
         }
         return itemStackMap;
+    }
+
+    public Inventory getShopInventory(Player owner, String shopName){
+        Inventory inventory = Bukkit.createInventory(owner, getShop(shopName).getShopSize(), getShop(shopName).getShopTitle());
+
+        for (Map.Entry<ItemStack, Integer> map : getShop(shopName).getShopItems().entrySet()) {
+            ItemStack itemStack = map.getKey();
+            ItemMeta meta = itemStack.getItemMeta();
+            if (meta != null) {
+                meta.getPersistentDataContainer().set(this.main.getProductKey(), PersistentDataType.INTEGER, map.getValue());
+                itemStack.setItemMeta(meta);
+            }
+            inventory.addItem(itemStack);
+        }
+
+        return inventory;
     }
 
     public Set<Shop> getShops() {
@@ -42,7 +78,7 @@ public class ShopManager {
     }
 
     public void removeShop(String shopName) {
-
+        this.shops.remove(getShop(shopName));
     }
 
     public Shop getShop(String shopName) {
