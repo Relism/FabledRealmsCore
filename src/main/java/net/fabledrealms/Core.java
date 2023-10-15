@@ -16,6 +16,7 @@ import net.fabledrealms.util.LogUtil;
 import net.fabledrealms.util.StringUtil;
 import net.fabledrealms.wrappers.DatabaseWrapper;
 import net.fabledrealms.wrappers.FileWrapper;
+import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.SQLException;
@@ -23,7 +24,6 @@ import java.sql.SQLException;
 public final class Core extends JavaPlugin {
 
     //Plugin Startup
-
     private FileWrapper configFileWrapper;
     private FileWrapper langFileWrapper;
     private FileWrapper guiItemWrapper;
@@ -37,6 +37,10 @@ public final class Core extends JavaPlugin {
     private EconomyManager economyManager;
     private QuestManager questManager;
     private ShopManager shopManager;
+
+    /* KEYS */
+
+    private final NamespacedKey productKey = new NamespacedKey(this, "product");
 
     @Override
     public void onEnable() {
@@ -108,6 +112,10 @@ public final class Core extends JavaPlugin {
         return shopManager;
     }
 
+    public NamespacedKey getProductKey() {
+        return productKey;
+    }
+
     //Plugin Shutdown
     @Override
     public void onDisable() {
@@ -116,6 +124,7 @@ public final class Core extends JavaPlugin {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        shopManager.saveShops();
         playerDatabaseWrapper.disconnect();
     }
 }
