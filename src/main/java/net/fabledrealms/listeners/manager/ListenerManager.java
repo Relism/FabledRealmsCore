@@ -21,6 +21,7 @@ public class ListenerManager {
 
         events.add(new ServerPingListener(core));
         events.add(new PlayerJoinListener(core));
+        events.add(new PlayerQuitListener(core));
         events.add(new PlayerDeathListener(core));
         events.add(new PlayerMoveListener(core));
         events.add(new PlayerInteractListener(core));
