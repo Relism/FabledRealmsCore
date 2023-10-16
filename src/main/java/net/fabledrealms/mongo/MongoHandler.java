@@ -10,6 +10,7 @@ import net.fabledrealms.Core;
 import org.bson.Document;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
+import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.Objects;
 
@@ -29,19 +30,27 @@ public class MongoHandler {
     public void init(){
         CodecRegistry pojoCodecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(), fromProviders(PojoCodecProvider.builder().automatic(true).build()));
 
+        FileConfiguration config = this.main.getConfigFile().getFile();
+        ConnectionString connectionString = getConnectionString(config);
+
         MongoClientSettings settings = MongoClientSettings.builder()
-                .applyConnectionString(new ConnectionString(Objects.requireNonNull(this.main.getConfigFile().getFile().getString("mongo.uri"))))
+                .applyConnectionString(connectionString)
                 .codecRegistry(pojoCodecRegistry)
                 .build();
 
         MongoClient mongoClient = MongoClients.create(settings);
         MongoDatabase database = mongoClient.getDatabase("core");
 
-        //test push :(
-
-
         this.characters = database.getCollection("players");
         this.loader = database.getCollection("loader");
+    }
+
+    private ConnectionString getConnectionString(FileConfiguration config) {
+        String devURI = "devURI";
+        String prodURI = "prodURI";
+        String environment = config.getString("environment");
+        String mongoURI = (environment.equals("dev")) ? devURI : prodURI;
+        return new ConnectionString(mongoURI);
     }
 
     public MongoCollection<Document> getCharacters() {

@@ -1,5 +1,4 @@
-mongo:
-  uri: "mongodb://fabledrealms-admin:sOh3dy5UZK4iQhzabvLY@129.152.5.2:4006/?authMechanism=DEFAULT"
+environment: dev
 module:
   server-list:
     player-count:
