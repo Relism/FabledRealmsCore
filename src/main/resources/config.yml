@@ -1,13 +1,5 @@
 mongo:
-  uri: "PUT URI CONNECTION STRING"
-settings:
-  databases: #Don't touch this unless you're a Josh or Griimm
-    player-data:
-      host: "srv2.ethera.net"
-      port: "3306"
-      database: "s835_PlayerData"
-      username: "u835_6QampAlMBY"
-      password: "YlR=9!4MY!6NeQ+sIRZTRe.Y"
+  uri: "mongodb://fabledrealms-admin:sOh3dy5UZK4iQhzabvLY@129.152.5.2:4006/?authMechanism=DEFAULT"
 module:
   server-list:
     player-count:
