@@ -9,6 +9,7 @@ import net.fabledrealms.economy.command.EconomyCommand;
 import net.fabledrealms.graveyards.GraveyardManager;
 import net.fabledrealms.gui.GUIManager;
 import net.fabledrealms.listeners.manager.ListenerManager;
+import net.fabledrealms.mongo.MongoHandler;
 import net.fabledrealms.quests.QuestManager;
 import net.fabledrealms.shop.command.ShopAdminCommand;
 import net.fabledrealms.shop.manager.ShopManager;
@@ -30,7 +31,6 @@ public final class Core extends JavaPlugin {
     private FileWrapper langFileWrapper;
     private FileWrapper guiItemWrapper;
     private FileWrapper shopFileWrapper;
-    private DatabaseWrapper playerDatabaseWrapper;
     private GraveyardManager graveyardManager;
     private CharacterManager characterManager;
     private CompassManager compassManager;
@@ -42,6 +42,10 @@ public final class Core extends JavaPlugin {
 
     /* KEYS */
 
+    /* DATABASE */
+
+    private MongoHandler mongoHandler;
+
     private final NamespacedKey productKey = new NamespacedKey(this, "product");
     private final misc misc = new misc();
 
@@ -51,6 +55,7 @@ public final class Core extends JavaPlugin {
         registerManagers();
         registerDatabases();
         this.characterManager = new CharacterManager(this);
+        this.characterManager.loadAllCharacters();
         this.economyManager = new EconomyManager(this);
         registerCommands();
         msg.log(misc.separator("&#34deeb", "DEPENDENCIES"));
@@ -76,6 +81,7 @@ public final class Core extends JavaPlugin {
         this.shopManager.loadShops();
         msg.log("");
     }
+
     private void registerUtility(){
         this.stringUtil = new StringUtil(this);
     }
@@ -85,25 +91,18 @@ public final class Core extends JavaPlugin {
         new ShopAdminCommand(this);
     }
     private void registerDatabases(){
-        this.playerDatabaseWrapper = new DatabaseWrapper(this, "player-data");
-        try {
-            this.playerDatabaseWrapper.initialization();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        this.mongoHandler = new MongoHandler(this);
+        this.mongoHandler.init();
     }
 
     public FileWrapper getConfigFile() {
         return configFileWrapper;
     }
     public FileWrapper getLangFile(){return langFileWrapper;}
-
     public FileWrapper getShopFileWrapper() {
         return shopFileWrapper;
     }
-
     public FileWrapper getGuiItemWrapper(){return guiItemWrapper;}
-    public DatabaseWrapper getPlayerDatabase(){return playerDatabaseWrapper;}
     public StringUtil getStringUtil() {
         return stringUtil;
     }
@@ -125,21 +124,18 @@ public final class Core extends JavaPlugin {
         return productKey;
     }
 
+    public MongoHandler getMongoHandler() {
+        return mongoHandler;
+    }
+
     //Plugin Shutdown
     @Override
     public void onDisable() {
-        try {
-            if (characterManager != null) {
-                characterManager.saveAllCharacters();
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        if (characterManager != null) {
+            characterManager.saveAllCharacters();
         }
         if (shopManager != null) {
             shopManager.saveShops();
-        }
-        if (playerDatabaseWrapper != null) {
-            playerDatabaseWrapper.disconnect();
         }
     }
 }
