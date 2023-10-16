@@ -37,6 +37,8 @@ public class MongoHandler {
         MongoClient mongoClient = MongoClients.create(settings);
         MongoDatabase database = mongoClient.getDatabase("core");
 
+        //test push
+
 
         this.characters = database.getCollection("players");
         this.loader = database.getCollection("loader");
