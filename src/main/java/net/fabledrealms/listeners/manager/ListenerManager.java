@@ -1,6 +1,7 @@
 package net.fabledrealms.listeners.manager;
 
 import net.fabledrealms.Core;
+import net.fabledrealms.character.listener.CharacterListener;
 import net.fabledrealms.listeners.*;
 import net.fabledrealms.shop.listener.ShopListener;
 import org.bukkit.Bukkit;
@@ -27,6 +28,7 @@ public class ListenerManager {
         events.add(new PlayerInteractListener(core));
         events.add(new InventoryClickListener(core));
         events.add(new ShopListener(core));
+        events.add(new CharacterListener(core));
 
         PluginManager pm = Bukkit.getPluginManager();
         for(Listener event : events) {

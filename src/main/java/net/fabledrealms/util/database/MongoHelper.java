@@ -5,7 +5,7 @@ import org.bson.Document;
 
 public class MongoHelper {
 
-    public static Document toDocument(Character character){
+    public static Document toCharacterDocument(Character character){
         Document document = new Document();
         document.put("uuid", character.getUuid());
         document.put("className", character.getClassName());
@@ -24,6 +24,7 @@ public class MongoHelper {
         document.put("expCrafting", character.getExpCrafting());
         document.put("expGathering", character.getExpGathering());
         document.put("balance", character.getBalance());
+        document.put("lastJoined", character.getLastJoined());
         return document;
     }
 
@@ -45,6 +46,7 @@ public class MongoHelper {
                 next.getInteger("expSmithing"),
                 next.getInteger("expCrafting"),
                 next.getInteger("expGathering"),
-                next.getInteger("balance"));
+                next.getInteger("balance"),
+                next.getLong("lastJoined"));
     }
 }

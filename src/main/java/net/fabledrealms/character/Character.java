@@ -1,5 +1,7 @@
 package net.fabledrealms.character;
 
+import java.util.Date;
+
 public class Character {
 
     private final String uuid;
@@ -20,8 +22,9 @@ public class Character {
     private final int expCrafting;
     private final int expGathering;
     private int balance;
+    private long lastJoined;
 
-    public Character(String uuid,int characterID, String className, int levelMain, int levelWoodcutting, int levelFishing, int levelMining, int levelSmithing, int levelCrafting, int levelGathering, int expMain, int expWoodcutting, int expFishing, int expMining, int expSmithing, int expCrafting, int expGathering, int balance) {
+    public Character(String uuid, int characterID, String className, int levelMain, int levelWoodcutting, int levelFishing, int levelMining, int levelSmithing, int levelCrafting, int levelGathering, int expMain, int expWoodcutting, int expFishing, int expMining, int expSmithing, int expCrafting, int expGathering, int balance, long lastJoined) {
         this.uuid = uuid;
         this.className = className;
         this.characterID = characterID;
@@ -40,6 +43,7 @@ public class Character {
         this.expCrafting = expCrafting;
         this.expGathering = expGathering;
         this.balance = balance;
+        this.lastJoined = lastJoined;
     }
 
     public String getUuid() {
@@ -116,5 +120,13 @@ public class Character {
 
     public void setBalance(int balance) {
         this.balance = balance;
+    }
+
+    public long getLastJoined() {
+        return lastJoined;
+    }
+
+    public void setLastJoined(long lastJoined) {
+        this.lastJoined = lastJoined;
     }
 }
