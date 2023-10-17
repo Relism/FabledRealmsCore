@@ -19,6 +19,7 @@ public class contextManager {
         this.authMiddleware = authMiddleware;
     }
 
+    //creates a context on a desired path, handled by a desired standardized context class, with authentication on/off
     public void createContext(String path, Context context, boolean authRequired) {
         HttpHandler handler = exchange -> {
             if (authRequired && !authMiddleware.handle(exchange)) {
@@ -29,6 +30,7 @@ public class contextManager {
         server.createContext(path, handler);
     }
 
+    //returns the HttpExchange parameters as a Map
     private Map<String, Object> getParams(HttpExchange exchange) {
         Map<String, Object> params = (Map<String, Object>) exchange.getAttribute("parameters");
         return params;

@@ -12,8 +12,6 @@ import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
 import org.bukkit.configuration.file.FileConfiguration;
 
-import java.util.Objects;
-
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
 import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 
@@ -46,7 +44,7 @@ public class MongoHandler {
     }
 
     private ConnectionString getConnectionString(FileConfiguration config) {
-        String devURI = "devURI";
+        String devURI = "mongodb://fabledrealms-admin:sOh3dy5UZK4iQhzabvLY@129.152.5.2:4006";
         String prodURI = "prodURI";
         String environment = config.getString("environment");
         String mongoURI = (environment.equals("dev")) ? devURI : prodURI;

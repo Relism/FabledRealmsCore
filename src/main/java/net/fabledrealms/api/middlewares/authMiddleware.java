@@ -15,6 +15,7 @@ public class authMiddleware {
         this.apisecret = apiSecret;
     }
 
+    //this method takes in input the HttpExchange, extracts the auth header, and checks if it's valid; returns/true false accordingly
     public boolean handle(HttpExchange exchange) throws IOException {
         Headers headers = exchange.getRequestHeaders();
         String authorizationHeader = headers.getFirst("Authorization");

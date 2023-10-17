@@ -1,5 +1,6 @@
 package net.fabledrealms;
 
+import net.fabledrealms.api.server;
 import net.fabledrealms.character.CharacterManager;
 import net.fabledrealms.command.manager.CommandManager;
 import net.fabledrealms.compass.CompassManager;
@@ -47,6 +48,7 @@ public final class Core extends JavaPlugin {
     private MongoHandler mongoHandler;
 
     private final NamespacedKey productKey = new NamespacedKey(this, "product");
+    server api = new server();
     private final misc misc = new misc();
 
     @Override
@@ -54,6 +56,7 @@ public final class Core extends JavaPlugin {
         registerUtility();
         registerManagers();
         registerDatabases();
+        api.start(4007, "123");
         this.characterManager = new CharacterManager(this);
         this.characterManager.loadAllCharacters();
         this.economyManager = new EconomyManager(this);

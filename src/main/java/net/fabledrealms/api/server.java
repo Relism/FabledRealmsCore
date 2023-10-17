@@ -5,6 +5,7 @@ import net.fabledrealms.api.middlewares.authMiddleware;
 import java.io.*;
 import java.net.InetSocketAddress;
 import net.fabledrealms.api.contexts.*;
+import net.fabledrealms.util.msg;
 
 public class server {
 
@@ -28,6 +29,7 @@ public class server {
 
             server.setExecutor(null); // creates a default executor
             server.start();
+            msg.log("started api on port " + port);
         } catch (Exception e) {
             e.printStackTrace();
         }
