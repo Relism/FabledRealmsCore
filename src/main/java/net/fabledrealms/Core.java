@@ -27,7 +27,6 @@ import java.sql.SQLException;
 
 public final class Core extends JavaPlugin {
 
-    //Plugin Startup
     private FileWrapper configFileWrapper;
     private FileWrapper langFileWrapper;
     private FileWrapper guiItemWrapper;
@@ -40,11 +39,6 @@ public final class Core extends JavaPlugin {
     private EconomyManager economyManager;
     private QuestManager questManager;
     private ShopManager shopManager;
-
-    /* KEYS */
-
-    /* DATABASE */
-
     private MongoHandler mongoHandler;
 
     private final NamespacedKey productKey = new NamespacedKey(this, "product");
