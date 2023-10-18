@@ -4,6 +4,7 @@ import net.fabledrealms.api.server;
 import net.fabledrealms.character.CharacterManager;
 import net.fabledrealms.command.manager.CommandManager;
 import net.fabledrealms.compass.CompassManager;
+import net.fabledrealms.dungeon.manager.DungeonManager;
 import net.fabledrealms.graveyards.GraveyardCommand;
 import net.fabledrealms.economy.EconomyManager;
 import net.fabledrealms.economy.command.EconomyCommand;
@@ -31,12 +32,14 @@ public final class Core extends JavaPlugin {
     private FileWrapper langFileWrapper;
     private FileWrapper guiItemWrapper;
     private FileWrapper shopFileWrapper;
+    private FileWrapper dungeonFileWrapper;
     private GraveyardManager graveyardManager;
     private CharacterManager characterManager;
     private CompassManager compassManager;
     private GUIManager guiManager;
     private StringUtil stringUtil;
     private EconomyManager economyManager;
+    private DungeonManager dungeonManager;
     private QuestManager questManager;
     private ShopManager shopManager;
     private MongoHandler mongoHandler;
@@ -68,6 +71,7 @@ public final class Core extends JavaPlugin {
         this.langFileWrapper = new FileWrapper(this, this.getDataFolder().getPath(), "lang.yml");
         this.guiItemWrapper = new FileWrapper(this,this.getDataFolder().getPath(),"gui-items.yml");
         this.shopFileWrapper = new FileWrapper(this, this.getDataFolder().getPath(), "shops.yml");
+        this.dungeonFileWrapper = new FileWrapper(this, this.getDataFolder().getPath(), "dungeon.yml");
         this.graveyardManager = new GraveyardManager(this);
         this.guiManager = new GUIManager(this);
         this.compassManager = new CompassManager(this);
@@ -76,6 +80,8 @@ public final class Core extends JavaPlugin {
         new ListenerManager(this);
         this.shopManager = new ShopManager(this);
         this.shopManager.loadShops();
+        this.dungeonManager = new DungeonManager(this);
+        this.dungeonManager.load();
         msg.log("");
     }
 
@@ -103,6 +109,11 @@ public final class Core extends JavaPlugin {
     public StringUtil getStringUtil() {
         return stringUtil;
     }
+
+    public FileWrapper getDungeonFileWrapper() {
+        return dungeonFileWrapper;
+    }
+
     public GraveyardManager getGraveyardManager(){return graveyardManager;}
     public CharacterManager getCharacterManager(){return characterManager;}
     public GUIManager getGuiManager(){return guiManager;}
@@ -133,6 +144,9 @@ public final class Core extends JavaPlugin {
         }
         if (shopManager != null) {
             shopManager.saveShops();
+        }
+        if (dungeonManager != null) {
+            dungeonManager.save();
         }
     }
 }

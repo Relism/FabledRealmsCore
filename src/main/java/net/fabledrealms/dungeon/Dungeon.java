@@ -1,18 +1,20 @@
 package net.fabledrealms.dungeon;
 
+import org.bukkit.Location;
+
 import java.util.List;
 import java.util.Map;
 
 public class Dungeon {
 
     private final String name;
-    private final String dungeonSpawn;
-    private final String dungeonClaimOne;
-    private final String dungeonClaimTwo;
+    private final Location dungeonSpawn;
+    private final Location dungeonClaimOne;
+    private final Location dungeonClaimTwo;
     private final Map<Integer, List<String>> chests;
     private final Map<Integer, List<String>> mobs;
 
-    public Dungeon(String name, String dungeonSpawn, String dungeonClaimOne, String dungeonClaimTwo,
+    public Dungeon(String name, Location dungeonSpawn, Location dungeonClaimOne, Location dungeonClaimTwo,
                    Map<Integer, List<String>> chests, Map<Integer, List<String>> mobs) {
         this.name = name;
         this.dungeonSpawn = dungeonSpawn;
@@ -34,15 +36,15 @@ public class Dungeon {
         return mobs;
     }
 
-    public String getDungeonClaimOne() {
+    public Location getDungeonClaimOne() {
         return dungeonClaimOne;
     }
 
-    public String getDungeonClaimTwo() {
+    public Location getDungeonClaimTwo() {
         return dungeonClaimTwo;
     }
 
-    public String getDungeonSpawn() {
+    public Location getDungeonSpawn() {
         return dungeonSpawn;
     }
 }
