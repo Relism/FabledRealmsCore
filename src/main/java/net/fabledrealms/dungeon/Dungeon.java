@@ -11,11 +11,11 @@ public class Dungeon {
     private final Location dungeonSpawn;
     private final Location dungeonClaimOne;
     private final Location dungeonClaimTwo;
-    private final Map<Integer, List<String>> chests;
+    private final Map<Integer, List<Location>> chests;
     private final Map<Integer, List<String>> mobs;
 
     public Dungeon(String name, Location dungeonSpawn, Location dungeonClaimOne, Location dungeonClaimTwo,
-                   Map<Integer, List<String>> chests, Map<Integer, List<String>> mobs) {
+                   Map<Integer, List<Location>> chests, Map<Integer, List<String>> mobs) {
         this.name = name;
         this.dungeonSpawn = dungeonSpawn;
         this.dungeonClaimOne = dungeonClaimOne;
@@ -28,7 +28,7 @@ public class Dungeon {
         return name;
     }
 
-    public Map<Integer, List<String>> getChests() {
+    public Map<Integer, List<Location>> getChests() {
         return chests;
     }
 

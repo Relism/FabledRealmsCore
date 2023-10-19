@@ -2,6 +2,7 @@ package net.fabledrealms.dungeon.manager;
 
 import net.fabledrealms.Core;
 import net.fabledrealms.dungeon.Dungeon;
+import org.bukkit.Location;
 
 import java.util.*;
 
@@ -21,10 +22,28 @@ public class DungeonManager {
                     this.main.getDungeonFileWrapper().getFile().getLocation("dungeon." + dungeon + ".spawn"),
                     this.main.getDungeonFileWrapper().getFile().getLocation("dungeon." + dungeon + ".first"),
                     this.main.getDungeonFileWrapper().getFile().getLocation("dungeon." + dungeon + ".second"),
-                    (Map<Integer, List<String>>) this.main.getDungeonFileWrapper().getFile().get("dungeon." + dungeon + ".chests"),
+                    this.main.getDungeonFileWrapper().getFile().get("dungeon." + dungeon + ".chests"),
                     (Map<Integer, List<String>>) this.main.getDungeonFileWrapper().getFile().get("dungeon." + dungeon + ".mobs")));
         }
     }
+
+    // todo get locationseriazlier and finish this function
+    private Map<Integer, List<Location>> getChestsFromFile(String dungeon){
+        Map<Integer, List<Location>> map = new HashMap<>();
+        List<Location> locations = new ArrayList<>();
+        if (this.main.getDungeonFileWrapper().getFile().getConfigurationSection("dungeon." + dungeon + ".chests") == null) return map;
+        for (final String integers : Objects.requireNonNull(this.main.getDungeonFileWrapper().getFile().getConfigurationSection("dungeon." + dungeon + ".chests")).getKeys(false)) {
+            this.main.getDungeonFileWrapper().getFile().getStringList("dungeon." + dungeon + ".chests." + integers + ".list")
+                            .forEach(string -> locations.add(null));
+            map.put(this.main.getDungeonFileWrapper().getFile().getInt("dungeon." + dungeon + ".chests." + integers + ".floor"),
+                    locations);
+            locations.clear();
+        }
+
+        return map;
+    }
+
+    private void getMobsFromFile(){}
 
     public void save(){
         dungeons.forEach(dungeon -> {
@@ -32,9 +51,14 @@ public class DungeonManager {
             this.main.getDungeonFileWrapper().getFile().set("dungeon." + dungeon.getName() + ".spawn", dungeon.getDungeonSpawn());
             this.main.getDungeonFileWrapper().getFile().set("dungeon." + dungeon.getName() + ".first", dungeon.getDungeonClaimOne());
             this.main.getDungeonFileWrapper().getFile().set("dungeon." + dungeon.getName() + ".second", dungeon.getDungeonClaimTwo());
-            this.main.getDungeonFileWrapper().getFile().set("dungeon." + dungeon.getName() + ".chests", dungeon.getChests());
-            this.main.getDungeonFileWrapper().getFile().set("dungeon." + dungeon.getName() + ".mobs", dungeon.getMobs());
-
+            dungeon.getChests().forEach((integer, list) -> {
+                this.main.getDungeonFileWrapper().getFile().set("dungeon." + dungeon.getName() + ".chests." + integer + ".floor", integer);
+                this.main.getDungeonFileWrapper().getFile().set("dungeon." + dungeon.getName() + ".chests." + integer + ".list", list);
+            });
+            dungeon.getMobs().forEach((integer, mob) -> {
+                this.main.getDungeonFileWrapper().getFile().set("dungeon." + dungeon.getName() + ".mobs." + integer + ".floor", integer);
+                this.main.getDungeonFileWrapper().getFile().set("dungeon." + dungeon.getName() + ".mobs." + integer + ".list", mob);
+            });
             this.main.getDungeonFileWrapper().saveFile();
         });
     }
