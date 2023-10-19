@@ -1,0 +1,10 @@
+common-sword:
+  display: "&7 %item-name%"
+  lore:
+    - "%rarity%%type%"
+    - ""
+    - "Damage: %attr-damage%"
+    - ""
+    - "Level: %attr-req-level%"
+    - ""
+    - "%price%"

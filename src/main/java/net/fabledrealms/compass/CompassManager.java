@@ -2,6 +2,7 @@ package net.fabledrealms.compass;
 
 import net.fabledrealms.Core;
 import org.bukkit.Bukkit;
+import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -26,6 +27,7 @@ public class CompassManager {
     }
 
     public void removeCompass(Player player){
+        getCompass(player).getCompassBar().removePlayer(player);
         compassBarHashMap.remove(player);
     }
 

@@ -1,0 +1,6 @@
+material: paper
+display-name: "Test"
+attributes:
+  damageMin: 1
+  damageMax: 10
+lore-template: "common-item"

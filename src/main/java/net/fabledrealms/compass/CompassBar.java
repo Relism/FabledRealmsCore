@@ -96,4 +96,7 @@ public class CompassBar {
         return (int) (((yaw + 2.5) / 5) % 72);
     }
 
+    public BossBar getCompassBar() {
+        return compassBar;
+    }
 }

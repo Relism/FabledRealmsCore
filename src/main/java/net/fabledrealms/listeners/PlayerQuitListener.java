@@ -1,7 +1,6 @@
 package net.fabledrealms.listeners;
 
 import net.fabledrealms.Core;
-import net.fabledrealms.compass.CompassManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

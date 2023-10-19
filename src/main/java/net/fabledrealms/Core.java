@@ -5,11 +5,12 @@ import net.fabledrealms.character.CharacterManager;
 import net.fabledrealms.command.manager.CommandManager;
 import net.fabledrealms.compass.CompassManager;
 import net.fabledrealms.dungeon.manager.DungeonManager;
-import net.fabledrealms.graveyards.GraveyardCommand;
 import net.fabledrealms.economy.EconomyManager;
 import net.fabledrealms.economy.command.EconomyCommand;
+import net.fabledrealms.graveyards.GraveyardCommand;
 import net.fabledrealms.graveyards.GraveyardManager;
 import net.fabledrealms.gui.GUIManager;
+import net.fabledrealms.itemgen.ItemManager;
 import net.fabledrealms.listeners.manager.ListenerManager;
 import net.fabledrealms.mongo.MongoHandler;
 import net.fabledrealms.quests.QuestManager;
@@ -19,12 +20,9 @@ import net.fabledrealms.util.LogUtil;
 import net.fabledrealms.util.StringUtil;
 import net.fabledrealms.util.misc;
 import net.fabledrealms.util.msg;
-import net.fabledrealms.wrappers.DatabaseWrapper;
 import net.fabledrealms.wrappers.FileWrapper;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.sql.SQLException;
 
 public final class Core extends JavaPlugin {
 
@@ -42,6 +40,7 @@ public final class Core extends JavaPlugin {
     private DungeonManager dungeonManager;
     private QuestManager questManager;
     private ShopManager shopManager;
+    private ItemManager itemManager;
     private MongoHandler mongoHandler;
 
     private final NamespacedKey productKey = new NamespacedKey(this, "product");
@@ -82,6 +81,7 @@ public final class Core extends JavaPlugin {
         this.shopManager.loadShops();
         this.dungeonManager = new DungeonManager(this);
         this.dungeonManager.load();
+        this.itemManager = new ItemManager(this);
         msg.log("");
     }
 
@@ -123,6 +123,7 @@ public final class Core extends JavaPlugin {
     }
     public CompassManager getCompassManager() { return compassManager;}
     public QuestManager getQuestManager() { return questManager; }
+    public ItemManager getItemManager(){return itemManager;}
 
     public ShopManager getShopManager() {
         return shopManager;
