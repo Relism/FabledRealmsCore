@@ -6,6 +6,7 @@ import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
 public class dialogueEvent extends Event {
+    //emits events to handle response from the OptionHandler
     private static final HandlerList HANDLERS = new HandlerList();
     private final Player player;
     private final String option;

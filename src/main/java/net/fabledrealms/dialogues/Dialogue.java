@@ -31,6 +31,7 @@ public class Dialogue implements Listener {
     }
 
     @EventHandler
+    //listens for response for the next phase
     public void onDialogueEvent(dialogueEvent event) {
         if (event.getPlayer() == player) {
             String response = event.getResponseOption();

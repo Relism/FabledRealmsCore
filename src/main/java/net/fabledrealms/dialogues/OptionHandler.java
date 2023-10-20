@@ -27,7 +27,6 @@ public class OptionHandler implements Listener {
     }
 
     public void handleOptions(String[] options) {
-        msg.log(String.valueOf(dialogue.isEnded()));
         if(!dialogue.isEnded() && options != null){
             // Register this class as a listener
             this.options = options;
