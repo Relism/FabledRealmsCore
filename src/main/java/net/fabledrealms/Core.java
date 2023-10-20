@@ -53,8 +53,8 @@ public final class Core extends JavaPlugin {
         registerManagers();
         registerDatabases();
         api.start(4007, "123");
-        this.characterManager = new CharacterManager(this);
-        this.characterManager.loadAllCharacters();
+        //this.characterManager = new CharacterManager(this);
+        //this.characterManager.loadAllCharacters();
         this.economyManager = new EconomyManager(this);
         registerCommands();
         msg.log(misc.separator("&#34deeb", "DEPENDENCIES"));
