@@ -10,15 +10,17 @@ public class Quest {
     private final String name;
     private Set<QuestPoint> questPoints;
     private QuestObjective questObjective;
+    private int position;
 
     public Quest(String name) {
         this.name = name;
     }
 
-    public Quest(String name, Set<QuestPoint> questPoints, QuestObjective questObjective) {
+    public Quest(String name, Set<QuestPoint> questPoints, QuestObjective questObjective, int position) {
         this.name = name;
         this.questPoints = questPoints;
         this.questObjective = questObjective;
+        this.position = position;
     }
 
     public String getName() {
@@ -36,6 +38,9 @@ public class Quest {
     public QuestObjective getQuestObjective() {
         return questObjective;
     }
+
+    public int getPosition() { return position; }
+    public void setPosition(int position) { this.position = position; }
 
     public void save() {}
     public void delete() {}

@@ -5,6 +5,7 @@ import net.fabledrealms.character.CharacterManager;
 import net.fabledrealms.command.manager.CommandManager;
 import net.fabledrealms.compass.CompassManager;
 import net.fabledrealms.dungeon.manager.DungeonManager;
+import net.fabledrealms.dungeon.manager.LootManager;
 import net.fabledrealms.economy.EconomyManager;
 import net.fabledrealms.economy.command.EconomyCommand;
 import net.fabledrealms.graveyards.GraveyardCommand;
@@ -33,6 +34,7 @@ public final class Core extends JavaPlugin {
     private FileWrapper dungeonFileWrapper;
     private GraveyardManager graveyardManager;
     private CharacterManager characterManager;
+    private LootManager lootManager;
     private CompassManager compassManager;
     private GUIManager guiManager;
     private StringUtil stringUtil;
@@ -82,6 +84,8 @@ public final class Core extends JavaPlugin {
         this.dungeonManager = new DungeonManager(this);
         this.dungeonManager.load();
         this.itemManager = new ItemManager(this);
+        this.lootManager = new LootManager(this);
+        this.lootManager.load();
         msg.log("");
     }
 
@@ -148,6 +152,9 @@ public final class Core extends JavaPlugin {
         }
         if (dungeonManager != null) {
             dungeonManager.save();
+        }
+        if (lootManager != null) {
+            this.lootManager.save();
         }
     }
 }
