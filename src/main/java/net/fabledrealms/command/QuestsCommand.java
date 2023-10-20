@@ -48,6 +48,9 @@ public class QuestsCommand extends Constants implements CoreCommand {
 
         if(!(sender instanceof Player)) return;
         Player p = (Player) sender;
+        //hooked into this class just so i could instance the dialogue with a player temporarily
+        Dialogue dialogue1 = new Dialogue(core, "dialogue1", p);
+        dialogue1.start();
         if(!p.hasPermission(getPermission())) {
             msg.send(p, Objects.requireNonNull(core.getLangFile().getFile().getString("system.no-permission"))
                     .replace("%%prefix%", super.prefix));
@@ -57,9 +60,6 @@ public class QuestsCommand extends Constants implements CoreCommand {
         if(args.length == 0) {
             for(String usage : getUsage()) {
                 msg.send(p, usage);
-                //hooked into this class just so i could instance the dialogue with a player temporarily
-                Dialogue dialogue1 = new Dialogue(core, "test", p);
-                dialogue1.start();
             }
         }
 

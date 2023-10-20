@@ -8,23 +8,19 @@ import org.jetbrains.annotations.NotNull;
 public class dialogueEvent extends Event {
     private static final HandlerList HANDLERS = new HandlerList();
     private final Player player;
-    private final int option;
+    private final String option;
 
-    public dialogueEvent(Player player, int option) {
+    public dialogueEvent(Player player, String responseOption) {
         this.player = player;
-        this.option = option;
+        this.option = responseOption;
     }
 
     public Player getPlayer() {
         return player;
     }
 
-    public int getOption() {
+    public String getResponseOption() {
         return option;
-    }
-
-    public static HandlerList getHandlerList() {
-        return HANDLERS;
     }
 
     @Override
