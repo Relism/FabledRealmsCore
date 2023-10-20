@@ -51,7 +51,7 @@ public class ItemManager {
     private FabledItem createItem(ItemRarity rarity, ItemType type, String itemKey){
         String path = core.getDataFolder() + File.separator + "Items" + File.separator + rarity.toString().toLowerCase() + File.separator + type.toString().toLowerCase();
         FileWrapper itemWrapper = new FileWrapper(core,path,itemKey + ".yml");
-        //TODO level scaling system
+        //TODO level scaling system -- Gets character's level and adds multiplyer to all attributes
         String displayName = itemWrapper.getFile().getString("display-name");
         String loreTemplate = itemWrapper.getFile().getString("lore-template");
         Material material = Material.valueOf(itemWrapper.getFile().getString("material").toUpperCase());
@@ -59,13 +59,24 @@ public class ItemManager {
         return item;
     }
 
+    private ArrayList<String> getItemLore(String loreTemplate){
+        FileWrapper loreFileWrapper = new FileWrapper(core, core.getDataFolder() + File.separator + "Items", "lore-templates.yml");
+        ArrayList<String> lore = (ArrayList<String>) loreFileWrapper.getFile().getStringList(loreTemplate);
+        for (String line : lore){
+           line = msg.translateColorCodes(line);
+           //TODO placeholder support
+        }
+        return lore;
+    }
+
     private ItemStack createItemStack(FileConfiguration itemConfig){
         String displayName = itemConfig.getString("display-name");
         Material material = Material.valueOf(itemConfig.getString("material").toUpperCase());
-        //TODO implement lore templates
+        String loreTemplate = itemConfig.getString("lore-template");
         ItemStack itemStack = new ItemStack(material);
         ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.setDisplayName(msg.translateColorCodes(displayName));
+        itemMeta.setLore(getItemLore(loreTemplate));
         itemStack.setItemMeta(itemMeta);
         return itemStack;
     }

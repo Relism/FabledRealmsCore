@@ -1,0 +1,11 @@
+example:
+  - ""
+  - "%rarity%%type%"
+  - "%quality%"
+  - ""
+  - "&7Required Level: "
+  - ""
+  - "%attributes%"
+  - ""
+  - "%price%"
+  - ""
