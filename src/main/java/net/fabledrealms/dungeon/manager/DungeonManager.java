@@ -1,7 +1,10 @@
 package net.fabledrealms.dungeon.manager;
 
+import io.lumine.mythic.api.mobs.MythicMob;
+import io.lumine.mythic.bukkit.MythicBukkit;
 import net.fabledrealms.Core;
 import net.fabledrealms.dungeon.Dungeon;
+import net.fabledrealms.util.LocationSerializer;
 import org.bukkit.Location;
 
 import java.util.*;
@@ -22,28 +25,36 @@ public class DungeonManager {
                     this.main.getDungeonFileWrapper().getFile().getLocation("dungeon." + dungeon + ".spawn"),
                     this.main.getDungeonFileWrapper().getFile().getLocation("dungeon." + dungeon + ".first"),
                     this.main.getDungeonFileWrapper().getFile().getLocation("dungeon." + dungeon + ".second"),
-                    this.main.getDungeonFileWrapper().getFile().get("dungeon." + dungeon + ".chests"),
-                    (Map<Integer, List<String>>) this.main.getDungeonFileWrapper().getFile().get("dungeon." + dungeon + ".mobs")));
+                    getChestsFromFile(dungeon), getMobsFromFile(dungeon)));
         }
     }
 
-    // todo get locationseriazlier and finish this function
     private Map<Integer, List<Location>> getChestsFromFile(String dungeon){
         Map<Integer, List<Location>> map = new HashMap<>();
-        List<Location> locations = new ArrayList<>();
-        if (this.main.getDungeonFileWrapper().getFile().getConfigurationSection("dungeon." + dungeon + ".chests") == null) return map;
+        if (this.main.getDungeonFileWrapper().getFile().getConfigurationSection("dungeon." + dungeon + ".chests") == null) return map; // empty map
         for (final String integers : Objects.requireNonNull(this.main.getDungeonFileWrapper().getFile().getConfigurationSection("dungeon." + dungeon + ".chests")).getKeys(false)) {
+            List<Location> locations = new ArrayList<>();
             this.main.getDungeonFileWrapper().getFile().getStringList("dungeon." + dungeon + ".chests." + integers + ".list")
-                            .forEach(string -> locations.add(null));
+                            .forEach(string -> locations.add(LocationSerializer.deSerialize(string)));
             map.put(this.main.getDungeonFileWrapper().getFile().getInt("dungeon." + dungeon + ".chests." + integers + ".floor"),
                     locations);
-            locations.clear();
         }
 
         return map;
     }
 
-    private void getMobsFromFile(){}
+    private Map<Integer, List<String>> getMobsFromFile(String dungeon){
+        Map<Integer, List<String>> map = new HashMap<>();
+
+        if (this.main.getDungeonFileWrapper().getFile().getConfigurationSection("dungeon." + dungeon + ".mobs") == null) return map; // empty map
+        for (final String integers : Objects.requireNonNull(this.main.getDungeonFileWrapper().getFile().getConfigurationSection("dungeon." + dungeon + ".mobs")).getKeys(false)) {
+            List<String> mobs = new ArrayList<>(this.main.getDungeonFileWrapper().getFile().getStringList("dungeon." + dungeon + ".mobs." + integers + ".list"));
+            map.put(this.main.getDungeonFileWrapper().getFile().getInt("dungeon." + dungeon + ".mobs." + integers + ".floor"),
+                    mobs);
+        }
+
+        return map;
+    }
 
     public void save(){
         dungeons.forEach(dungeon -> {
@@ -61,6 +72,19 @@ public class DungeonManager {
             });
             this.main.getDungeonFileWrapper().saveFile();
         });
+    }
+
+    public List<MythicMob> getMythicMobFromList(String dungeon, int floor){
+        List<MythicMob> map = new ArrayList<>();
+        for (final String integers : Objects.requireNonNull(this.main.getDungeonFileWrapper().getFile().getConfigurationSection("dungeon." + dungeon + ".mobs")).getKeys(false)) {
+            if (this.main.getDungeonFileWrapper().getFile().getInt("dungeon." + dungeon + ".mobs." + integers + ".floor") == floor) {
+                this.main.getDungeonFileWrapper().getFile().getStringList("dungeon." + dungeon + ".mobs." + integers + ".mobs").forEach(stringMob -> {
+                    map.add(MythicBukkit.inst().getMobManager().getMythicMob(stringMob).get());
+                });
+            }
+        }
+
+        return map;
     }
 
     public Set<Dungeon> getDungeons() {
