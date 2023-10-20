@@ -19,8 +19,9 @@ public class QuestManager {
     private Set<Quest> quests = new HashSet<>();
 
 
-
     public QuestManager(Core core) {
+        List<Quest> quests = new LinkedList<>();
+
         this.core = core;
         file = new File(core.getDataFolder() + "/quests");
         if(!file.exists())  file.mkdirs();
@@ -29,8 +30,8 @@ public class QuestManager {
             config = YamlConfiguration.loadConfiguration(files);
             Set<QuestPoint> points = new HashSet<>();
 
-            // Name
             String name = config.getString("name");
+            int position = config.getInt("position");
 
             // QuestPoint section
             section = config.getConfigurationSection("points");
@@ -48,7 +49,9 @@ public class QuestManager {
             String objective = config.getString("objective.name");
             List<String> commands = new ArrayList<>(config.getStringList("objective.commands"));
 
-            quests.add(new Quest(name, points, new QuestObjective(objective, commands)));
+
+
+            quests.add(new Quest(name, points, new QuestObjective(objective, commands), position));
         }
 
     }
@@ -73,6 +76,5 @@ public class QuestManager {
     }
 
     public Set<Quest> getQuests() { return quests; }
-
 
 }
