@@ -13,3 +13,5 @@ module:
     default-balance: 10
     max-characters: 5
     npc: "Character Creator"
+dungeon:
+  item-per-chest: 5
