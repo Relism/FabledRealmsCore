@@ -34,7 +34,7 @@ public class LootManager {
             this.main.getDungeonFileWrapper().getFile().set("floor." + entry.getKey() + ".floor", entry.getKey());
             entry.getValue().forEach((chance, list) -> {
                 this.main.getDungeonFileWrapper().getFile().set("floor." + entry.getKey() + ".chance-amount", chance);
-                this.main.getDungeonFileWrapper().getFile().set("floor." + entry.getKey() + ".chance." + chance + ".list", list)
+                this.main.getDungeonFileWrapper().getFile().set("floor." + entry.getKey() + ".chance." + chance + ".list", list);
             });
             this.main.getDungeonFileWrapper().saveFile();
         }
