@@ -1,6 +1,7 @@
 package net.fabledrealms.command.manager;
 
 import net.fabledrealms.Core;
+import net.fabledrealms.command.LootChestCommand;
 import net.fabledrealms.command.QuestsCommand;
 import net.fabledrealms.command.base.CoreCommand;
 import org.bukkit.command.Command;
@@ -22,6 +23,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
         this.core = core;
 
         commands.add(new QuestsCommand(core));
+        commands.add(new LootChestCommand(core));
         for(CoreCommand command : commands) {
             core.getCommand(command.getName()).setExecutor(this);
         }

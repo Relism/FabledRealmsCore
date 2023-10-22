@@ -29,6 +29,7 @@ public class ListenerManager {
         events.add(new InventoryClickListener(core));
         events.add(new ShopListener(core));
         events.add(new CharacterListener(core));
+        events.add(new PlayerBlockPlaceListener(core));
 
         PluginManager pm = Bukkit.getPluginManager();
         for(Listener event : events) {
