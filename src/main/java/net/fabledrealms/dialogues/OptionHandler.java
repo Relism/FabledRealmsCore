@@ -2,7 +2,6 @@ package net.fabledrealms.dialogues;
 
 import net.fabledrealms.Core;
 import net.fabledrealms.events.dialogueEvent;
-import net.fabledrealms.util.msg;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -47,10 +46,12 @@ public class OptionHandler implements Listener {
                 //msg.log(player.getName() + " has interacted, with selected option : " + currentPosition);
                 dialogueEvent dEvent = new dialogueEvent(player, options[currentPosition]);
                 Bukkit.getPluginManager().callEvent(dEvent);
+                event.setCancelled(true);
             }
         } else {
             PlayerInteractEvent.getHandlerList().unregister(this);
             PlayerItemHeldEvent.getHandlerList().unregister(this);
+            event.setCancelled(true);
         }
     }
 
@@ -87,11 +88,13 @@ public class OptionHandler implements Listener {
                 } else if (currentPosition >= options.length) {
                     currentPosition = 0;
                 }
-                msg.send(player, String.valueOf(currentPosition) + " " + options[currentPosition]);
+                event.setCancelled(true);
+                //msg.send(player, String.valueOf(currentPosition) + " " + options[currentPosition]);
             }
         } else {
             PlayerInteractEvent.getHandlerList().unregister(this);
             PlayerItemHeldEvent.getHandlerList().unregister(this);
+            event.setCancelled(true);
         }
     }
 

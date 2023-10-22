@@ -3,7 +3,6 @@ package net.fabledrealms.command;
 import net.fabledrealms.Core;
 import net.fabledrealms.command.base.CoreCommand;
 import net.fabledrealms.dialogues.Dialogue;
-import net.fabledrealms.dialogues.OptionHandler;
 import net.fabledrealms.util.Constants;
 import net.fabledrealms.util.msg;
 import org.bukkit.command.CommandSender;
@@ -50,6 +49,7 @@ public class QuestsCommand extends Constants implements CoreCommand {
         Player p = (Player) sender;
         //hooked into this class just so i could instance the dialogue with a player temporarily
         Dialogue dialogue1 = new Dialogue(core, "dialogue1", p);
+
         dialogue1.start();
         if(!p.hasPermission(getPermission())) {
             msg.send(p, Objects.requireNonNull(core.getLangFile().getFile().getString("system.no-permission"))

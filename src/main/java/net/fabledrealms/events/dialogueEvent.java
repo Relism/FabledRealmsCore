@@ -24,9 +24,12 @@ public class dialogueEvent extends Event {
         return option;
     }
 
+    public static HandlerList getHandlerList() {
+        return HANDLERS;
+    }
+
     @Override
-    @NotNull
-    public HandlerList getHandlers() {
+    public @NotNull HandlerList getHandlers() {
         return HANDLERS;
     }
 }
