@@ -1,6 +1,6 @@
-package net.fabledrealms.util;
+package net.fabledrealms.util.serializer;
 
-import org.bukkit.Location;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 
@@ -9,14 +9,14 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Base64;
 
-public class LocationSerializer {
+public class ItemStackSerializer {
 
-    public static String serialize(Location location) {
+    public static String serialize(ItemStack itemStack){
         String serialize;
         try {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             BukkitObjectOutputStream bukkitObjectOutputStream = new BukkitObjectOutputStream(byteArrayOutputStream);
-            bukkitObjectOutputStream.writeObject(location);
+            bukkitObjectOutputStream.writeObject(itemStack);
             bukkitObjectOutputStream.flush();
             byte[] serializedObject = byteArrayOutputStream.toByteArray();
             serialize = new String(Base64.getEncoder().encode(serializedObject));
@@ -26,12 +26,12 @@ public class LocationSerializer {
         return serialize;
     }
 
-    public static Location deSerialize(String stringLocation) {
-        byte[] deSerializedObject = Base64.getDecoder().decode(stringLocation);
+    public static ItemStack deSerialize(String stringItemStack){
+        byte[] deSerializedObject = Base64.getDecoder().decode(stringItemStack);
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(deSerializedObject);
         try {
             BukkitObjectInputStream bukkitObjectInputStream = new BukkitObjectInputStream(byteArrayInputStream);
-            return (Location) bukkitObjectInputStream.readObject();
+            return (ItemStack) bukkitObjectInputStream.readObject();
         } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }

@@ -1,4 +1,4 @@
-package net.fabledrealms.compass;
+package net.fabledrealms.util;
 
 import org.bukkit.util.Vector;
 

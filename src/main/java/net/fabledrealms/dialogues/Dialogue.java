@@ -3,6 +3,7 @@ package net.fabledrealms.dialogues;
 import net.fabledrealms.Core;
 import net.fabledrealms.events.dialogueEvent;
 import net.fabledrealms.util.msg;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -30,16 +31,6 @@ public class Dialogue implements Listener {
         this.ended = false;
     }
 
-    @EventHandler
-    //listens for response for the next phase
-    public void onDialogueEvent(dialogueEvent event) {
-        if (event.getPlayer() == player) {
-            String response = event.getResponseOption();
-            msg.send(player, "Your response is: " + response);
-            handleNextPhase(response);
-        }
-    }
-
     public void start() {
         if (currentDialogueNode != null) {
             oh.handleOptions(getCurrentOptions());
@@ -48,6 +39,15 @@ public class Dialogue implements Listener {
             msg.send(player, "Dialogue data not loaded. Unable to start the conversation.");
         }
         FabledCore.getServer().getPluginManager().registerEvents(this, FabledCore);
+    }
+
+    public void end() {
+        dialogueEvent.getHandlerList().unregister(this);
+        ended = true;
+    }
+
+    public boolean isEnded(){
+        return ended;
     }
 
     private void loadDialogueConfig() {
@@ -65,9 +65,18 @@ public class Dialogue implements Listener {
         }
     }
 
+    @EventHandler
+    //listens for response for the next phase
+    void onDialogueEvent(dialogueEvent event) {
+        if (event.getPlayer() == player) {
+            String response = event.getResponseOption();
+            //msg.send(player, "Your response is: " + response);
+            handleNextPhase(response);
+        }
+    }
+
     private String[] getCurrentOptions() {
         JSONArray optionsArray = currentDialogueNode.optJSONArray("options");
-        //msg.log(currentDialogueNode.toString(2));
         if (optionsArray != null) {
             String[] options = new String[optionsArray.length()];
             for (int i = 0; i < optionsArray.length(); i++) {
@@ -114,8 +123,5 @@ public class Dialogue implements Listener {
                 msg.send(player, "Option " + (i + 1) + ": " + optionText);
             }
         }
-    }
-    public boolean isEnded(){
-        return ended;
     }
 }

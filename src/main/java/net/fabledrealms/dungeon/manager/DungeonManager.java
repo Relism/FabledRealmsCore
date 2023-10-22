@@ -4,8 +4,9 @@ import io.lumine.mythic.api.mobs.MythicMob;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import net.fabledrealms.Core;
 import net.fabledrealms.dungeon.Dungeon;
-import net.fabledrealms.util.LocationSerializer;
+import net.fabledrealms.util.serializer.LocationSerializer;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 
 import java.util.*;
 

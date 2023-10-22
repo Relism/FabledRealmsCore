@@ -1,8 +1,7 @@
 package net.fabledrealms.listeners;
 
 import net.fabledrealms.Core;
-import net.fabledrealms.compass.CompassBar;
-import net.fabledrealms.compass.CompassManager;
+import net.fabledrealms.bossbar.BossbarType;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -19,15 +18,18 @@ public class PlayerJoinListener implements Listener {
     }
 
     private void sendCompass(Player player){
-        main.getCompassManager().addCompass(player, new CompassBar(player));
+        bossbar.bbarManager bbarManager = new bossbar.bbarManager(main, player);
+        bbarManager.display(BossbarType.COMPASS);
     }
+
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event){
         Player player = event.getPlayer();
         sendCompass(player);
 
+        /*temporarily disabled because of a bug
         if (this.main.getCharacterManager().getCharacter(player) == null) {
             this.main.getCharacterManager().createCharacter(player, 0, null);
-        }
+        }*/
     }
 }
