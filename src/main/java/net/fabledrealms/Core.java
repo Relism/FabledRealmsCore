@@ -49,7 +49,7 @@ public final class Core extends JavaPlugin {
     private MongoHandler mongoHandler;
     private ProtocolManager protocolManager;
     private LootChestManager lootChestManager;
-    private StoryManager storyManager;
+    //private StoryManager storyManager;
 
     private final NamespacedKey productKey = new NamespacedKey(this, "product");
     server api = new server();
@@ -93,7 +93,7 @@ public final class Core extends JavaPlugin {
         this.itemManager = new ItemManager(this);
         this.lootManager = new LootManager(this);
         this.lootManager.load();
-        this.storyManager = new StoryManager(this);
+        //this.storyManager = new StoryManager(this);
         WorldManager.init(this.getConfigFile().getFile().getString("world.name"));
         msg.log("");
     }
@@ -150,7 +150,7 @@ public final class Core extends JavaPlugin {
     }
     public ProtocolManager getProtocolManager(){return protocolManager;}
     public LootChestManager getLootChestManager(){return lootChestManager;}
-    public StoryManager getStoryManager() { return storyManager; }
+    //public StoryManager getStoryManager() { return storyManager; }
 
     //Plugin Shutdown
     @Override
