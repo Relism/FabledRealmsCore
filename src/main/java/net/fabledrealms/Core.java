@@ -1,5 +1,7 @@
 package net.fabledrealms;
 
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
 import net.fabledrealms.api.server;
 import net.fabledrealms.character.CharacterManager;
 import net.fabledrealms.command.manager.CommandManager;
@@ -12,6 +14,7 @@ import net.fabledrealms.graveyards.GraveyardManager;
 import net.fabledrealms.gui.GUIManager;
 import net.fabledrealms.itemgen.ItemManager;
 import net.fabledrealms.listeners.manager.ListenerManager;
+import net.fabledrealms.lootchests.LootChestManager;
 import net.fabledrealms.mongo.MongoHandler;
 import net.fabledrealms.quests.QuestManager;
 import net.fabledrealms.shop.command.ShopAdminCommand;
@@ -43,6 +46,8 @@ public final class Core extends JavaPlugin {
     private ShopManager shopManager;
     private ItemManager itemManager;
     private MongoHandler mongoHandler;
+    private ProtocolManager protocolManager;
+    private LootChestManager lootChestManager;
 
     private final NamespacedKey productKey = new NamespacedKey(this, "product");
     server api = new server();
@@ -67,6 +72,7 @@ public final class Core extends JavaPlugin {
 
     private void registerManagers(){
         msg.log(misc.separator("&#eb8c34", "MANAGERS REGISTERING"));
+        this.protocolManager = ProtocolLibrary.getProtocolManager();
         this.configFileWrapper = new FileWrapper(this, this.getDataFolder().getPath(), "config.yml");
         this.langFileWrapper = new FileWrapper(this, this.getDataFolder().getPath(), "lang.yml");
         this.guiItemWrapper = new FileWrapper(this,this.getDataFolder().getPath(),"gui-items.yml");
@@ -75,6 +81,7 @@ public final class Core extends JavaPlugin {
         this.graveyardManager = new GraveyardManager(this);
         this.guiManager = new GUIManager(this);
         this.questManager = new QuestManager(this);
+        this.lootChestManager = new LootChestManager(this);
         new CommandManager(this);
         new ListenerManager(this);
         this.shopManager = new ShopManager(this);
@@ -138,6 +145,8 @@ public final class Core extends JavaPlugin {
     public MongoHandler getMongoHandler() {
         return mongoHandler;
     }
+    public ProtocolManager getProtocolManager(){return protocolManager;}
+    public LootChestManager getLootChestManager(){return lootChestManager;}
 
     //Plugin Shutdown
     @Override
