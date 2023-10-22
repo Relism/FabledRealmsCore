@@ -20,6 +20,7 @@ import net.fabledrealms.util.LogUtil;
 import net.fabledrealms.util.StringUtil;
 import net.fabledrealms.util.misc;
 import net.fabledrealms.util.msg;
+import net.fabledrealms.util.world.WorldManager;
 import net.fabledrealms.wrappers.FileWrapper;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -83,6 +84,7 @@ public final class Core extends JavaPlugin {
         this.itemManager = new ItemManager(this);
         this.lootManager = new LootManager(this);
         this.lootManager.load();
+        WorldManager.init(this.getConfigFile().getFile().getString("world.name"));
         msg.log("");
     }
 

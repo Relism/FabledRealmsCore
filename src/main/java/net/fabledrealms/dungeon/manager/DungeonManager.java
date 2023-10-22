@@ -6,7 +6,6 @@ import net.fabledrealms.Core;
 import net.fabledrealms.dungeon.Dungeon;
 import net.fabledrealms.util.serializer.LocationSerializer;
 import org.bukkit.Location;
-import org.bukkit.entity.Entity;
 
 import java.util.*;
 
@@ -14,6 +13,7 @@ public class DungeonManager {
 
     private final Core main;
     private final Set<Dungeon> dungeons = new HashSet<>();
+    private final Set<String> currentWorlds = new HashSet<>();
 
     public DungeonManager(Core main) {
         this.main = main;
@@ -90,5 +90,9 @@ public class DungeonManager {
 
     public Set<Dungeon> getDungeons() {
         return dungeons;
+    }
+
+    public Set<String> getCurrentWorlds() {
+        return currentWorlds;
     }
 }

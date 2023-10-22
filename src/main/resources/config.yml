@@ -15,3 +15,5 @@ module:
     npc: "Character Creator"
 dungeon:
   item-per-chest: 5
+world:
+  name: "dungeon_world"
