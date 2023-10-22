@@ -19,6 +19,7 @@ import net.fabledrealms.mongo.MongoHandler;
 import net.fabledrealms.quests.QuestManager;
 import net.fabledrealms.shop.command.ShopAdminCommand;
 import net.fabledrealms.shop.manager.ShopManager;
+import net.fabledrealms.story.StoryManager;
 import net.fabledrealms.util.LogUtil;
 import net.fabledrealms.util.StringUtil;
 import net.fabledrealms.util.misc;
@@ -48,6 +49,7 @@ public final class Core extends JavaPlugin {
     private MongoHandler mongoHandler;
     private ProtocolManager protocolManager;
     private LootChestManager lootChestManager;
+    private StoryManager storyManager;
 
     private final NamespacedKey productKey = new NamespacedKey(this, "product");
     server api = new server();
@@ -91,6 +93,7 @@ public final class Core extends JavaPlugin {
         this.itemManager = new ItemManager(this);
         this.lootManager = new LootManager(this);
         this.lootManager.load();
+        this.storyManager = new StoryManager(this);
         WorldManager.init(this.getConfigFile().getFile().getString("world.name"));
         msg.log("");
     }
@@ -147,6 +150,7 @@ public final class Core extends JavaPlugin {
     }
     public ProtocolManager getProtocolManager(){return protocolManager;}
     public LootChestManager getLootChestManager(){return lootChestManager;}
+    public StoryManager getStoryManager() { return storyManager; }
 
     //Plugin Shutdown
     @Override
