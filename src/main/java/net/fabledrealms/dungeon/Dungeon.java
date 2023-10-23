@@ -8,10 +8,10 @@ public class Dungeon {
     private final DungeonLocation location;
     private final Map<Integer, List<DungeonLocation>> chests;
     private final Map<Integer, List<String>> mobs;
-    private final List<DungeonLocation> mobLocations;
+    private final Map<Integer, List<DungeonLocation>> mobLocations;
 
     public Dungeon(DungeonLocation location,
-                   Map<Integer, List<DungeonLocation>> chests, Map<Integer, List<String>> mobs, List<DungeonLocation> mobLocations) {
+                   Map<Integer, List<DungeonLocation>> chests, Map<Integer, List<String>> mobs, Map<Integer, List<DungeonLocation>> mobLocations) {
         this.location = location;
         this.chests = chests;
         this.mobs = mobs;
@@ -30,7 +30,7 @@ public class Dungeon {
         return location;
     }
 
-    public List<DungeonLocation> getMobLocations() {
+    public Map<Integer, List<DungeonLocation>> getMobLocations() {
         return mobLocations;
     }
 }

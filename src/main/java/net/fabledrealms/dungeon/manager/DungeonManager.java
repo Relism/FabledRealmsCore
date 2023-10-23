@@ -26,15 +26,19 @@ public class DungeonManager {
 
     private Map<Integer, List<DungeonLocation>> getChests(){
         Map<Integer, List<DungeonLocation>> map = new HashMap<>();
-        if (this.main.getDungeonFileWrapper().getFile().getConfigurationSection("locations") == null) return map;
+        if (this.main.getDungeonFileWrapper().getFile().getConfigurationSection("chest-locations") == null) return map;
         for (final String index : Objects.requireNonNull(this.main.getDungeonFileWrapper().getFile().getConfigurationSection("locations")).getKeys(false)) {
-            if (map.get(this.main.getDungeonFileWrapper().getFile().getInt("locations." + index + ".floor")) == null) {
+            if (map.get(this.main.getDungeonFileWrapper().getFile().getInt("chest-locations." + index + ".floor")) == null) {
                 List<DungeonLocation> locations = new ArrayList<>();
-                locations.add(new DungeonLocation(0,0,0));
-                map.put(this.main.getDungeonFileWrapper().getFile().getInt("locations." + index + ".floor"), locations);
+                locations.add(new DungeonLocation(this.main.getDungeonFileWrapper().getFile().getInt("chest-locations." + index + ".x"),
+                        this.main.getDungeonFileWrapper().getFile().getInt("chest-locations." + index + ".y"),
+                        this.main.getDungeonFileWrapper().getFile().getInt("chest-locations." + index + ".z")));
+                map.put(this.main.getDungeonFileWrapper().getFile().getInt("chest-locations." + index + ".floor"), locations);
             } else {
-                map.get(this.main.getDungeonFileWrapper().getFile().getInt("locations." + index + ".floor"))
-                        .add(new DungeonLocation(0,0,0));
+                map.get(this.main.getDungeonFileWrapper().getFile().getInt("chest-locations." + index + ".floor"))
+                        .add(new DungeonLocation(this.main.getDungeonFileWrapper().getFile().getInt("chest-locations." + index + ".x"),
+                                this.main.getDungeonFileWrapper().getFile().getInt("chest-locations." + index + ".y"),
+                                this.main.getDungeonFileWrapper().getFile().getInt("chest-locations." + index + ".z")));
             }
         }
 
@@ -42,10 +46,44 @@ public class DungeonManager {
     }
 
     private Map<Integer, List<String>> getMobs(){
-        return null;
+        Map<Integer, List<String>> map = new HashMap<>();
+        if (this.main.getDungeonFileWrapper().getFile().getConfigurationSection("mobs") == null) return map;
+        for (final String index : Objects.requireNonNull(this.main.getDungeonFileWrapper().getFile().getConfigurationSection("mobs")).getKeys(false)) {
+            if (map.get(this.main.getDungeonFileWrapper().getFile().getInt("mobs." + index + ".floor")) == null) {
+                List<String> mobs = new ArrayList<>();
+                mobs.add(this.main.getDungeonFileWrapper().getFile().getString("mobs." + index + ".name"));
+                map.put(this.main.getDungeonFileWrapper().getFile().getInt("mobs." + index + ".floor"), mobs);
+            } else {
+                map.get(this.main.getDungeonFileWrapper().getFile().getInt("mobs." + index + ".floor"))
+                        .add(this.main.getDungeonFileWrapper().getFile().getString("mobs." + index + ".name"));
+            }
+        }
+
+        return map;
     }
 
-    private List<DungeonLocation> getLocations(){
-        return new ArrayList<>();
+    private Map<Integer, List<DungeonLocation>> getLocations(){
+        Map<Integer, List<DungeonLocation>> map = new HashMap<>();
+        if (this.main.getDungeonFileWrapper().getFile().getConfigurationSection("mobs-location") == null) return map;
+        for (final String index : Objects.requireNonNull(this.main.getDungeonFileWrapper().getFile().getConfigurationSection("mobs-location")).getKeys(false)) {
+            if (map.get(this.main.getDungeonFileWrapper().getFile().getInt("mobs-location." + index + ".floor")) == null) {
+                List<DungeonLocation> locations = new ArrayList<>();
+                locations.add(new DungeonLocation(this.main.getDungeonFileWrapper().getFile().getInt("mobs-location." + index + ".x"),
+                        this.main.getDungeonFileWrapper().getFile().getInt("mobs-location." + index + ".y"),
+                        this.main.getDungeonFileWrapper().getFile().getInt("mobs-location." + index + ".z")));
+                map.put(this.main.getDungeonFileWrapper().getFile().getInt("mobs-location." + index + ".floor"), locations);
+            } else {
+                map.get(this.main.getDungeonFileWrapper().getFile().getInt("mobs-location." + index + ".floor"))
+                        .add(new DungeonLocation(this.main.getDungeonFileWrapper().getFile().getInt("mobs-location." + index + ".x"),
+                                this.main.getDungeonFileWrapper().getFile().getInt("mobs-location." + index + ".y"),
+                                this.main.getDungeonFileWrapper().getFile().getInt("mobs-location." + index + ".z")));
+            }
+        }
+
+        return map;
+    }
+
+    public Set<Dungeon> getDungeons() {
+        return dungeons;
     }
 }

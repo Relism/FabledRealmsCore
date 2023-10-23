@@ -4,9 +4,21 @@ dungeon:
     y: 100
     z: 0
 
-locations:
+chest-locations:
   1:
     floor: 1
     x: 0
     y: 0
     z: 0
+
+mobs-location:
+  1:
+    floor: 1
+    x: 0
+    y: 0
+    z: 0
+
+mobs:
+  1:
+    floor: 1
+    name: ""
