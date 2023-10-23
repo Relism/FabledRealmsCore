@@ -2,6 +2,7 @@ package net.fabledrealms.listeners;
 
 import net.fabledrealms.Core;
 import net.fabledrealms.gui.CharacterSelectionGUI;
+import net.fabledrealms.lootchests.LootChest;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -40,6 +41,12 @@ public class PlayerInteractListener implements Listener {
             Block block = event.getClickedBlock();
             if (event.getHand().equals(EquipmentSlot.OFF_HAND))return;
             if (block.getState() instanceof TileState) {
+                if (player.isSneaking() && player.hasPermission("fr.admin")){
+                    event.setCancelled(true);
+                    LootChest lootChest = main.getLootChestManager().getChestByLocation(block.getLocation());
+                    main.getLootChestManager().removeChest(lootChest);
+                    block.setType(Material.AIR);
+                }
                 if (block.getType().equals(Material.CHEST) && !block.getMetadata("chestKey").equals(null)){
                     event.setCancelled(true);
                     main.getLootChestManager().redeemLootChest(player,block);
