@@ -5,7 +5,7 @@ import org.bukkit.inventory.ItemStack;
 
 public enum DropTable {
 
-    COMMON("&aCommon", new ItemStack[]{new ItemStack(Material.GOLD_NUGGET, 10), new ItemStack(Material.ACACIA_BUTTON)});
+    COMMON("&aCommon", new ItemStack[]{new ItemStack(Material.GOLD_NUGGET, 1), new ItemStack(Material.AIR),new ItemStack(Material.PAPER)});
 
 
     private String label;

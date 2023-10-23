@@ -109,6 +109,7 @@ public class LootChestManager {
 
     private void chestRespawnRunnable(Player player,Block lootChest){
         long cooldown = 300l;
+        lootChest.setType(Material.AIR);
         Bukkit.getScheduler().scheduleSyncDelayedTask(core, new Runnable() {
             @Override
             public void run() {
