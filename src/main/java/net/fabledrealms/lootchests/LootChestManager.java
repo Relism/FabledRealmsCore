@@ -34,18 +34,18 @@ public class LootChestManager {
         this.chestWrapper = new FileWrapper(core,core.getDataFolder().getPath(), "loot-chests.yml");
         this.chestDropTableWrapper = new FileWrapper(core,core.getDataFolder().getPath(), "loot-chest-drop-tables.yml");
         loadChests();
-        for (LootChest lootChest : chestMap.keySet()){
-            chestParticleRunnable(lootChest);
-        }
+        chestParticleRunnable();
     }
 
     public void addChest(LootChest lootChest){
         chestMap.put(lootChest, lootChest.getLocation());
+        saveChests();
     }
 
     public void removeChest(LootChest lootChest){
         chestMap.remove(lootChest);
         chestWrapper.getFile().getKeys(false).remove(String.valueOf(lootChest.getID()));
+        saveChests();
     }
 
     public NamespacedKey getChestKey(){return chestKey;}
@@ -108,9 +108,10 @@ public class LootChestManager {
     }
 
     public Inventory getLootChestInventory(Player player, LootChest lootChest){
-        Inventory inventory = Bukkit.createInventory(null, InventoryType.CHEST, msg.translateColorCodes("&eLoot Chest &f- "));
-        int contentAmount = new Random().nextInt(1, inventory.getSize() - 1);
         DropTable dropTable = lootChest.getDropTable();
+        String chestName = msg.translateColorCodes("&eLoot Chest &f- " + dropTable.getLabel());
+        Inventory inventory = Bukkit.createInventory(null, InventoryType.CHEST, msg.translateColorCodes(chestName));
+        int contentAmount = new Random().nextInt(1, inventory.getSize() - 1);
         ArrayList<ItemStack> dropList = new ArrayList();
         for (ItemStack item : dropTable.getDrops()){
             dropList.add(item);
@@ -124,6 +125,7 @@ public class LootChestManager {
     }
 
     public void redeemLootChest(Player player, Block lootChest){
+        player.playSound(player.getLocation(),Sound.BLOCK_CHEST_OPEN,1,1);
         lootChest.setType(Material.AIR);
         player.openInventory(getLootChestInventory(player,getChestByLocation(lootChest.getLocation())));
         chestRespawnRunnable(player,lootChest);
@@ -139,20 +141,23 @@ public class LootChestManager {
         },cooldown);
     }
 
-    private void chestParticleRunnable(LootChest lootChest){
+    private void chestParticleRunnable(){
         Bukkit.getScheduler().scheduleSyncRepeatingTask(core, new Runnable() {
             @Override
             public void run() {
-                if (lootChest.getLocation().getWorld().getBlockAt(lootChest.getLocation()).getType().equals(lootChest.getMaterial())){
-                    //Play animated particles
-                    int x = lootChest.getLocation().getBlockX();
-                    int y = lootChest.getLocation().getBlockY();
-                    int z = lootChest.getLocation().getBlockZ();
-                    int amount = 1;
-                    lootChest.getLocation().getWorld().spawnParticle(Particle.CRIT, x,y + 1,z,amount);
+                for (LootChest lootChest : chestMap.keySet()) {
+                    if (lootChest.getLocation().getWorld().getBlockAt(lootChest.getLocation()).getType().equals(lootChest.getMaterial())) {
+                        //Play animated particles
+                        int x = (int) lootChest.getLocation().getX();
+                        int y = (int) lootChest.getLocation().getY() + 1;
+                        int z = (int) lootChest.getLocation().getZ();
+                        int amount = 10;
+                        lootChest.getLocation().getWorld().spawnParticle(Particle.CRIT, x, y, z, amount);
+                    }
                 }
             }
-        },0l,1l);
+        },0,1);
     }
+
 
 }
