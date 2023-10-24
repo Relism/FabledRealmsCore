@@ -1,6 +1,7 @@
 package net.fabledrealms.dungeon.manager;
 
 import net.fabledrealms.Core;
+import net.fabledrealms.dungeon.ChestType;
 import net.fabledrealms.util.serializer.ItemStackSerializer;
 import org.bukkit.inventory.ItemStack;
 
@@ -54,6 +55,16 @@ public class LootManager {
         }
 
         return items;
+    }
+
+    public Map<Integer, ItemStack> assignChest(List<ItemStack> itemStacks, ChestType chestType){
+        Map<Integer, ItemStack> map = new HashMap<>();
+
+        for (ItemStack item : itemStacks) {
+            map.put(random.nextInt(chestType.getSlots()), item);
+        }
+
+        return map;
     }
 
     public Map<Integer, Map<Integer, List<String>>> getMap() {
