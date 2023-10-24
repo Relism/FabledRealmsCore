@@ -120,4 +120,3 @@ public class compassBossbar implements Bossbar {
         Bukkit.getScheduler().scheduleSyncRepeatingTask(fabledCore, this::displayCompass, 0, 1);
     }
 }
-

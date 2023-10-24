@@ -34,7 +34,7 @@ public class Dialogue implements Listener {
     public void start() {
         if (currentDialogueNode != null) {
             oh.handleOptions(getCurrentOptions());
-            sendPhaseTextAndOptions(currentDialogueNode);
+            parsePhaseData(currentDialogueNode);
         } else {
             msg.send(player, "Dialogue data not loaded. Unable to start the conversation.");
         }
@@ -97,7 +97,7 @@ public class Dialogue implements Listener {
                         // Move to the next dialogue node
                         currentDialogueNode = responsesArray.getJSONObject(0); // Assuming we take the first response
                         oh.handleOptions(getCurrentOptions());
-                        sendPhaseTextAndOptions(currentDialogueNode);
+                        parsePhaseData(currentDialogueNode);
                     } else {
                         msg.send(player, "End of conversation.");
                         currentDialogueNode = null; // No more options, end of conversation
@@ -113,9 +113,10 @@ public class Dialogue implements Listener {
         }
     }
 
-    private void sendPhaseTextAndOptions(JSONObject node) {
-        String phaseText = node.optString("message");
-        msg.send(player, phaseText);
+    private void parsePhaseData(JSONObject node) {
+        String phaseMessage = node.optString("message");
+        if (node.optString("trigger") != null) msg.log(node.optString("trigger"));
+        msg.send(player, phaseMessage);
         JSONArray optionsArray = node.optJSONArray("options");
         if (optionsArray != null) {
             for (int i = 0; i < optionsArray.length(); i++) {

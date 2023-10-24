@@ -1,7 +1,7 @@
 package net.fabledrealms.listeners;
 
 import net.fabledrealms.Core;
-import net.fabledrealms.bossbar.BossbarType;
+import net.fabledrealms.bossbar.*;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -20,8 +20,8 @@ public class PlayerQuitListener implements Listener {
     @EventHandler
     public void onPlayerQuitServer(PlayerQuitEvent event){
         Player player = event.getPlayer();
-        bossbar.bbarManager bbarManager = new bossbar.bbarManager(core, player);
-        bbarManager.remove(BossbarType.COMPASS);
+        bbarManager bbm = new bbarManager(core, player);
+        bbm.remove(BossbarType.COMPASS);
     }
 
 }

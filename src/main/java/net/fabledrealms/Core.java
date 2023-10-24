@@ -74,7 +74,7 @@ public final class Core extends JavaPlugin {
 
     private void registerManagers(){
         msg.log(misc.separator("&#eb8c34", "MANAGERS REGISTERING"));
-        this.protocolManager = ProtocolLibrary.getProtocolManager();
+        //this.protocolManager = ProtocolLibrary.getProtocolManager();
         this.configFileWrapper = new FileWrapper(this, this.getDataFolder().getPath(), "config.yml");
         this.langFileWrapper = new FileWrapper(this, this.getDataFolder().getPath(), "lang.yml");
         this.guiItemWrapper = new FileWrapper(this,this.getDataFolder().getPath(),"gui-items.yml");
@@ -94,7 +94,7 @@ public final class Core extends JavaPlugin {
         this.lootManager = new LootManager(this);
         this.lootManager.load();
         //this.storyManager = new StoryManager(this);
-        WorldManager.init(this.getConfigFile().getFile().getString("world.name"));
+        //WorldManager.init(this.getConfigFile().getFile().getString("world.name"));
         msg.log("");
     }
 

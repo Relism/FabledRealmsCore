@@ -1,8 +1,6 @@
-package bossbar;
+package net.fabledrealms.bossbar;
 
 import net.fabledrealms.Core;
-import net.fabledrealms.bossbar.Bossbar;
-import net.fabledrealms.bossbar.BossbarType;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
