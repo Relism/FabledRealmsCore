@@ -34,6 +34,9 @@ public class LootChestManager {
         this.chestWrapper = new FileWrapper(core,core.getDataFolder().getPath(), "loot-chests.yml");
         this.chestDropTableWrapper = new FileWrapper(core,core.getDataFolder().getPath(), "loot-chest-drop-tables.yml");
         loadChests();
+        for (LootChest lootChest : chestMap.keySet()){
+            chestParticleRunnable(lootChest);
+        }
     }
 
     public void addChest(LootChest lootChest){
@@ -60,6 +63,25 @@ public class LootChestManager {
             LootChest lootChest = new LootChest(core,ID,material,location,dropTable);
             chestMap.put(lootChest,location);
         }
+    }
+
+    public void saveChests(){
+        for (LootChest lootChest : chestMap.keySet()){
+            int id = lootChest.getID();
+            Material material = lootChest.getMaterial();
+            String world = lootChest.getLocation().getWorld().getName();
+            int x = (int) lootChest.getLocation().getX();
+            int y = (int) lootChest.getLocation().getY();
+            int z = (int) lootChest.getLocation().getZ();
+            String dropTable = lootChest.getDropTable().toString().toUpperCase();
+            chestWrapper.getFile().set(id + ".material", material.toString());
+            chestWrapper.getFile().set(id+".location.world", world);
+            chestWrapper.getFile().set(id+".location.x", String.valueOf(x));
+            chestWrapper.getFile().set(id+".location.y", String.valueOf(y));
+            chestWrapper.getFile().set(id+".location.z", String.valueOf(z));
+            chestWrapper.getFile().set(id+".drop-table", dropTable);
+        }
+        chestWrapper.saveFile();
     }
 
     public HashMap<LootChest,Location> getChestMap(){return chestMap;}
@@ -102,14 +124,13 @@ public class LootChestManager {
     }
 
     public void redeemLootChest(Player player, Block lootChest){
-        player.sendBlockChange(lootChest.getLocation(), Material.AIR.createBlockData());
+        lootChest.setType(Material.AIR);
         player.openInventory(getLootChestInventory(player,getChestByLocation(lootChest.getLocation())));
         chestRespawnRunnable(player,lootChest);
     }
 
     private void chestRespawnRunnable(Player player,Block lootChest){
         long cooldown = 300l;
-        lootChest.setType(Material.AIR);
         Bukkit.getScheduler().scheduleSyncDelayedTask(core, new Runnable() {
             @Override
             public void run() {
@@ -118,5 +139,20 @@ public class LootChestManager {
         },cooldown);
     }
 
+    private void chestParticleRunnable(LootChest lootChest){
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(core, new Runnable() {
+            @Override
+            public void run() {
+                if (lootChest.getLocation().getWorld().getBlockAt(lootChest.getLocation()).getType().equals(lootChest.getMaterial())){
+                    //Play animated particles
+                    int x = lootChest.getLocation().getBlockX();
+                    int y = lootChest.getLocation().getBlockY();
+                    int z = lootChest.getLocation().getBlockZ();
+                    int amount = 1;
+                    lootChest.getLocation().getWorld().spawnParticle(Particle.CRIT, x,y + 1,z,amount);
+                }
+            }
+        },0l,1l);
+    }
 
 }

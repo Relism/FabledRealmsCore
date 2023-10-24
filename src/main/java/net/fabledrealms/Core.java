@@ -161,5 +161,8 @@ public final class Core extends JavaPlugin {
         if (lootManager != null) {
             this.lootManager.save();
         }
+        if (lootChestManager != null){
+            this.lootChestManager.saveChests();
+        }
     }
 }
