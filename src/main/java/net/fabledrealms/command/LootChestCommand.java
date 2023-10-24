@@ -3,6 +3,7 @@ package net.fabledrealms.command;
 import net.fabledrealms.Core;
 import net.fabledrealms.command.base.CoreCommand;
 import net.fabledrealms.itemgen.ItemRarity;
+import net.fabledrealms.lootchests.droptables.DropTable;
 import net.fabledrealms.util.Constants;
 import net.fabledrealms.util.msg;
 import org.bukkit.command.CommandSender;
@@ -48,7 +49,7 @@ public class LootChestCommand extends Constants implements CoreCommand {
                     .replace("%%prefix%", super.prefix));
             return;
         }
-        ItemStack lootChestItem = core.getLootChestManager().getLootChestItem(player, ItemRarity.valueOf(args[0].toUpperCase()));
+        ItemStack lootChestItem = core.getLootChestManager().getLootChestItem(player, DropTable.valueOf(args[0].toUpperCase()));
         player.getInventory().setItem(EquipmentSlot.HAND,lootChestItem);
 
 

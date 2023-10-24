@@ -1,34 +1,24 @@
 package net.fabledrealms.dungeon;
 
-import org.bukkit.Location;
-
 import java.util.List;
 import java.util.Map;
 
 public class Dungeon {
 
-    private final String name;
-    private final Location dungeonSpawn;
-    private final Location dungeonClaimOne;
-    private final Location dungeonClaimTwo;
-    private final Map<Integer, List<Location>> chests;
+    private final DungeonLocation location;
+    private final Map<Integer, List<DungeonLocation>> chests;
     private final Map<Integer, List<String>> mobs;
+    private final Map<Integer, List<DungeonLocation>> mobLocations;
 
-    public Dungeon(String name, Location dungeonSpawn, Location dungeonClaimOne, Location dungeonClaimTwo,
-                   Map<Integer, List<Location>> chests, Map<Integer, List<String>> mobs) {
-        this.name = name;
-        this.dungeonSpawn = dungeonSpawn;
-        this.dungeonClaimOne = dungeonClaimOne;
-        this.dungeonClaimTwo = dungeonClaimTwo;
+    public Dungeon(DungeonLocation location,
+                   Map<Integer, List<DungeonLocation>> chests, Map<Integer, List<String>> mobs, Map<Integer, List<DungeonLocation>> mobLocations) {
+        this.location = location;
         this.chests = chests;
         this.mobs = mobs;
+        this.mobLocations = mobLocations;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public Map<Integer, List<Location>> getChests() {
+    public Map<Integer, List<DungeonLocation>> getChests() {
         return chests;
     }
 
@@ -36,15 +26,11 @@ public class Dungeon {
         return mobs;
     }
 
-    public Location getDungeonClaimOne() {
-        return dungeonClaimOne;
+    public DungeonLocation getDungeonSpawn() {
+        return location;
     }
 
-    public Location getDungeonClaimTwo() {
-        return dungeonClaimTwo;
-    }
-
-    public Location getDungeonSpawn() {
-        return dungeonSpawn;
+    public Map<Integer, List<DungeonLocation>> getMobLocations() {
+        return mobLocations;
     }
 }

@@ -161,11 +161,11 @@ public final class Core extends JavaPlugin {
         if (shopManager != null) {
             shopManager.saveShops();
         }
-        if (dungeonManager != null) {
-            dungeonManager.save();
-        }
         if (lootManager != null) {
             this.lootManager.save();
+        }
+        if (lootChestManager != null){
+            this.lootChestManager.saveChests();
         }
     }
 }

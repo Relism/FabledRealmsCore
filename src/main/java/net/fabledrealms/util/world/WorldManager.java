@@ -49,8 +49,8 @@ public class WorldManager {
         return world!=null && Bukkit.getServer().unloadWorld(world, false);
     }
 
-    public static void copyWorld(World originalWorld, String newWorldName) {
+    public static World copyWorld(World originalWorld, String newWorldName) {
         copyFileStructure(originalWorld.getWorldFolder(), new File(Bukkit.getWorldContainer(), newWorldName));
-        new WorldCreator(newWorldName).createWorld();
+        return new WorldCreator(newWorldName).createWorld();
     }
 }
