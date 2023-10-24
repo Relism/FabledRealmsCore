@@ -18,7 +18,8 @@ public class LootManager {
     }
 
     public void load(){
-        if (this.main.getDungeonFileWrapper().getFile().getConfigurationSection("floor") == null) return;
+        /*
+                if (this.main.getDungeonFileWrapper().getFile().getConfigurationSection("floor") == null) return;
         for (String floor : Objects.requireNonNull(this.main.getDungeonFileWrapper().getFile().getConfigurationSection("floor")).getKeys(false)) {
             if (this.main.getDungeonFileWrapper().getFile().getConfigurationSection("floor." + floor + ".chance") == null) return;
             for (String chance : Objects.requireNonNull(this.main.getDungeonFileWrapper().getFile().getConfigurationSection("floor." + floor + ".chance")).getKeys(false)) {
@@ -28,10 +29,12 @@ public class LootManager {
                 map.put(this.main.getDungeonFileWrapper().getFile().getInt("floor." + floor + ".floor"), entries);
             }
         }
+         */
     }
 
     public void save(){
-        for (Map.Entry<Integer, Map<Integer, List<String>>> entry : map.entrySet()) {
+        /*
+                for (Map.Entry<Integer, Map<Integer, List<String>>> entry : map.entrySet()) {
             this.main.getDungeonFileWrapper().getFile().set("floor." + entry.getKey() + ".floor", entry.getKey());
             entry.getValue().forEach((chance, list) -> {
                 this.main.getDungeonFileWrapper().getFile().set("floor." + entry.getKey() + ".chance-amount", chance);
@@ -39,6 +42,7 @@ public class LootManager {
             });
             this.main.getDungeonFileWrapper().saveFile();
         }
+         */
     }
 
     public List<ItemStack> getChestReward(int floor){
@@ -69,5 +73,9 @@ public class LootManager {
 
     public Map<Integer, Map<Integer, List<String>>> getMap() {
         return map;
+    }
+
+    public void addLoot(int floor, ItemStack itemInMainHand) {
+
     }
 }

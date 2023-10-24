@@ -150,6 +150,15 @@ public final class Core extends JavaPlugin {
     }
     public ProtocolManager getProtocolManager(){return protocolManager;}
     public LootChestManager getLootChestManager(){return lootChestManager;}
+
+    public DungeonManager getDungeonManager() {
+        return dungeonManager;
+    }
+
+    public LootManager getLootManager() {
+        return lootManager;
+    }
+
     //public StoryManager getStoryManager() { return storyManager; }
 
     //Plugin Shutdown
