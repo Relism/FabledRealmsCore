@@ -170,9 +170,6 @@ public final class Core extends JavaPlugin {
         if (shopManager != null) {
             shopManager.saveShops();
         }
-        if (lootManager != null) {
-            this.lootManager.save();
-        }
         if (lootChestManager != null){
             this.lootChestManager.saveChests();
         }

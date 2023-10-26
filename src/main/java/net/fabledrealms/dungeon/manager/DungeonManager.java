@@ -3,6 +3,9 @@ package net.fabledrealms.dungeon.manager;
 import net.fabledrealms.Core;
 import net.fabledrealms.dungeon.Dungeon;
 import net.fabledrealms.dungeon.DungeonLocation;
+import net.fabledrealms.util.world.WorldManager;
+import org.bukkit.World;
+import org.bukkit.entity.Player;
 
 import java.util.*;
 
@@ -10,7 +13,7 @@ public class DungeonManager {
 
     private final Core main;
     private final Set<Dungeon> dungeons = new HashSet<>();
-    private final Set<String> currentWorlds = new HashSet<>();
+    private final Set<World> currentWorlds = new HashSet<>();
 
     public DungeonManager(Core main) {
         this.main = main;
@@ -22,6 +25,13 @@ public class DungeonManager {
                 this.main.getDungeonFileWrapper().getFile().getInt("dungeon.spawn.z")),
                 getChests(),
                 getMobs(), getLocations()));
+    }
+
+    public void startDungeon(Player owner){
+        World created = WorldManager.copyWorld(WorldManager.init(this.main.getDungeonFileWrapper()
+                .getFile().getString("dungeon.world")), owner.getName() + "-dungeonworld");
+        // todo spawn chests
+        currentWorlds.add(created);
     }
 
     private Map<Integer, List<DungeonLocation>> getChests(){
@@ -85,5 +95,9 @@ public class DungeonManager {
 
     public Set<Dungeon> getDungeons() {
         return dungeons;
+    }
+
+    public Set<World> getCurrentWorlds() {
+        return currentWorlds;
     }
 }

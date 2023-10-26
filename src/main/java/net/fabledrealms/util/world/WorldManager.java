@@ -10,8 +10,8 @@ import java.util.Arrays;
 
 public class WorldManager {
 
-    public static void init(String name){
-        new WorldCreator(name).createWorld();
+    public static World init(String name){
+        return new WorldCreator(name).createWorld();
     }
 
     private static void copyFileStructure(File source, File target){
