@@ -37,6 +37,7 @@ floor:
 
 loot:
   1:
+    floor: 1
     item:
     name:
     lore:

@@ -1,15 +1,15 @@
 package net.fabledrealms.dungeon.manager;
 
-import io.lumine.mythic.core.skills.placeholders.all.RandomFloatRoundedPlaceholder;
 import net.fabledrealms.Core;
 import net.fabledrealms.dungeon.Dungeon;
 import net.fabledrealms.dungeon.DungeonLocation;
-import net.fabledrealms.util.cuboid.Cuboid;
-import net.fabledrealms.util.world.WorldManager;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
-import org.checkerframework.checker.units.qual.C;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 
@@ -53,12 +53,24 @@ public class DungeonManager {
     }
 
     private void spawnChests(World world) {
-        if (this.main.getDungeonFileWrapper().getFile().getConfigurationSection("floor") == null) return;
-        for (String index : Objects.requireNonNull(this.main.getDungeonFileWrapper().getFile().getConfigurationSection("floor")).getKeys(false)) {
-            Cuboid cuboid = new Cuboid(new Location(world,1,1,1), new Location(world,1,1,1));
+        for (final String index : Objects.requireNonNull(this.main.getDungeonFileWrapper().getFile().getConfigurationSection("chest-locations")).getKeys(false)) {
+            Location location = new Location(world,
+                    this.main.getDungeonFileWrapper().getFile().getInt("chest-locations." + index + ".x"),
+                    this.main.getDungeonFileWrapper().getFile().getInt("chest-locations." + index + ".y"),
+                    this.main.getDungeonFileWrapper().getFile().getInt("chest-locations." + index + ".z"));
+            location.getBlock().setType(Material.CHEST);
+            if (location.getBlock().getState() instanceof Chest chest) {
+                Inventory chestInventory = chest.getBlockInventory();
+                chestInventory.clear();
+
+                for (Map.Entry<Integer, ItemStack> m : this.main.getLootManager().assignItems
+                        (this.main.getLootManager().getRandomizedItems(this.main.getDungeonFileWrapper().getFile().getInt("chest-locations." + index + ".floor"),
+                                this.main.getConfigFile().getFile().getInt("dungeon.item-per-chest")), this.main.getConfigFile().getFile().getInt("dungeon.item-per-chest")).entrySet()) {
+                    chestInventory.setItem(m.getKey(), m.getValue());
+                }
+            }
         }
     }
-
     private Map<Integer, List<DungeonLocation>> getChests(){
         Map<Integer, List<DungeonLocation>> map = new HashMap<>();
         if (this.main.getDungeonFileWrapper().getFile().getConfigurationSection("chest-locations") == null) return map;

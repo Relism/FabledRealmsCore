@@ -1,9 +1,6 @@
 package net.fabledrealms.dungeon.manager;
 
 import net.fabledrealms.Core;
-import net.fabledrealms.dungeon.ChestType;
-import net.fabledrealms.itemgen.ItemType;
-import net.fabledrealms.util.serializer.ItemStackSerializer;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
@@ -14,6 +11,7 @@ import java.util.*;
 public class LootManager {
 
     private final Core main;
+    private final Random random = new Random();
     private final Map<Integer, Map<Integer, List<ItemStack>>> map = new HashMap<>();
 
     public LootManager(Core main) {
@@ -30,7 +28,7 @@ public class LootManager {
             });
             ItemMeta meta = itemStack.getItemMeta();
             meta.setDisplayName(this.main.getStringUtil().colorString(this.main.getDungeonFileWrapper().getFile().getString("loot." + index + ".name")));
-            meta.setLore(new ArrayList<>(this.main.getDungeonFileWrapper().getFile().getStringList("loot." + index + ".lore")));
+            meta.setLore(new ArrayList<>(this.main.getStringUtil().colorList(this.main.getDungeonFileWrapper().getFile().getStringList("loot." + index + ".lore"))));
 
             if (map.get(this.main.getDungeonFileWrapper().getFile().getInt("loot." + index + ".floor")) == null) {
                 Map<Integer, List<ItemStack>> mapped = new HashMap<>();
@@ -49,6 +47,41 @@ public class LootManager {
                 }
             }
         }
+    }
+
+    private ItemStack getRandomizedItem(int floor){
+        if (map.get(floor) == null) return null;
+
+        Map<Integer, List<ItemStack>> items = map.get(floor);
+        List<ItemStack> i = new ArrayList<>();
+        for (Map.Entry<Integer, List<ItemStack>> mappedItems : items.entrySet()) {
+            if (random.nextInt(100) < mappedItems.getKey()) {
+                i.addAll(mappedItems.getValue());
+            }
+        }
+
+        return i.get(random.nextInt(i.size() - 1));
+    }
+
+    public List<ItemStack> getRandomizedItems(int floor, int count){
+        List<ItemStack> i = new ArrayList<>();
+
+        for (int x = 0; x < count; x++) {
+            i.add(this.getRandomizedItem(floor));
+        }
+
+        return i;
+    }
+
+    public Map<Integer, ItemStack> assignItems(List<ItemStack> items, int count){
+        // 26 - small chest inventory size
+        Map<Integer, ItemStack> returned = new HashMap<>();
+
+        for (int i = 0; i < count; i++) {
+            returned.put(random.nextInt(26), items.get(i));
+        }
+
+        return returned;
     }
 
     public Map<Integer, Map<Integer, List<ItemStack>>> getMap() {
