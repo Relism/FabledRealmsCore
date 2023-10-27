@@ -1,37 +1,62 @@
 package net.fabledrealms.dungeon.manager;
 
+import io.lumine.mythic.core.skills.placeholders.all.RandomFloatRoundedPlaceholder;
 import net.fabledrealms.Core;
 import net.fabledrealms.dungeon.Dungeon;
 import net.fabledrealms.dungeon.DungeonLocation;
+import net.fabledrealms.util.cuboid.Cuboid;
 import net.fabledrealms.util.world.WorldManager;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.checkerframework.checker.units.qual.C;
 
 import java.util.*;
 
 public class DungeonManager {
 
     private final Core main;
-    private final Set<Dungeon> dungeons = new HashSet<>();
-    private final Set<World> currentWorlds = new HashSet<>();
+    private Dungeon dungeonHelper;
+    private final Map<UUID, World> dungeonWorlds = new HashMap<>();
 
     public DungeonManager(Core main) {
         this.main = main;
     }
 
-    public void load(){
-        dungeons.add(new Dungeon(new DungeonLocation(this.main.getDungeonFileWrapper().getFile().getInt("dungeon.spawn.x"),
+    public void load() {
+        this.dungeonHelper = new Dungeon(new DungeonLocation(this.main.getDungeonFileWrapper().getFile().getInt("dungeon.spawn.x"),
                 this.main.getDungeonFileWrapper().getFile().getInt("dungeon.spawn.y"),
                 this.main.getDungeonFileWrapper().getFile().getInt("dungeon.spawn.z")),
                 getChests(),
-                getMobs(), getLocations()));
+                getMobs(), getLocations());
     }
 
     public void startDungeon(Player owner){
-        World created = WorldManager.copyWorld(WorldManager.init(this.main.getDungeonFileWrapper()
-                .getFile().getString("dungeon.world")), owner.getName() + "-dungeonworld");
-        // todo spawn chests
-        currentWorlds.add(created);
+        World created = this.main.getWorldManager().copyWorld(this.main.getWorldManager().getWorld(), owner.getName() + "-dungeon-world");
+        dungeonWorlds.put(owner.getUniqueId(), created);
+
+        this.spawnChests(dungeonWorlds.get(owner.getUniqueId()));
+        this.spawnMobs(dungeonWorlds.get(owner.getUniqueId()));
+
+        owner.teleport(new Location(dungeonWorlds.get(owner.getUniqueId()),
+                this.dungeonHelper.getDungeonSpawn().getX(),
+                this.dungeonHelper.getDungeonSpawn().getY(),
+                this.dungeonHelper.getDungeonSpawn().getZ()));
+    }
+
+    public void endDungeon(Player owner){
+
+    }
+
+    private void spawnMobs(World world) {
+
+    }
+
+    private void spawnChests(World world) {
+        if (this.main.getDungeonFileWrapper().getFile().getConfigurationSection("floor") == null) return;
+        for (String index : Objects.requireNonNull(this.main.getDungeonFileWrapper().getFile().getConfigurationSection("floor")).getKeys(false)) {
+            Cuboid cuboid = new Cuboid(new Location(world,1,1,1), new Location(world,1,1,1));
+        }
     }
 
     private Map<Integer, List<DungeonLocation>> getChests(){
@@ -93,11 +118,11 @@ public class DungeonManager {
         return map;
     }
 
-    public Set<Dungeon> getDungeons() {
-        return dungeons;
+    public Dungeon getDungeonHelper() {
+        return dungeonHelper;
     }
 
-    public Set<World> getCurrentWorlds() {
-        return currentWorlds;
+    public Map<UUID, World> getDungeonWorlds() {
+        return dungeonWorlds;
     }
 }

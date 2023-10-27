@@ -38,6 +38,7 @@ public final class Core extends JavaPlugin {
     private FileWrapper dungeonFileWrapper;
     private GraveyardManager graveyardManager;
     private CharacterManager characterManager;
+    private WorldManager worldManager;
     private LootManager lootManager;
     private GUIManager guiManager;
     private StringUtil stringUtil;
@@ -83,6 +84,7 @@ public final class Core extends JavaPlugin {
         this.graveyardManager = new GraveyardManager(this);
         this.guiManager = new GUIManager(this);
         this.questManager = new QuestManager(this);
+        this.worldManager = new WorldManager(this);
         this.lootChestManager = new LootChestManager(this);
         new CommandManager(this);
         new ListenerManager(this);
@@ -157,6 +159,10 @@ public final class Core extends JavaPlugin {
 
     public LootManager getLootManager() {
         return lootManager;
+    }
+
+    public WorldManager getWorldManager() {
+        return worldManager;
     }
 
     //public StoryManager getStoryManager() { return storyManager; }

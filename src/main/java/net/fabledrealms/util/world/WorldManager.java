@@ -1,5 +1,6 @@
 package net.fabledrealms.util.world;
 
+import net.fabledrealms.Core;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
@@ -10,11 +11,20 @@ import java.util.Arrays;
 
 public class WorldManager {
 
-    public static World init(String name){
+    private final Core main;
+    private final World world;
+
+    public WorldManager(Core main) {
+        this.main = main;
+
+        this.world = this.init(this.main.getConfigFile().getFile().getString("world.name"));
+    }
+
+    private World init(String name) {
         return new WorldCreator(name).createWorld();
     }
 
-    private static void copyFileStructure(File source, File target){
+    public void copyFileStructure(File source, File target){
         try {
             ArrayList<String> ignore = new ArrayList<>(Arrays.asList("uid.dat", "session.lock"));
             if(!ignore.contains(source.getName())) {
@@ -45,12 +55,16 @@ public class WorldManager {
     }
 
 
-    public static boolean unloadWorld(World world) {
+    public boolean unloadWorld(World world) {
         return world!=null && Bukkit.getServer().unloadWorld(world, false);
     }
 
-    public static World copyWorld(World originalWorld, String newWorldName) {
+    public World copyWorld(World originalWorld, String newWorldName) {
         copyFileStructure(originalWorld.getWorldFolder(), new File(Bukkit.getWorldContainer(), newWorldName));
         return new WorldCreator(newWorldName).createWorld();
+    }
+
+    public World getWorld() {
+        return world;
     }
 }
