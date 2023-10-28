@@ -11,29 +11,12 @@ chest-locations:
     y: 0
     z: 0
 
-mobs-location:
+mobs:
   1:
-    floor: 1
+    name: ""
     x: 0
     y: 0
     z: 0
-
-mobs:
-  1:
-    floor: 1
-    name: ""
-
-floor:
-  1:
-    floor: 1
-    first:
-      x: 0
-      y: 0
-      z: 0
-    second:
-      x: 0
-      y: 0
-      z: 0
 
 loot:
   1:

@@ -1,8 +1,12 @@
 package net.fabledrealms.dungeon.manager;
 
+import io.lumine.mythic.api.mobs.MythicMob;
+import io.lumine.mythic.bukkit.BukkitAdapter;
+import io.lumine.mythic.bukkit.MythicBukkit;
 import net.fabledrealms.Core;
 import net.fabledrealms.dungeon.Dungeon;
 import net.fabledrealms.dungeon.DungeonLocation;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -16,19 +20,10 @@ import java.util.*;
 public class DungeonManager {
 
     private final Core main;
-    private Dungeon dungeonHelper;
     private final Map<UUID, World> dungeonWorlds = new HashMap<>();
 
     public DungeonManager(Core main) {
         this.main = main;
-    }
-
-    public void load() {
-        this.dungeonHelper = new Dungeon(new DungeonLocation(this.main.getDungeonFileWrapper().getFile().getInt("dungeon.spawn.x"),
-                this.main.getDungeonFileWrapper().getFile().getInt("dungeon.spawn.y"),
-                this.main.getDungeonFileWrapper().getFile().getInt("dungeon.spawn.z")),
-                getChests(),
-                getMobs(), getLocations());
     }
 
     public void startDungeon(Player owner){
@@ -39,17 +34,30 @@ public class DungeonManager {
         this.spawnMobs(dungeonWorlds.get(owner.getUniqueId()));
 
         owner.teleport(new Location(dungeonWorlds.get(owner.getUniqueId()),
-                this.dungeonHelper.getDungeonSpawn().getX(),
-                this.dungeonHelper.getDungeonSpawn().getY(),
-                this.dungeonHelper.getDungeonSpawn().getZ()));
+                this.main.getDungeonFileWrapper().getFile().getInt("dungeon.spawn.x"),
+                this.main.getDungeonFileWrapper().getFile().getInt("dungeon.spawn.y"),
+                this.main.getDungeonFileWrapper().getFile().getInt("dungeon.spawn.z")));
     }
 
     public void endDungeon(Player owner){
-
+        // todo assign to spawn
+        owner.teleport(new Location(Bukkit.getWorld("world"),1,1,1));
+        this.main.getWorldManager().unloadWorld(this.dungeonWorlds.get(owner.getUniqueId()));
     }
 
     private void spawnMobs(World world) {
+        if (this.main.getDungeonFileWrapper().getFile().getConfigurationSection("mobs") == null) return;
+        for (final String index : Objects.requireNonNull(this.main.getDungeonFileWrapper().getFile().getConfigurationSection("mobs")).getKeys(false)) {
+            MythicMob mob = MythicBukkit.inst().getMobManager().getMythicMob(this.main.getDungeonFileWrapper().getFile().getString("mobs." + index + ".name")).orElse(null);
+            Location spawnLocation = new Location(world,
+                    this.main.getDungeonFileWrapper().getFile().getInt("mobs." + index + ".x"),
+                    this.main.getDungeonFileWrapper().getFile().getInt("mobs." + index + ".y"),
+                    this.main.getDungeonFileWrapper().getFile().getInt("mobs." + index + ".z"));
 
+            if (mob != null) {
+                mob.spawn(BukkitAdapter.adapt(spawnLocation), 1);
+            }
+        }
     }
 
     private void spawnChests(World world) {
@@ -107,31 +115,6 @@ public class DungeonManager {
         }
 
         return map;
-    }
-
-    private Map<Integer, List<DungeonLocation>> getLocations(){
-        Map<Integer, List<DungeonLocation>> map = new HashMap<>();
-        if (this.main.getDungeonFileWrapper().getFile().getConfigurationSection("mobs-location") == null) return map;
-        for (final String index : Objects.requireNonNull(this.main.getDungeonFileWrapper().getFile().getConfigurationSection("mobs-location")).getKeys(false)) {
-            if (map.get(this.main.getDungeonFileWrapper().getFile().getInt("mobs-location." + index + ".floor")) == null) {
-                List<DungeonLocation> locations = new ArrayList<>();
-                locations.add(new DungeonLocation(this.main.getDungeonFileWrapper().getFile().getInt("mobs-location." + index + ".x"),
-                        this.main.getDungeonFileWrapper().getFile().getInt("mobs-location." + index + ".y"),
-                        this.main.getDungeonFileWrapper().getFile().getInt("mobs-location." + index + ".z")));
-                map.put(this.main.getDungeonFileWrapper().getFile().getInt("mobs-location." + index + ".floor"), locations);
-            } else {
-                map.get(this.main.getDungeonFileWrapper().getFile().getInt("mobs-location." + index + ".floor"))
-                        .add(new DungeonLocation(this.main.getDungeonFileWrapper().getFile().getInt("mobs-location." + index + ".x"),
-                                this.main.getDungeonFileWrapper().getFile().getInt("mobs-location." + index + ".y"),
-                                this.main.getDungeonFileWrapper().getFile().getInt("mobs-location." + index + ".z")));
-            }
-        }
-
-        return map;
-    }
-
-    public Dungeon getDungeonHelper() {
-        return dungeonHelper;
     }
 
     public Map<UUID, World> getDungeonWorlds() {
