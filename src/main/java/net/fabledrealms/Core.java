@@ -1,14 +1,16 @@
 package net.fabledrealms;
 
-import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import net.fabledrealms.api.server;
+import net.fabledrealms.api.socket.*;
 import net.fabledrealms.character.CharacterManager;
 import net.fabledrealms.command.manager.CommandManager;
 import net.fabledrealms.dungeon.manager.DungeonManager;
 import net.fabledrealms.dungeon.manager.LootManager;
 import net.fabledrealms.economy.EconomyManager;
 import net.fabledrealms.economy.command.EconomyCommand;
+import net.fabledrealms.environmentalEffects.ambientPopulator;
+import net.fabledrealms.events.listeners.globalListener;
 import net.fabledrealms.graveyards.GraveyardCommand;
 import net.fabledrealms.graveyards.GraveyardManager;
 import net.fabledrealms.gui.GUIManager;
@@ -19,12 +21,10 @@ import net.fabledrealms.mongo.MongoHandler;
 import net.fabledrealms.quests.QuestManager;
 import net.fabledrealms.shop.command.ShopAdminCommand;
 import net.fabledrealms.shop.manager.ShopManager;
-import net.fabledrealms.story.StoryManager;
 import net.fabledrealms.util.LogUtil;
 import net.fabledrealms.util.StringUtil;
 import net.fabledrealms.util.misc;
 import net.fabledrealms.util.msg;
-import net.fabledrealms.util.world.WorldManager;
 import net.fabledrealms.wrappers.FileWrapper;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -49,6 +49,9 @@ public final class Core extends JavaPlugin {
     private MongoHandler mongoHandler;
     private ProtocolManager protocolManager;
     private LootChestManager lootChestManager;
+    private net.fabledrealms.events.listeners.globalListener globalListener;
+    private ambientPopulator ambientPopulator;
+    private socketHandler socketHandler;
     //private StoryManager storyManager;
 
     private final NamespacedKey productKey = new NamespacedKey(this, "product");
@@ -81,9 +84,12 @@ public final class Core extends JavaPlugin {
         this.shopFileWrapper = new FileWrapper(this, this.getDataFolder().getPath(), "shops.yml");
         this.dungeonFileWrapper = new FileWrapper(this, this.getDataFolder().getPath(), "dungeon.yml");
         this.graveyardManager = new GraveyardManager(this);
+        this.socketHandler = new socketHandler(this);
         this.guiManager = new GUIManager(this);
         this.questManager = new QuestManager(this);
         this.lootChestManager = new LootChestManager(this);
+        this.globalListener = new globalListener(this);
+        ambientPopulator = new ambientPopulator(this);
         new CommandManager(this);
         new ListenerManager(this);
         this.shopManager = new ShopManager(this);
@@ -150,6 +156,9 @@ public final class Core extends JavaPlugin {
     }
     public ProtocolManager getProtocolManager(){return protocolManager;}
     public LootChestManager getLootChestManager(){return lootChestManager;}
+    public globalListener getGlobalListener(){return globalListener;}
+    public ambientPopulator getAmbientPopulator(){return ambientPopulator;}
+    public socketHandler getSocketHandler(){return socketHandler;}
     //public StoryManager getStoryManager() { return storyManager; }
 
     //Plugin Shutdown

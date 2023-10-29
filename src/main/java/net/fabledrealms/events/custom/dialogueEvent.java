@@ -1,4 +1,4 @@
-package net.fabledrealms.events;
+package net.fabledrealms.events.custom;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -28,8 +28,9 @@ public class dialogueEvent extends Event {
         return HANDLERS;
     }
 
+    @NotNull
     @Override
-    public @NotNull HandlerList getHandlers() {
+    public HandlerList getHandlers() {
         return HANDLERS;
     }
 }

@@ -2,6 +2,7 @@ package net.fabledrealms.listeners;
 
 import net.fabledrealms.Core;
 import net.fabledrealms.bossbar.*;
+import net.fabledrealms.environmentalEffects.ambientPopulator;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

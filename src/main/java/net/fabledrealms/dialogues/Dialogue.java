@@ -1,7 +1,7 @@
 package net.fabledrealms.dialogues;
 
 import net.fabledrealms.Core;
-import net.fabledrealms.events.dialogueEvent;
+import net.fabledrealms.events.custom.dialogueEvent;
 import net.fabledrealms.util.msg;
 
 import org.bukkit.entity.Player;
