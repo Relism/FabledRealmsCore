@@ -1,9 +1,10 @@
 package net.fabledrealms.dungeon.manager;
 
 import net.fabledrealms.Core;
-import net.fabledrealms.dungeon.ChestType;
-import net.fabledrealms.util.serializer.ItemStackSerializer;
+import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.*;
 
@@ -11,63 +12,79 @@ public class LootManager {
 
     private final Core main;
     private final Random random = new Random();
-    private final Map<Integer, Map<Integer, List<String>>> map = new HashMap<>();
+    private final Map<Integer, Map<Integer, List<ItemStack>>> map = new HashMap<>();
 
     public LootManager(Core main) {
         this.main = main;
     }
 
     public void load(){
-        if (this.main.getDungeonFileWrapper().getFile().getConfigurationSection("floor") == null) return;
-        for (String floor : Objects.requireNonNull(this.main.getDungeonFileWrapper().getFile().getConfigurationSection("floor")).getKeys(false)) {
-            if (this.main.getDungeonFileWrapper().getFile().getConfigurationSection("floor." + floor + ".chance") == null) return;
-            for (String chance : Objects.requireNonNull(this.main.getDungeonFileWrapper().getFile().getConfigurationSection("floor." + floor + ".chance")).getKeys(false)) {
-                Map<Integer, List<String>> entries = new HashMap<>();
-                entries.put(this.main.getDungeonFileWrapper().getFile().getInt("floor." + floor + ".chance-amount"),
-                        this.main.getDungeonFileWrapper().getFile().getStringList("floor." + floor + ".chance." + chance + ".list"));
-                map.put(this.main.getDungeonFileWrapper().getFile().getInt("floor." + floor + ".floor"), entries);
-            }
-        }
-    }
-
-    public void save(){
-        for (Map.Entry<Integer, Map<Integer, List<String>>> entry : map.entrySet()) {
-            this.main.getDungeonFileWrapper().getFile().set("floor." + entry.getKey() + ".floor", entry.getKey());
-            entry.getValue().forEach((chance, list) -> {
-                this.main.getDungeonFileWrapper().getFile().set("floor." + entry.getKey() + ".chance-amount", chance);
-                this.main.getDungeonFileWrapper().getFile().set("floor." + entry.getKey() + ".chance." + chance + ".list", list);
+        if (this.main.getDungeonFileWrapper().getFile().getConfigurationSection("loot") == null) return;
+        for (final String index : Objects.requireNonNull(this.main.getDungeonFileWrapper().getFile().getConfigurationSection("loot")).getKeys(false)) {
+            ItemStack itemStack = new ItemStack(Material.valueOf(this.main.getDungeonFileWrapper().getFile().getString("loot." + index + ".item")));
+            itemStack.setAmount(this.main.getDungeonFileWrapper().getFile().getInt("loot." + index + ".amount"));
+            this.main.getDungeonFileWrapper().getFile().getStringList("loot." + index + ".enchantments").forEach(enchant -> {
+                itemStack.addUnsafeEnchantment(Objects.requireNonNull(Enchantment.getByName(enchant.split(":")[0])), Integer.parseInt(enchant.split(":")[1]));
             });
-            this.main.getDungeonFileWrapper().saveFile();
-        }
-    }
+            ItemMeta meta = itemStack.getItemMeta();
+            meta.setDisplayName(this.main.getStringUtil().colorString(this.main.getDungeonFileWrapper().getFile().getString("loot." + index + ".name")));
+            meta.setLore(new ArrayList<>(this.main.getStringUtil().colorList(this.main.getDungeonFileWrapper().getFile().getStringList("loot." + index + ".lore"))));
 
-    public List<ItemStack> getChestReward(int floor){
-        List<ItemStack> items = new ArrayList<>();
+            if (map.get(this.main.getDungeonFileWrapper().getFile().getInt("loot." + index + ".floor")) == null) {
+                Map<Integer, List<ItemStack>> mapped = new HashMap<>();
+                List<ItemStack> items = new ArrayList<>();
+                items.add(itemStack);
+                mapped.put(this.main.getDungeonFileWrapper().getFile().getInt("loot." + index + ".chance"), items);
 
-        for (int i = 0; i < this.main.getConfigFile().getFile().getInt("dungeon.item-per-chest"); i++) {
-            int randomNumber = random.nextInt(100);
-
-            for (Map.Entry<Integer, List<String>> mapped : this.map.get(floor).entrySet()) {
-                if (randomNumber < mapped.getKey()) {
-                    items.add(ItemStackSerializer.deSerialize(this.map.get(floor).get(mapped.getKey()).get(random.nextInt(this.map.get(floor).get(mapped.getKey()).size()))));
+                map.put(this.main.getDungeonFileWrapper().getFile().getInt("loot." + index + ".floor"), mapped);
+            } else {
+                if (map.get(this.main.getDungeonFileWrapper().getFile().getInt("loot." + index + ".floor")).get(this.main.getDungeonFileWrapper().getFile().getInt("loot." + index + ".chance")) == null) {
+                    List<ItemStack> items = new ArrayList<>();
+                    items.add(itemStack);
+                    map.get(this.main.getDungeonFileWrapper().getFile().getInt("loot." + index + ".floor")).put(this.main.getDungeonFileWrapper().getFile().getInt("loot." + index + ".chance"), items);
+                } else {
+                    map.get(this.main.getDungeonFileWrapper().getFile().getInt("loot." + index + ".floor")).get(this.main.getDungeonFileWrapper().getFile().getInt("loot." + index + ".chance")).add(itemStack);
                 }
             }
         }
-
-        return items;
     }
 
-    public Map<Integer, ItemStack> assignChest(List<ItemStack> itemStacks, ChestType chestType){
-        Map<Integer, ItemStack> map = new HashMap<>();
+    private ItemStack getRandomizedItem(int floor){
+        if (map.get(floor) == null) return null;
 
-        for (ItemStack item : itemStacks) {
-            map.put(random.nextInt(chestType.getSlots()), item);
+        Map<Integer, List<ItemStack>> items = map.get(floor);
+        List<ItemStack> i = new ArrayList<>();
+        for (Map.Entry<Integer, List<ItemStack>> mappedItems : items.entrySet()) {
+            if (random.nextInt(100) < mappedItems.getKey()) {
+                i.addAll(mappedItems.getValue());
+            }
         }
 
-        return map;
+        return i.get(random.nextInt(i.size() - 1));
     }
 
-    public Map<Integer, Map<Integer, List<String>>> getMap() {
+    public List<ItemStack> getRandomizedItems(int floor, int count){
+        List<ItemStack> i = new ArrayList<>();
+
+        for (int x = 0; x < count; x++) {
+            i.add(this.getRandomizedItem(floor));
+        }
+
+        return i;
+    }
+
+    public Map<Integer, ItemStack> assignItems(List<ItemStack> items, int count){
+        // 26 - small chest inventory size
+        Map<Integer, ItemStack> returned = new HashMap<>();
+
+        for (int i = 0; i < count; i++) {
+            returned.put(random.nextInt(26), items.get(i));
+        }
+
+        return returned;
+    }
+
+    public Map<Integer, Map<Integer, List<ItemStack>>> getMap() {
         return map;
     }
 }
