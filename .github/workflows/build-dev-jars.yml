@@ -1,35 +1,50 @@
-name: Build DEV Jars
+name: Build, Release, and Post
 
-on: [push, pull_request]
+on:
+  push:
+    # Sequence of patterns matched against refs/tags
+    tags:
+    - 'v*'
 
 jobs:
-  build_dev_jars:
-    name: Build DEV jars
+  build_release_post:
+    name: Build, Release, and Post
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: Setup JDK
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up JDK
         uses: actions/setup-java@v2
         with:
           distribution: 'adopt'
           java-version: '17'
+
       - name: Build with Maven
         run: |
           mvn clean package
           git_hash=$(git rev-parse --short "$GITHUB_SHA")
+          commit_message=$(git log --format=%B -n 1 $GITHUB_SHA)
           echo "git_hash=$git_hash" >> $GITHUB_ENV
           echo "snapshotVersion=5.5-SNAPSHOT" >> $GITHUB_ENV
-          echo "artifactPath=$(pwd)/builds" >> $GITHUB_ENV
-      - name: Upload Plugin JAR to API
-        run: |
-          API_ENDPOINT="https://example.com/upload" # Replace with your API endpoint
-          JAR_FILE="${{ env.artifactPath }}/Plugin-${{ env.snapshotVersion }}.jar"
-          curl -X POST -F "file=@$JAR_FILE" "$API_ENDPOINT"
-      - name: Upload Plugin JAR as Artifact
-        uses: actions/upload-artifact@v3
+          echo "artifactPath=$(pwd)/target" >> $GITHUB_ENV
+
+      - name: Create Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
         with:
-          name: Plugin-${{ env.snapshotVersion }}-${{ env.git_hash }}.jar
-          path: ${{ env.artifactPath }}/Plugin-${{ env.snapshotVersion }}.jar
+          files: ${{ env.artifactPath }}/Plugin-${{ env.snapshotVersion }}.jar
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: Release $(date +'%Y-%m-%d-%H')
+          body: "Release created on $(date) - $commit_message"
+
+      - name: Post JAR to Express API
+        run: |
+          apitoken="Wk6Owy1j72CX8RAzJYPSyDRy"
+          jar_file="${{ env.artifactPath }}/Plugin-${{ env.snapshotVersion }}.jar"
+          filename="$(basename $jar_file)"
+          description="Release created on $(date) - $commit_message"
+          api_url="https://43pxcj-3000.csb.app/builds/upload?token=$apitoken"
+          
+          curl -X POST -F "file=@$jar_file" -F "name=$filename" -F "description=$description" "$api_url"
