@@ -1,10 +1,6 @@
 name: Build, Release, and Post
 
-on:
-  push:
-    # Sequence of patterns matched against refs/tags
-    tags:
-    - 'v*'
+on: [push, pull_request]
 
 jobs:
   build_release_post:
@@ -38,6 +34,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           name: Release $(date +'%Y-%m-%d-%H')
           body: "Release created on $(date) - $commit_message"
+          tags: 'v-${{ env.snapshotVersion }}'
 
       - name: Post JAR to Express API
         run: |
