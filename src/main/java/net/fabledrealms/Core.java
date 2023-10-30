@@ -91,7 +91,6 @@ public final class Core extends JavaPlugin {
         this.shopManager = new ShopManager(this);
         this.shopManager.loadShops();
         this.dungeonManager = new DungeonManager(this);
-        //this.dungeonManager.load();
         this.itemManager = new ItemManager(this);
         this.lootManager = new LootManager(this);
         this.lootManager.load();
