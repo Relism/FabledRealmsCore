@@ -1,10 +1,10 @@
-name: Upload JAR to Express API
+name: Build, Release, and Post
 
 on: [push, pull_request]
 
 jobs:
-  upload_jar:
-    name: Upload JAR
+  build_release_post:
+    name: Build, Release, and Post
     runs-on: ubuntu-latest
 
     steps:
@@ -26,12 +26,21 @@ jobs:
           echo "snapshotVersion=5.5-SNAPSHOT" >> $GITHUB_ENV
           echo "artifactPath=$(pwd)/target" >> $GITHUB_ENV
 
-      - name: Upload JAR to Express API
+      - name: Create Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ${{ env.artifactPath }}/Plugin-${{ env.snapshotVersion }}.jar
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: Release $(date +'%Y-%m-%d-%H')
+          body: "Release created on $(date) - $commit_message"
+
+      - name: Post JAR to Express API
         run: |
-          authtoken="Wk6Owy1j72CX8RAzJYPSyDRy"
+          apitoken="Wk6Owy1j72CX8RAzJYPSyDRy"
           jar_file="${{ env.artifactPath }}/Plugin-${{ env.snapshotVersion }}.jar"
           filename="$(basename $jar_file)"
           description="Release created on $(date) - $commit_message"
-          api_url="https://43pxcj-3000.csb.app/builds/upload?token=$authtoken"
+          api_url="https://43pxcj-3000.csb.app/builds/upload?token=$apitoken"
           
           curl -X POST -F "file=@$jar_file" -F "name=$filename" -F "description=$description" "$api_url"
