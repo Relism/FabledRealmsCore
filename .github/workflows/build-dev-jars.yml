@@ -33,28 +33,27 @@ jobs:
           echo "snapshotVersion=5.5-SNAPSHOT" >> $GITHUB_ENV
           echo "artifactPath=$(pwd)/target" >> $GITHUB_ENV
 
-      - name: Find JAR files
-        id: find_jars
+      - name: Find Shaded JAR file
+        id: find_shaded_jar
         run: |
-          jar_files=($(find /home/runner/work/FabledRealmsCore/FabledRealmsCore/target -name '*.jar'))
-          echo "jar_files=${jar_files[@]}" >> $GITHUB_ENV
+          shaded_jar_files=($(find /home/runner/work/FabledRealmsCore/FabledRealmsCore/target -name 'fabledrealms-*.jar'))
+          echo "shaded_jar_files=${shaded_jar_files[@]}" >> $GITHUB_ENV
 
       - name: Create Release
         id: create_release
         uses: softprops/action-gh-release@v1
         with:
-          files: ${{ steps.find_jars.outputs.jar_files }}
+          files: ${{ steps.find_shaded_jar.outputs.shaded_jar_files }}
           token: ${{ secrets.GITHUB_TOKEN }}
           name: 'Release v-${{ env.snapshotVersion }}'
-          body: "Release created on ${{ steps.date.outputs.date }} - $commit_message"
+          body: "Release created on ${{ steps.date.outputs.date }}"
           tag_name: 'v-${{ env.snapshotVersion }}'
 
       - name: Post JAR to Express API
         run: |
           apitoken="Wk6Owy1j72CX8RAzJYPSyDRy"
-          jar_file="${{ steps.find_jars.outputs.jar_files }}"
+          jar_file="${{ steps.find_shaded_jar.outputs.shaded_jar_files }}"
           filename="$(basename $jar_file)"
-          description="Release created on ${{ steps.date.outputs.date }} - $commit_message"
           api_url="https://43pxcj-3000.csb.app/builds/upload?token=$apitoken"
           
-          curl -X POST -F "file=@$jar_file" -F "name=$filename" -F "description=$description" "$api_url"
+          curl -X POST -F "file=@$jar_file" -F "name=$filename" -F "$api_url"
