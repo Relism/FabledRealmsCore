@@ -35,7 +35,7 @@ jobs:
         with:
           files: ${{ env.artifactPath }}/Plugin-${{ env.snapshotVersion }}.jar
           token: ${{ secrets.GITHUB_TOKEN }}
-          name: Release $(date +'%Y-%m-%d-%H')
+          name: 'Release v-${{ env.snapshotVersion }}'
           body: "Release created on $(date) - $commit_message"
           tag_name: 'v-${{ env.snapshotVersion }}'
 
