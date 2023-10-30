@@ -11,6 +11,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+        
       - name: Checkout Repository
         uses: actions/checkout@v2
 
@@ -36,15 +40,15 @@ jobs:
           files: ${{ env.artifactPath }}/Plugin-${{ env.snapshotVersion }}.jar
           token: ${{ secrets.GITHUB_TOKEN }}
           name: 'Release v-${{ env.snapshotVersion }}'
-          body: "Release created on $(date) - $commit_message"
+          body: "Release created on ${{ steps.date.outputs.date }} - $commit_message"
           tag_name: 'v-${{ env.snapshotVersion }}'
 
-      - name: Post JAR to Express API
-        run: |
-          apitoken="Wk6Owy1j72CX8RAzJYPSyDRy"
-          jar_file="${{ env.artifactPath }}/Plugin-${{ env.snapshotVersion }}.jar"
-          filename="$(basename $jar_file)"
-          description="Release created on $(date) - $commit_message"
-          api_url="https://43pxcj-3000.csb.app/builds/upload?token=$apitoken"
+      #- name: Post JAR to Express API
+        #run: |
+          #apitoken="Wk6Owy1j72CX8RAzJYPSyDRy"
+          #jar_file="${{ env.artifactPath }}/Plugin-${{ env.snapshotVersion }}.jar"
+          #filename="$(basename $jar_file)"
+          #description="Release created on ${{ steps.date.outputs.date }} - $commit_message"
+          #api_url="https://43pxcj-3000.csb.app/builds/upload?token=$apitoken"
           
-          curl -X POST -F "file=@$jar_file" -F "name=$filename" -F "description=$description" "$api_url"
+          #curl -X POST -F "file=@$jar_file" -F "name=$filename" -F "description=$description" "$api_url"
