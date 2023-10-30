@@ -13,11 +13,9 @@ import java.util.Set;
 
 public class ListenerManager {
 
-    private final Core core;
     private Set<Listener> events = new HashSet<>();
 
     public ListenerManager(Core core) {
-        this.core = core;
 
 
         events.add(new ServerPingListener(core));

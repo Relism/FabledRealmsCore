@@ -1,4 +1,6 @@
 environment: dev
+apiurl: "https://v9qj78-3000.csb.app"
+apitoken: "123"
 module:
   server-list:
     player-count:

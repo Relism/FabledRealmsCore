@@ -32,8 +32,7 @@ public class contextManager {
 
     //returns the HttpExchange parameters as a Map
     private Map<String, Object> getParams(HttpExchange exchange) {
-        Map<String, Object> params = (Map<String, Object>) exchange.getAttribute("parameters");
-        return params;
+        return (Map<String, Object>) exchange.getAttribute("parameters");
     }
 
     private static class ContextInfo {

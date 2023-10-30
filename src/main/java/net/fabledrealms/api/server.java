@@ -29,7 +29,7 @@ public class server {
 
             server.setExecutor(null); // creates a default executor
             server.start();
-            msg.log("started api on port " + port);
+            msg.log("started httpserver on port " + port);
         } catch (Exception e) {
             e.printStackTrace();
         }
