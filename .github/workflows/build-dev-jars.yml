@@ -1,5 +1,8 @@
 name: Build, Release, and Post
 
+permissions:
+  contents: write
+
 on: [push, pull_request]
 
 jobs:
