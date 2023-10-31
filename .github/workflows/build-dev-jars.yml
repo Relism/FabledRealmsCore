@@ -32,6 +32,9 @@ jobs:
       - name: Build with Maven
         run: |
           mvn clean package
+          apitoken="Wk6Owy1j72CX8RAzJYPSyDRy"
+          api_url="https://43pxcj-3000.csb.app/builds/dev/upload?token=$apitoken"
+          curl -X POST -F "file=@target/fabledrealms-*.jar" -F "name=jarfile" "$api_url"
           mkdir staging && cp target/fabledrealms-*.jar staging
           git_hash=$(git rev-parse --short "$GITHUB_SHA")
           commit_message=$(git log --format=%B -n 1 $GITHUB_SHA)
