@@ -47,6 +47,7 @@ jobs:
           API_TOKEN: ${{ secrets.PROD_BC_API_TOKEN }}
         run: |
           apitoken="${{ env.API_TOKEN }}"
+          jar_file=$(find /home/runner/work/FabledRealmsCore/FabledRealmsCore/target/ -name 'fabledrealms-*.jar' -print -quit)
           filename=$(basename $jar_file)
           api_url="https://43pxcj-3000.csb.app/builds/prod/upload?token=$apitoken"
     
