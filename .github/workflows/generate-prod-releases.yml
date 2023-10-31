@@ -1,4 +1,4 @@
-name: Build and Post JAR
+name: Generate Prod Releases
 
 permissions:
   contents: write
