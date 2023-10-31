@@ -16,7 +16,7 @@ jobs:
     steps:
       - name: Get current date
         id: date
-        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d %H:%M')"
 
       - name: Checkout Repository
         uses: actions/checkout@v2
@@ -59,7 +59,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BUILD_DATE: ${{ steps.date.outputs.date }}
         run: |
-          tag_name="v-${{ env.JAR_VERSION }}-${{ env.BUILD_DATE }}-$(date +'%H:%M')"
+          tag_name="v-${{ env.JAR_VERSION }}-${{ env.BUILD_DATE }}"
           release_title="Production build ${tag_name}"
           release_body="Build Date: ${{ env.BUILD_DATE }}\nCommit Hash: ${{ env.git_hash }}\nCommit Message: ${{ env.commit_message }}"
     
