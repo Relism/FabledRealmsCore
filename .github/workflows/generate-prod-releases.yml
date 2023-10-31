@@ -1,0 +1,90 @@
+name: Build and Post JAR
+
+permissions:
+  contents: write
+
+on:
+  push:
+    branches:
+      - prod
+
+jobs:
+  build_and_post:
+    name: Build and Post JAR
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '17'
+
+      - name: Build with Maven
+        run: |
+          mvn clean package
+          mkdir staging && cp target/fabledrealms-*.jar staging
+          git_hash=$(git rev-parse --short "$GITHUB_SHA")
+          commit_message=$(git log --format=%B -n 1 $GITHUB_SHA)
+          echo "git_hash=$git_hash" >> $GITHUB_ENV
+          echo "snapshotVersion=5.5-SNAPSHOT" >> $GITHUB_ENV
+          echo "artifactPath=$(pwd)/target" >> $GITHUB_ENV
+
+      - name: Post JAR to Remote Endpoint
+        env:
+          API_TOKEN: ${{ secrets.PROD_BC_API_TOKEN }}
+        run: |
+          apitoken="${{ env.API_TOKEN }}"
+          jar_file=$(find /home/runner/work/FabledRealmsCore/FabledRealmsCore/target/ -name 'fabledrealms-*.jar' -print -quit)
+          filename=$(basename $jar_file)
+          api_url="https://43pxcj-3000.csb.app/builds/prod/upload?token=$apitoken"
+    
+          curl -X POST -F "file=@$jar_file" -F "name=jarfile" "$api_url"
+
+      - name: Create GitHub Release
+        id: create_release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          JAR_VERSION: ${{ steps.build_and_post.outputs.snapshotVersion }}
+          BUILD_DATE: ${{ steps.date.outputs.date }}
+        run: |
+          tag_name="v-${{ env.JAR_VERSION }}-${{ env.BUILD_DATE }}"
+          release_title="Production build ${tag_name}"
+          release_body="Build Date: ${{ env.BUILD_DATE }}\nCommit Hash: ${{ env.git_hash }}\nCommit Message: ${{ env.commit_message }}"
+    
+          echo "Creating GitHub release $tag_name"
+          echo "::set-output name=tag_name::$tag_name"
+          echo "::set-output name=release_title::$release_title"
+    
+          response=$(curl -X POST \
+            -H "Accept: application/vnd.github.v3+json" \
+            -H "Authorization: Bearer $GITHUB_TOKEN" \
+            https://api.github.com/repos/${{ github.repository }}/releases \
+            -d '{
+              "tag_name": "'"$tag_name"'",
+              "name": "'"$release_title"'",
+              "body": "'"$release_body"'",
+              "draft": false,
+              "prerelease": false
+            }')
+
+          echo "$response"
+
+      - name: Upload Artifact
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          upload_url="https://uploads.github.com/repos/${{ github.repository }}/releases/${{ steps.create_release.outputs.tag_name }}/assets?name=${{ env.JAR_VERSION }}.jar"
+          echo "Uploading artifact to $upload_url"
+          curl -X POST \
+            -H "Authorization: token $GITHUB_TOKEN" \
+            -H "Content-Type: application/octet-stream" \
+            --data-binary "@${{ steps.build_and_post.outputs.artifactPath }}/fabledrealms-${{ env.JAR_VERSION }}.jar" \
+            "$upload_url"
