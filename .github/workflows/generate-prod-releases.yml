@@ -57,10 +57,10 @@ jobs:
         id: create_release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # Replace spaces with %20 in BUILD_DATE
-          BUILD_DATE: ${{ steps.date.outputs.date | replace(' ', '%20') }}
+          # Format BUILD_DATE to include %20 instead of spaces
+          BUILD_DATE: ${{ steps.date.outputs.date }}
         run: |
-          tag_name="v-${{ env.JAR_VERSION }}-${{ env.BUILD_DATE }}"
+          tag_name="v-${{ env.JAR_VERSION }}-${{ env.BUILD_DATE// /%20 }}"
           release_title="Production build ${tag_name}"
           release_body="Build Date: ${{ env.BUILD_DATE }}\nCommit Hash: ${{ env.git_hash }}\nCommit Message: ${{ env.commit_message }}"
     
@@ -86,8 +86,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Replace spaces with %20 in BUILD_DATE
-          BUILD_DATE="${{ steps.date.outputs.date | replace(' ', '%20') }}"
+          # Format BUILD_DATE to include %20 instead of spaces
+          BUILD_DATE="${{ steps.date.outputs.date }}"
           upload_url="https://uploads.github.com/repos/${{ github.repository }}/releases/${{ steps.create_release.outputs.tag_name }}/assets?name=fabledrealms-${{ env.JAR_VERSION }}.jar"
           echo "Uploading artifact to $upload_url"
           curl -X POST \
