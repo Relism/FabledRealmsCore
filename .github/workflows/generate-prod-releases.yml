@@ -59,7 +59,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BUILD_DATE: ${{ steps.date.outputs.date }}
         run: |
-          tag_name="v-${{ env.JAR_VERSION }}-${{ env.BUILD_DATE }}"
+          tag_name="v-${{ env.JAR_VERSION }}-${{ env.BUILD_DATE }}-$(date +'%H:%M')"
           release_title="Production build ${tag_name}"
           release_body="Build Date: ${{ env.BUILD_DATE }}\nCommit Hash: ${{ env.git_hash }}\nCommit Message: ${{ env.commit_message }}"
     
