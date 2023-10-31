@@ -3,7 +3,10 @@ name: Build, Release, and Post
 permissions:
   contents: write
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - dev
 
 jobs:
   build_release_post:
@@ -27,6 +30,7 @@ jobs:
       - name: Build with Maven
         run: |
           mvn clean package
+          mkdir staging && cp target/fabledrealms-*.jar staging
           git_hash=$(git rev-parse --short "$GITHUB_SHA")
           commit_message=$(git log --format=%B -n 1 $GITHUB_SHA)
           echo "git_hash=$git_hash" >> $GITHUB_ENV
@@ -39,21 +43,21 @@ jobs:
           shaded_jar_files=($(find /home/runner/work/FabledRealmsCore/FabledRealmsCore/target -name 'fabledrealms-*.jar'))
           echo "shaded_jar_files=${shaded_jar_files[@]}" >> $GITHUB_ENV
 
-      - name: Create Release
-        id: create_release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: ${{ steps.find_shaded_jar.outputs.shaded_jar_files }}
-          token: ${{ secrets.GITHUB_TOKEN }}
-          name: 'Release v-${{ env.snapshotVersion }}'
-          body: "Release created on ${{ steps.date.outputs.date }}"
-          tag_name: 'v-${{ env.snapshotVersion }}'
+      #- name: Create Release
+        #id: create_release
+        #uses: softprops/action-gh-release@v1
+        #with:
+          #files: ${{ steps.find_shaded_jar.outputs.shaded_jar_files }}
+          #token: ${{ secrets.GITHUB_TOKEN }}
+          #name: 'Release v-${{ env.snapshotVersion }}'
+          #body: "Release created on ${{ steps.date.outputs.date }}"
+          #tag_name: 'v-${{ env.snapshotVersion }}'
 
-      - name: Post JAR to Express API
-        run: |
-          apitoken="Wk6Owy1j72CX8RAzJYPSyDRy"
-          jar_file="${{ steps.find_shaded_jar.outputs.shaded_jar_files }}"
-          filename="$(basename $jar_file)"
-          api_url="https://43pxcj-3000.csb.app/builds/upload?token=$apitoken"
+      #- name: Post JAR to Express API
+        #run: |
+          #apitoken="Wk6Owy1j72CX8RAzJYPSyDRy"
+          #jar_file="${{ steps.find_shaded_jar.outputs.shaded_jar_files }}"
+          #filename="$(basename $jar_file)"
+          #api_url="https://43pxcj-3000.csb.app/builds/upload?token=$apitoken"
           
-          curl -X POST -F "file=@$jar_file" -F "name=$filename" -F "$api_url"
+          #curl -X POST -F "file=@$jar_file" -F "name=$filename" -F "$api_url"
