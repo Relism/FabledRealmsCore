@@ -90,5 +90,5 @@ jobs:
           curl -X POST \
             -H "Authorization: token $GITHUB_TOKEN" \
             -H "Content-Type: application/octet-stream" \
-            --data-binary "@$(find $artifactPath -name 'fabledrealms-*.jar' -print -quit)" \
+            --data-binary "@$(find /home/runner/work/FabledRealmsCore/FabledRealmsCore/target/ -name 'fabledrealms-*.jar' -print -quit)" \
             "$upload_url"
