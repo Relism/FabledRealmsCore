@@ -45,6 +45,28 @@ jobs:
           JAR_VERSION=$(echo "$jar_file" | sed -n 's/.*fabledrealms-\(.*\).jar/\1/p')
           echo "JAR_VERSION=$JAR_VERSION" >> $GITHUB_ENV
 
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.build_and_post.outputs.JAR_VERSION }}-${{ steps.date.outputs.date }}
+          release_name: Release ${{ steps.build_and_post.outputs.JAR_VERSION }}-${{ steps.date.outputs.date }}
+          draft: false
+          prerelease: false
+
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./staging/fabledrealms-${{ steps.build_and_post.outputs.JAR_VERSION }}.jar
+          asset_name: fabledrealms-${{ steps.build_and_post.outputs.JAR_VERSION }}.jar
+          asset_content_type: application/java-archive
+
       - name: Post JAR to Remote Endpoint
         env:
           API_TOKEN: ${{ secrets.PROD_BC_API_TOKEN }}
@@ -55,35 +77,6 @@ jobs:
           api_url="https://43pxcj-3000.csb.app/builds/prod/upload?token=$apitoken"
     
           curl -X POST -F "file=@$jar_file" -F "name=jarfile" "$api_url"
-
-      - name: Create GitHub Release
-        id: create_release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # Replace spaces with %20 in BUILD_DATE
-          BUILD_DATE: ${{ steps.date.outputs.date }}
-        run: |
-          tag_name="v-${{ env.JAR_VERSION }}-${{ env.BUILD_DATE }}"
-          release_title="Production build ${tag_name}"
-          release_body="Build Date: ${{ env.BUILD_DATE }}\nCommit Hash: ${{ env.git_hash }}\nCommit Message: ${{ env.commit_message }}"
-    
-          echo "Creating GitHub release $tag_name"
-          echo "::set-output name=tag_name::$tag_name"
-          echo "::set-output name=release_title::$release_title"
-    
-          response=$(curl -X POST \
-            -H "Accept: application/vnd.github.v3+json" \
-            -H "Authorization: Bearer $GITHUB_TOKEN" \
-            https://api.github.com/repos/${{ github.repository }}/releases \
-            -d '{
-              "tag_name": "'$tag_name'",
-              "name": "'$release_title'",
-              "body": "'$release_body'",
-              "draft": false,
-              "prerelease": false
-            }')
-
-          echo "$response"
 
       - name: Upload Artifact
         env:
