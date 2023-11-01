@@ -43,7 +43,7 @@ jobs:
 
           # Extract JAR version from the file name and remove hyphens
           jar_file=$(find $artifactPath -name 'fabledrealms-*.jar' -print -quit)
-          echo "::set-output name=jarfile::jar_file"
+          echo "::set-output name=jarfile::$jar_file"
           JAR_VERSION=$(echo "$jar_file" | sed -n 's/.*fabledrealms-\(.*\)\.jar/\1/p; s/-//g')
           echo "JAR_VERSION=$JAR_VERSION" >> $GITHUB_ENV
 
