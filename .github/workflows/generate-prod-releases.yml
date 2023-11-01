@@ -16,7 +16,7 @@ jobs:
     steps:
       - name: Get current date
         id: date
-        run: echo "::set-output name=date::$(date +'%Y-%m-%d %H:%M')"
+        run: echo "::set-output name=date::$(date +'%Y/%m/%d-%H:%M')"
 
       - name: Checkout Repository
         uses: actions/checkout@v2
@@ -87,7 +87,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           # Replace spaces with %20 in BUILD_DATE
-          BUILD_DATE="${{ steps.date.outputs.date | replace(' ', '%20') }}"
+          BUILD_DATE="${{ steps.date.outputs.date }}"
           upload_url="https://uploads.github.com/repos/${{ github.repository }}/releases/${{ steps.create_release.outputs.tag_name }}/assets?name=fabledrealms-${{ env.JAR_VERSION }}.jar"
           echo "Uploading artifact to $upload_url"
           curl -X POST \
