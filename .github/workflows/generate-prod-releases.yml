@@ -63,6 +63,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./staging/fabledrealms-${{ steps.build_and_post.outputs.JAR_VERSION }}.jar
+          asset_path: $(find $artifactPath -name 'fabledrealms-*.jar' -print -quit)
           asset_name: fabledrealms-${{ steps.build_and_post.outputs.JAR_VERSION }}.jar
           asset_content_type: application/java-archive
