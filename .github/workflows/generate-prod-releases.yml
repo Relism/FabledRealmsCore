@@ -42,7 +42,7 @@ jobs:
 
           # Extract JAR version from the file name and remove hyphens
           jar_file=$(find $artifactPath -name 'fabledrealms-*.jar' -print -quit)
-          JAR_VERSION=$(echo "$jar_file" | sed -n 's/.*fabledrealms-\(.*\)\.jar/\1/p' | tr -d '-')
+          JAR_VERSION=$(echo "$jar_file" | sed -n 's/.*fabledrealms-\(.*\)\.jar/\1/p; s/-//g')
           echo "JAR_VERSION=$JAR_VERSION" >> $GITHUB_ENV
 
       - name: Create Release
@@ -51,7 +51,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v${{ steps.build_and_post.outputs.JAR_VERSION }}-${{ steps.date.outputs.date }}
+          tag_name: 'v${{ steps.build_and_post.outputs.JAR_VERSION }}-${{ steps.date.outputs.date }}'
           release_name: Release v${{ steps.build_and_post.outputs.JAR_VERSION }}-${{ steps.date.outputs.date }}
           draft: false
           prerelease: false
