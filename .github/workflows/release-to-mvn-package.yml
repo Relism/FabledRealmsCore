@@ -26,6 +26,6 @@ jobs:
       - name: Publish package
         run: |
           echo "Deploying Maven package..."
-          mvn --batch-mode deploy
+          mvn clean deploy
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
