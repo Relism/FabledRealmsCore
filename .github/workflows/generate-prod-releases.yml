@@ -48,8 +48,8 @@ jobs:
 
       - name: Deploy to GitHub Packages
         run:
-          echo "Jar File Path ${{ steps.mvn_build.outputs.jarfile }}"
-          mvn deploy:deploy-file -Durl=https://maven.pkg.github.com/FabledRealms/FabledRealmsCore \
+          #echo "Jar File Path ${{ steps.mvn_build.outputs.jarfile }}"
+          mvn deploy:deploy-file -Durl=https://maven.pkg.github.com/Relism/FabledRealmsCore \
                                      -DrepositoryId=github \
                                      -Dfile=${{ steps.mvn_build.outputs.jarfile }} \
                                      -DgroupId=net.fabledrealms \
