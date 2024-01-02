@@ -47,7 +47,9 @@ jobs:
           echo "JAR_VERSION=$JAR_VERSION" >> $GITHUB_ENV
 
       - name: Deploy to GitHub Packages
-        run: mvn deploy:deploy-file -Durl=https://maven.pkg.github.com/FabledRealms/FabledRealmsCore \
+        run:
+          echo "Jar File Path ${{ steps.mvn_build.outputs.jarfile }}"
+          mvn deploy:deploy-file -Durl=https://maven.pkg.github.com/FabledRealms/FabledRealmsCore \
                                      -DrepositoryId=github \
                                      -Dfile=${{ steps.mvn_build.outputs.jarfile }} \
                                      -DgroupId=net.fabledrealms \
