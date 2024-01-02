@@ -24,18 +24,11 @@ jobs:
       - name: Install xmlstarlet
         uses: Mudlet/xmlstarlet-action@master
 
-      - name: Set up Java
-        uses: actions/setup-java@v3
+      - name: Modify POM version using xmlstarlet
+        id: xml_replace
+        uses: Mudlet/xmlstarlet-action@master
         with:
-          java-version: '17'
-          distribution: 'temurin'
-
-      - name: Update POM version
-        id: update_version
-        run: |
-          VERSION=$(xmlstarlet sel -t -v "//project/version" pom.xml)
-          NEW_VERSION="$VERSION-${{ steps.date.outputs.date }}"
-          xmlstarlet ed --inplace -u "//project/version" -v "$NEW_VERSION" pom.xml
+          args: ed -L --update "/project/version" -v "$(xmlstarlet sel -t -v '/project/version' pom.xml)-${{ steps.date.outputs.date }}" pom.xml
 
       - name: Publish package
         run: |
