@@ -41,41 +41,21 @@ jobs:
           artifactPath=$(pwd)/target
           echo "artifactPath=$artifactPath" >> $GITHUB_ENV
 
-          # Extract JAR version from the file name and remove hyphens
           jar_file=$(find $artifactPath -name 'fabledrealms-*.jar' -print -quit)
           echo "::set-output name=jarfile::$jar_file"
           JAR_VERSION=$(echo "$jar_file" | sed -n 's/.*fabledrealms-\(.*\)\.jar/\1/p; s/-//g')
           echo "JAR_VERSION=$JAR_VERSION" >> $GITHUB_ENV
 
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
+      - name: Deploy to GitHub Packages
+        run: mvn deploy:deploy-file -Durl=https://maven.pkg.github.com/FabledRealms/FabledRealmsCore \
+                                     -DrepositoryId=github \
+                                     -Dfile=${{ steps.mvn_build.outputs.jarfile }} \
+                                     -DgroupId=net.fabledrealms \
+                                     -DartifactId=fabledrealms \
+                                     -Dversion=v-${{ steps.date.outputs.date }} \
+                                     -Dpackaging=jar \
+                                     -DgeneratePom=true \
+                                     -DgeneratePom.description="My Project Description" \
+                                     -DrepositoryLayout=legacy
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ steps.date.outputs.date }}
-          release_name: Release v-${{ steps.date.outputs.date }}
-          draft: false
-          prerelease: false
-
-      - name: Upload Release Asset
-        id: upload-release-asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ steps.mvn_build.outputs.jarfile }}
-          asset_name: fabledrealms-${{ steps.date.outputs.date }}.jar
-          asset_content_type: application/java-archive
-
-      - name: Post JAR to Remote Endpoint
-        env:
-          API_TOKEN: ${{ secrets.DEV_BC_API_TOKEN }}
-        run: |
-          apitoken="${{ env.API_TOKEN }}"
-          jar_file=${{ steps.mvn_build.outputs.jarfile }}
-          filename=$(basename $jar_file)
-          api_url="https://43pxcj-3000.csb.app/builds/dev/upload?token=$apitoken"
-    
-          curl -X POST -F "file=@$jar_file" -F "name=jarfile" "$api_url"
