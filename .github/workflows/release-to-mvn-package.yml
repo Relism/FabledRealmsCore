@@ -21,9 +21,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install xmlstarlet
-        uses: Mudlet/xmlstarlet-action@master
-
       - name: Modify POM version using xmlstarlet
         id: xml_replace
         uses: Mudlet/xmlstarlet-action@master
