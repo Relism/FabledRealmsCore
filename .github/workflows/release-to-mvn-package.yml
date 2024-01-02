@@ -28,7 +28,7 @@ jobs:
         id: xml_replace
         uses: Mudlet/xmlstarlet-action@master
         with:
-          args: ed -L --update "/project/version" -v "$(xmlstarlet sel -t -v '/project/version' pom.xml)-${{ steps.date.outputs.date }}" pom.xml
+          args: ed -L --update "/project/version" -v "${{ steps.date.outputs.date }}" "pom.xml"
 
       - name: Publish package
         run: |
