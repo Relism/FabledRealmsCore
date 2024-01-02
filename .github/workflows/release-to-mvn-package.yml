@@ -1,8 +1,10 @@
 name: Publish package to GitHub Packages
 
 on:
-  release:
-    types: [published]
+  workflow_run:
+    workflows: [Generate Prod Releases]  # Adjust this to your actual workflow name
+    types:
+      - completed
 
 jobs:
   publish:
