@@ -27,8 +27,24 @@ jobs:
           java-version: 17
           distribution: zulu
 
+      - name: Extract Maven project version
+        run: echo ::set-output name=version::$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)
+        id: project
+
       - name: Update version in pom.xml (release only)
-        run: mvn -B versions:set -DnewVersion=${{ steps.date.outputs.date }}
+        run: |
+          # Extract project version
+          project_version=$(echo "${{ steps.project.outputs.version }}")
+    
+          # Extract date
+          date=$(echo "${{ steps.date.outputs.date }}")
+    
+          # Create the new version format
+          new_version="dev-${project_version}-${date}"
+    
+          # Update the version in pom.xml
+          mvn -B versions:set -DnewVersion="${new_version}"
+
 
       - name: Publish package
         run: |
@@ -36,5 +52,3 @@ jobs:
           mvn --batch-mode -DuseGitHubPackages=true deploy
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-#run
