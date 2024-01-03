@@ -21,11 +21,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Modify POM version using xmlstarlet
-        id: xml_replace
-        uses: Mudlet/xmlstarlet-action@master
-        with:
-          args: ed -L --update "/project/version" -v "${{ steps.date.outputs.date }}" "pom.xml"
+      - name: Update version in pom.xml (release only)
+        run: mvn -B versions:set -DnewVersion=${{ steps.date.outputs.date }}
 
       - name: Publish package
         run: |
