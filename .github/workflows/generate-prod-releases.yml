@@ -69,7 +69,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          # Other necessary upload parameters
+          asset_path: ${{ steps.mvn_build.outputs.jarfile }}
+          asset_name: fabledrealms-dev-${{ steps.date.outputs.date }}.jar
+          asset_content_type: application/java-archive
 
       - name: Post JAR to Remote Endpoint
         env:
