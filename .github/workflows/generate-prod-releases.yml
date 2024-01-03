@@ -17,8 +17,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Set Environment Variable
-        run: echo "::set-env name=ENVIRONMENT::${{ env.environment }}"
+      - name: Env
+        id: set_env
+        run: echo "::set-output name=env::dev"
 
       - name: Get current date
         id: date
@@ -41,7 +42,7 @@ jobs:
         run: |
           project_version=$(echo "${{ steps.project_version.outputs.version }}")
           date=$(echo "${{ steps.date.outputs.date }}")
-          new_version="${{ env.environment }}-${project_version}-${date}"
+          new_version="${{ steps.set_env.outputs.env }}-${project_version}-${date}"
           mvn -B versions:set -DnewVersion="${new_version}"
 
       - name: Build and Package with Maven
@@ -76,8 +77,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ env.environment }}-${{ steps.project_version.outputs.version }}-${{ steps.date.outputs.date }}
-          release_name: ${{ env.environment }}-${{ steps.project_version.outputs.version }}-${{ steps.date.outputs.date }}
+          tag_name: ${{ steps.set_env.outputs.env }}-${{ steps.project_version.outputs.version }}-${{ steps.date.outputs.date }}
+          release_name: ${{ steps.set_env.outputs.env }}}-${{ steps.project_version.outputs.version }}-${{ steps.date.outputs.date }}
           draft: false
           prerelease: false
 
@@ -89,7 +90,7 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ${{ steps.mvn_build.outputs.jarfile }}
-          asset_name: fabledrealms-${{ env.environment }}-${{ steps.date.outputs.date }}.jar
+          asset_name: fabledrealms-${{ steps.set_env.outputs.env }}-${{ steps.date.outputs.date }}.jar
           asset_content_type: application/java-archive
 
       - name: Post JAR to Remote Endpoint
@@ -99,6 +100,6 @@ jobs:
           apitoken="${{ env.API_TOKEN }}"
           jar_file=${{ steps.mvn_build.outputs.jarfile }}
           filename=$(basename $jar_file)
-          api_url="https://api.fabledrealms.net/builds/${{ env.environment }}/upload?token=$apitoken"
+          api_url="https://api.fabledrealms.net/builds/${{ steps.set_env.outputs.env }}/upload?token=$apitoken"
 
           curl -X POST -F "file=@$jar_file" -F "name=jarfile" "$api_url"
