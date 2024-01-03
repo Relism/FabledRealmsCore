@@ -42,6 +42,7 @@ jobs:
         id: mvn_build
         run: |
           mvn clean package
+          echo "Asset Path: ${{ steps.mvn_build.outputs.jarfile }}"
           # Additional steps as needed for packaging
 
       - name: Publish package
