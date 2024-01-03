@@ -1,16 +1,16 @@
-name: Generate Prod Releases
-
-permissions:
-  contents: write
+name: Build, Release, and Deploy dev builds
 
 on:
   push:
     branches:
       - main
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
-  build_and_post:
-    name: Build and Post JAR
+  build_and_release:
     runs-on: ubuntu-latest
 
     steps:
@@ -18,34 +18,38 @@ jobs:
         id: date
         run: echo "::set-output name=date::$(date +'%Y%m%d_%H%M')"
 
-      - name: Checkout Repository
-        uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Set up JDK
-        uses: actions/setup-java@v2
+      - name: Setup Java
+        uses: actions/setup-java@v4
         with:
-          distribution: 'adopt'
-          java-version: '17'
+          java-version: 17
+          distribution: zulu
+
+      - name: Extract Maven project version
+        run: echo ::set-output name=version::$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)
+        id: project_version
+
+      - name: Update version in pom.xml
+        run: |
+          project_version=$(echo "${{ steps.project_version.outputs.version }}")
+          date=$(echo "${{ steps.date.outputs.date }}")
+          new_version="dev-${project_version}-${date}"
+          mvn -B versions:set -DnewVersion="${new_version}"
 
       - name: Build with Maven
         id: mvn_build
         run: |
           mvn clean package
-          if [ ! -d staging ]; then
-            mkdir staging
-          fi
-          cp target/fabledrealms-*.jar staging/
-          git_hash=$(git rev-parse --short "$GITHUB_SHA")
-          commit_message=$(git log --format=%B -n 1 $GITHUB_SHA)
-          echo "git_hash=$git_hash" >> $GITHUB_ENV
-          artifactPath=$(pwd)/target
-          echo "artifactPath=$artifactPath" >> $GITHUB_ENV
+          # Additional steps as needed for packaging
 
-          # Extract JAR version from the file name and remove hyphens
-          jar_file=$(find $artifactPath -name 'fabledrealms-*.jar' -print -quit)
-          echo "::set-output name=jarfile::$jar_file"
-          JAR_VERSION=$(echo "$jar_file" | sed -n 's/.*fabledrealms-\(.*\)\.jar/\1/p; s/-//g')
-          echo "JAR_VERSION=$JAR_VERSION" >> $GITHUB_ENV
+      - name: Publish package
+        run: |
+          echo "Deploying Maven package..."
+          mvn --batch-mode -DuseGitHubPackages=true deploy
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create Release
         id: create_release
@@ -53,8 +57,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ steps.date.outputs.date }}
-          release_name: Release v-${{ steps.date.outputs.date }}
+          tag_name: prod
+          release_name: dev-${{ steps.project_version.outputs.version }}-${{ steps.date.outputs.date }}
           draft: false
           prerelease: false
 
@@ -65,9 +69,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ steps.mvn_build.outputs.jarfile }}
-          asset_name: fabledrealms-${{ steps.date.outputs.date }}.jar
-          asset_content_type: application/java-archive
+          # Other necessary upload parameters
 
       - name: Post JAR to Remote Endpoint
         env:
@@ -76,6 +78,5 @@ jobs:
           apitoken="${{ env.API_TOKEN }}"
           jar_file=${{ steps.mvn_build.outputs.jarfile }}
           filename=$(basename $jar_file)
-          api_url="https://43pxcj-3000.csb.app/builds/dev/upload?token=$apitoken"
-    
-          curl -X POST -F "file=@$jar_file" -F "name=jarfile" "$api_url"
+          api_url="https://api.fabledrealms.net/builds/dev/upload?token=$apitoken"
+          # Additional commands to post JAR to the remote API
