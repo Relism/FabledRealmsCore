@@ -93,6 +93,15 @@ jobs:
           asset_name: fabledrealms-${{ steps.set_env.outputs.env }}-${{ steps.date.outputs.date }}.jar
           asset_content_type: application/java-archive
 
+      - name: Deploy JavaDoc 🚀
+        uses: MathieuSoysal/Javadoc-publisher.yml@v2.4.0
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          javadoc-branch: master
+          java-version: 17
+          target-folder: javadocs
+          project: maven
+
       - name: Post JAR to Remote Endpoint
         env:
           API_TOKEN: ${{ secrets.DEV_BC_API_TOKEN }}
