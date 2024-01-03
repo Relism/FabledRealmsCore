@@ -42,8 +42,20 @@ jobs:
         id: mvn_build
         run: |
           mvn clean package
-          echo "Asset Path: ${{ steps.mvn_build.outputs.jarfile }}"
-          # Additional steps as needed for packaging
+          if [ ! -d staging ]; then
+            mkdir staging
+          fi
+          cp target/fabledrealms-*.jar staging/
+          git_hash=$(git rev-parse --short "$GITHUB_SHA")
+          commit_message=$(git log --format=%B -n 1 $GITHUB_SHA)
+          echo "git_hash=$git_hash" >> $GITHUB_ENV
+          artifactPath=$(pwd)/target
+          echo "artifactPath=$artifactPath" >> $GITHUB_ENV
+          # Extract JAR version from the file name and remove hyphens
+          jar_file=$(find $artifactPath -name 'fabledrealms-*.jar' -print -quit)
+          echo "::set-output name=jarfile::$jar_file"
+          JAR_VERSION=$(echo "$jar_file" | sed -n 's/.*fabledrealms-\(.*\)\.jar/\1/p; s/-//g')
+          echo "JAR_VERSION=$JAR_VERSION" >> $GITHUB_ENV
 
       - name: Publish package
         run: |
