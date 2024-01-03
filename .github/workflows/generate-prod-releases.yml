@@ -9,11 +9,17 @@ permissions:
   contents: write
   packages: write
 
+env:
+  environment: 'dev'
+
 jobs:
   build_and_release:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Set Environment Variable
+        run: echo "::set-env name=ENVIRONMENT::${{ env.environment }}"
+
       - name: Get current date
         id: date
         run: echo "::set-output name=date::$(date +'%Y%m%d_%H%M')"
@@ -35,10 +41,10 @@ jobs:
         run: |
           project_version=$(echo "${{ steps.project_version.outputs.version }}")
           date=$(echo "${{ steps.date.outputs.date }}")
-          new_version="dev-${project_version}-${date}"
+          new_version="${{ env.environment }}-${project_version}-${date}"
           mvn -B versions:set -DnewVersion="${new_version}"
 
-      - name: Build with Maven
+      - name: Build and Package with Maven
         id: mvn_build
         run: |
           mvn clean package
@@ -57,9 +63,9 @@ jobs:
           JAR_VERSION=$(echo "$jar_file" | sed -n 's/.*fabledrealms-\(.*\)\.jar/\1/p; s/-//g')
           echo "JAR_VERSION=$JAR_VERSION" >> $GITHUB_ENV
 
-      - name: Publish package
+      - name: Publish Maven Package
         run: |
-          echo "Deploying Maven package..."
+          echo "Deploying Maven package to GitHub Packages..."
           mvn --batch-mode -DuseGitHubPackages=true deploy
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -70,8 +76,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: dev-${{ steps.project_version.outputs.version }}-${{ steps.date.outputs.date }}
-          release_name: dev-${{ steps.project_version.outputs.version }}-${{ steps.date.outputs.date }}
+          tag_name: ${{ env.environment }}-${{ steps.project_version.outputs.version }}-${{ steps.date.outputs.date }}
+          release_name: ${{ env.environment }}-${{ steps.project_version.outputs.version }}-${{ steps.date.outputs.date }}
           draft: false
           prerelease: false
 
@@ -83,7 +89,7 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ${{ steps.mvn_build.outputs.jarfile }}
-          asset_name: fabledrealms-dev-${{ steps.date.outputs.date }}.jar
+          asset_name: fabledrealms-${{ env.environment }}-${{ steps.date.outputs.date }}.jar
           asset_content_type: application/java-archive
 
       - name: Post JAR to Remote Endpoint
@@ -93,5 +99,6 @@ jobs:
           apitoken="${{ env.API_TOKEN }}"
           jar_file=${{ steps.mvn_build.outputs.jarfile }}
           filename=$(basename $jar_file)
-          api_url="https://api.fabledrealms.net/builds/dev/upload?token=$apitoken"
-          # Additional commands to post JAR to the remote API
+          api_url="https://api.fabledrealms.net/builds/${{ env.environment }}/upload?token=$apitoken"
+
+          curl -X POST -F "file=@$jar_file" -F "name=jarfile" "$api_url"
